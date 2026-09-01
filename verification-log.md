@@ -63,3 +63,24 @@ Verified August 31, 2026, against primary publications, trial protocols, and str
 
 ## Added September 1, 2026 (v0.3.1)
 - **KEYNOTE-905 / EV-303** (verified: FDA approval Nov 21, 2025; Merck release; ASCO Post trial summary). Cisplatin-ineligible MIBC: neoadjuvant enfortumab vedotin 1.25 mg/kg d1, d8 + pembrolizumab 200 d1 q3w ×3 → radical cystectomy + PLND → adjuvant EV + pembrolizumab ×6, then pembrolizumab alone ×8 (14 adjuvant pembrolizumab cycles; 17 total). KEYNOTE-B15 / EV-304 (cisplatin-eligible) met EFS, OS, and pCR endpoints in 2026 and is cited; the app's eligibility line stays "when cisplatin is not an option" until the label expands.
+
+## Added September 1, 2026 (v0.4.1)
+- **IMvigor011** (verified: NEJM 2025, NEJMoa2511885; FDA approval May 15, 2026 with Signatera CDx). After radical cystectomy, serial ctDNA testing begins ≥6 weeks post-op (surveillance window 6–24 weeks) for up to 1 year; ctDNA-positive → atezolizumab 1680 mg IV q4w (or subcutaneous) for up to 12 cycles / 1 year; ctDNA-negative → continued surveillance. IMvigor011: DFS HR 0.64, OS HR 0.59. Neoadjuvant cisplatin chemotherapy is shown as an optional first step because most trial patients had received it.
+
+## Added September 1, 2026 (v0.5): head and neck, melanoma, GI additions
+- **ATOMIC** (verified: NEJM 2026; FDA priority review, decision expected Oct 9, 2026; NCCN category 2A preferred). Resected stage III dMMR/MSI-H colon: mFOLFOX6 ×12 (q2w) + atezolizumab 840 mg q2w ×12 → atezolizumab ×13 alone (12 months total). 3-year DFS 86% vs 76%, HR 0.50. Labeled in the app as NCCN-listed with the FDA decision pending.
+- **Anal canal chemoradiation** (standard-reference; ACT II, RTOG 98-11). Mitomycin + 5-FU (or capecitabine) with RT ~5–6 weeks; response assessed at 11, 18, and 26 weeks; salvage APR for persistent disease.
+- **Definitive chemoradiation, HNSCC** (standard-reference; MACH-NC; Noronha JCO 2018). Cisplatin 100 mg/m² q3w ×3 (or 40 mg/m² weekly) with 70 Gy/35 fx; PET/CT at ~12 weeks; neck dissection for residual nodal disease.
+- **Post-operative RT ± cisplatin** (standard-reference; RTOG 9501, EORTC 22931). Cisplatin added for positive margins or extranodal extension; RT to start within 6 weeks of surgery.
+- **KEYNOTE-689** (verified: FDA approval June 12, 2025; ClinicalTrials.gov protocol). PD-L1 CPS ≥1: pembrolizumab 200 q3w ×2 → surgery within 6 weeks → pembrolizumab ×3 with RT ± cisplatin → pembrolizumab ×12 (15 adjuvant, 17 total). EFS 59.7 vs 29.6 months in CPS ≥1.
+- **Nasopharyngeal induction** (standard-reference; Zhang NEJM 2019). Gemcitabine 1000 d1,8 + cisplatin 80 d1 q3w ×3 → cisplatin 100 q3w ×3 with RT.
+- **NADINA** (verified: NEJM 2024; ASCO Post; NCCN-listed, no FDA label). Ipilimumab 80 mg + nivolumab 240 mg q3w ×2 → therapeutic lymph node dissection at ~week 6 → major pathologic response (≤10% viable, 59%): no adjuvant; otherwise nivolumab 480 q4w ×11 or dabrafenib + trametinib 46 weeks if BRAF-mutant.
+- **SWOG S1801** (standard-reference; NEJM 2023). Pembrolizumab 200 q3w ×3 → surgery → ×15 (18 total).
+- **Adjuvant immunotherapy** (standard-reference; KEYNOTE-054, KEYNOTE-716, CheckMate 238). Pembrolizumab q3w ×17 or nivolumab q4w ×12 for one year.
+- **COMBI-AD** (standard-reference; NEJM 2017). Dabrafenib 150 mg BID + trametinib 2 mg daily for 12 months, BRAF V600.
+
+## Added September 1, 2026 (v0.5.1)
+- **Genomic-assay pathway, HR+/HER2− breast** (standard-reference; TAILORx NEJM 2018, RxPONDER NEJM 2021, MINDACT NEJM 2016; monarchE / NATALEE for the optional CDK4/6 step). Surgery → Oncotype DX or MammaPrint → high risk: TC ×4 (or AC-T) → radiation → endocrine 5–10 y ± CDK4/6; low risk: radiation → endocrine ± CDK4/6. Patient text notes that premenopausal women with mid-range scores may still benefit from chemotherapy (TAILORx age ≤50, RS 16–25).
+- **LITESPARK-022** (verified: FDA approval June 12, 2026; ASCO/Urology Times). Intermediate-high/high-risk or M1-NED clear-cell RCC after nephrectomy: pembrolizumab 400 mg q6w ×9 (or 200 q3w) up to 12 months + belzutifan 120 mg daily up to 54 weeks, starting within 12 weeks of surgery. DFS HR 0.72.
+- **Nasopharynx, chemoradiation alone** (standard-reference; Chen JNCI 2011; NCCN) for stage II / lower-risk III.
+- **Nasopharynx, Intergroup 0099** (standard-reference; Al-Sarraf JCO 1998; MAC-NPC meta-analysis). Concurrent cisplatin + RT → cisplatin 80 + 5-FU 1000 ×4 days q4w ×3.

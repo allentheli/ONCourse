@@ -1,6 +1,17 @@
 # Keeping ONCourse current
 
-## Start here (what to actually do)
+## Recommended setup: Claude Code on the repository
+
+The lowest-friction way to maintain ONCourse is Claude Code connected to the GitHub repository. `CLAUDE.md` in the repository root tells it how the files fit together and the rules for clinical changes, and `tests/check.js` lets it verify the library before committing. A change then becomes one sentence from you ("add the new approval below as a pathway") and one click to merge the pull request it opens.
+
+1. Install Claude Code (desktop app, or the command line) and sign in.
+2. Ask it to clone your repository (`https://github.com/YOUR-USERNAME/ONCourse`) and open the folder; it reads `CLAUDE.md` automatically.
+3. Give it the change in plain language, or paste one of the prompts below with the source. Ask it to open a pull request rather than commit to main for anything clinical.
+4. On GitHub, read the pull request (the diff shows exactly what changed in `regimens.js` and the verification log), then merge. GitHub Pages publishes within about a minute.
+
+A Claude Project (chat) remains useful for research and verification conversations, and Claude Design for visuals; hand their outputs to Claude Code to apply.
+
+## Start here without Claude Code (chat-only)
 
 1. Create a Claude Project called **ONCourse** and add two files to its project knowledge: `regimens.js` and this file. That gives every future conversation the library and the rules.
 2. When you want a change — a new approval, a correction, a new regimen — open that Project and paste one of the prompts below (they are ready to copy), plus the source.

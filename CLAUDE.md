@@ -1,0 +1,27 @@
+# ONCourse — instructions for Claude Code
+
+ONCourse is a static site (GitHub Pages) that turns cancer treatment regimens into one-page patient "maps". You are editing a live clinical-education tool; correctness and plain language matter more than speed. The owner is a practicing medical oncologist who reviews every clinical change.
+
+## Files
+- `regimens.js` — the library: every pathway, its steps, plain-language text, sources, `added` / `reviewed` / `reviewedBy`, plus `CHANGELOG` and `APP_VERSION`. Most changes happen here.
+- `app.html` — the builder and patient page (timeline engine, editor, print fit, share links). Change only for feature work.
+- `index.html`, `about.html`, `updates.html`, `references.html`, `disclaimer.html`, `site.css` — public pages. Updates and References render from `regimens.js` automatically.
+- `fonts/` — self-hosted fonts. Never add external scripts, fonts, or analytics: the site promises that nothing leaves the browser and makes no third-party requests.
+- `tests/check.js` — dependency-free library check. Run `node tests/check.js` before every commit; do not commit if it reports errors.
+- `UPDATING.md` — the human playbook and the prompts the owner uses. Keep it in sync with this file.
+- `verification-log.md` — what was checked against which source, per pathway. Append an entry for every clinical change.
+
+## Adding or changing a pathway
+1. Verify the schedule against the primary publication and a structured protocol reference (HemOnc.org, eviQ) and current FDA labeling. Cite both in `refs` as `{t: citation text, q: PubMed search terms}`.
+2. Write patient-facing `plain` text at about an eighth-grade level. Say what the treatment is and how it is given. No promises beyond the evidence; no drug doses on the patient page.
+3. Prefer "beneficial" over "needed" when a test guides chemotherapy; treatment is a choice the evidence informs.
+4. Protocol-specified intervals stay as protocol; practice-variable intervals get a typical default and text saying the team sets it. Radiation whose course varies uses `weeks:''`.
+5. Use existing `group` names exactly (they become sub-headings). Hormone-therapy steps only in breast and prostate pathways. Surveillance is `mods:['watch']` alone. Decisions are top-level only, 2–3 branches.
+6. Set `added` (new) and `reviewed` (any change) to today; set `reviewedBy` to `'AI-assisted source check; physician review pending'` unless the owner has signed off, in which case use their initials and the date.
+7. Add a one-line `CHANGELOG` entry at the top. Bump `APP_VERSION`: patch for content, minor for features.
+8. Never change an existing `id` (share links depend on it). Never delete a pathway without the owner's explicit instruction; deprecate by prefixing `name` with "(Superseded) " and explaining in the changelog.
+9. Append to `verification-log.md`: what you checked, the source, and anything you could not confirm.
+10. Run `node tests/check.js`. Open a pull request for clinical changes so the owner reviews the diff; commit typo fixes directly.
+
+## Style
+No em dashes in patient text; no emoji; sentence case; drug names as generic (brand) on first mention, e.g. pembrolizumab (Keytruda).
