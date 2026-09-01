@@ -176,7 +176,6 @@ body.patient .main{padding:24px 20px 60px}
 .branch.dim{opacity:.55}
 .branch h4{margin:0 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600}
-.tag.alt{background:transparent;border:1px solid var(--line);color:var(--muted)}
 .branch .steps{grid-template-columns:1fr;gap:8px;margin:0}
 .visits{margin:6px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}
 .visits li{display:flex;gap:8px;padding:2px 0;border-top:1px dotted var(--line)}
@@ -511,8 +510,11 @@ function nodeSummary(n){
   return '';
 }
 function visibleBranches(n){
-  if (n.only && n.emph !== null && n.emph !== undefined && n.branches[n.emph]) return [{ b: n.branches[n.emph], idx: n.emph }];
-  return n.branches.map((b, idx) => ({ b, idx }));
+  const em = (n.emph === null || n.emph === undefined || !n.branches[n.emph]) ? null : n.emph;
+  if (n.only && em !== null) return [{ b: n.branches[em], idx: em }];
+  const vis = n.branches.map((b, idx) => ({ b, idx }));
+  if (em !== null) vis.unshift(vis.splice(em, 1)[0]);
+  return vis;
 }
 
 /* ===================== state ===================== */
@@ -658,9 +660,9 @@ function fieldsFor(n, path){
     <div class="f"><label>How the patient sees the paths</label>
       <div class="radios">
         <label><input type="radio" name="emph-${n.id}" ${P_} data-k="emph" value="both" ${n.emph == null ? 'checked' : ''}> Show both equally</label>
-        ${n.branches.map((b, i) => `<label><input type="radio" name="emph-${n.id}" ${P_} data-k="emph" value="${i}" ${n.emph === i ? 'checked' : ''}> Expected: ${esc(b.cond)}</label>`).join('')}
+        ${n.branches.map((b, i) => `<label><input type="radio" name="emph-${n.id}" ${P_} data-k="emph" value="${i}" ${n.emph === i ? 'checked' : ''}> Show first: ${esc(b.cond)}</label>`).join('')}
       </div>
-      <label class="chk"><input type="checkbox" ${P_} data-k="only" ${n.only ? 'checked' : ''} ${n.emph == null ? 'disabled' : ''}> Show only the expected path</label>
+      <label class="chk"><input type="checkbox" ${P_} data-k="only" ${n.only ? 'checked' : ''} ${n.emph == null ? 'disabled' : ''}> Show only this path</label>
     </div>
     ${n.branches.map((b, i) => `<div class="branch-ed"><div class="f"><label>Path ${i + 1}: shown when…</label><div style="display:flex;gap:6px"><input type="text" data-bp="${path}.${i}" data-k="cond" value="${esc(b.cond)}">${n.branches.length > 2 ? `<button type="button" class="ibtn" title="Remove this path" data-act="delbranch" data-bp="${path}.${i}">✕</button>` : ''}</div></div>
       <div style="margin-top:8px">${renderNodes(b.nodes, `${path}.${i}`, false, assignColors(state.regimen))}</div></div>`).join('')}
@@ -805,12 +807,12 @@ function layout(nodes, cfg){
           const r = row + bi;
           const isExp = n.emph === v.idx;
           const dimB = dim || (n.emph != null && !isExp);
-          ctx.forks.push({ fx:x + C.diamond, frow:row, tx:bx, trow:r, cond:v.b.short || v.b.cond, expected:isExp, single:vis.length === 1, dim:dimB, decided:n.emph != null });
+          ctx.forks.push({ fx:x + C.diamond, frow:row, tx:bx, trow:r, cond:v.b.short || v.b.cond, expected:isExp, single:vis.length === 1, dim:dimB });
           const res = place(v.b.nodes, bx, week, r, dimB);
           ends.push({ x:res.x, row:r });
           ctx.rows = Math.max(ctx.rows, r + 1);
           ext(r, bx, Math.max(bx + 1, res.x));
-          ctx.branchTotals.push({ expected:isExp, decided:n.emph != null, treat:res.treat, end:res.week });
+          ctx.branchTotals.push({ treat:res.treat, end:res.week });
           maxX = Math.max(maxX, res.x); maxWeek = Math.max(maxWeek, res.week); maxTreat = Math.max(maxTreat, res.treat);
         });
         x = maxX; week = maxWeek; treat = maxTreat; lastStart = x; lastWeek = week;
@@ -847,9 +849,8 @@ function layout(nodes, cfg){
   // totals in weeks of treatment (excluding monitoring, hormone-only, open-ended tablets)
   const bt = ctx.branchTotals;
   if (bt.length){
-    const exp = bt.find(b => b.expected);
-    ctx.total = { min:Math.min(...bt.map(b => b.treat)) - 1, max:Math.max(...bt.map(b => b.treat)) - 1, expected: exp ? exp.treat - 1 : null };
-  } else ctx.total = { min:res.treat - 1, max:res.treat - 1, expected:null };
+    ctx.total = { min:Math.min(...bt.map(b => b.treat)) - 1, max:Math.max(...bt.map(b => b.treat)) - 1 };
+  } else ctx.total = { min:res.treat - 1, max:res.treat - 1 };
   return ctx;
 }
 
@@ -883,7 +884,7 @@ function renderRoute(ctx, startDate, colors, here){
   for (let r = 0; r < ctx.rows; r++){ const e = ctx.rowExt[r]; if (!e || !isFinite(e.min)) continue; g += `<line x1="${e.min}" y1="${cy(r)}" x2="${e.max}" y2="${cy(r)}" stroke="#D9DEE7" stroke-width="2"/>`; }
   for (const f of ctx.forks){
     g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow), f.dim);
-    const lines = wrapText((f.decided && f.expected ? 'Expected: ' : '') + f.cond, 21);
+    const lines = wrapText(f.cond, 21);
     if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 11, ln, { size:9.5, fill:'#3B4557', weight:600 }); }); }
     else { const base = cy(f.trow) - 6 - (lines.length - 1) * 11; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 11, ln, { size:9.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400 }); }); }
   }
@@ -987,8 +988,7 @@ function stepsHtml(nodes, start, ctx, startDate, detail, colors){
         const isExp = n.emph === v.idx, decided = n.emph != null;
         const inner = stepsHtml(v.b.nodes, num, ctx, startDate, detail, colors);
         next = Math.max(next, inner.next);
-        const tag = decided ? (isExp ? `<span class="tag">Expected path</span>` : `<span class="tag alt">If results differ</span>`) : '';
-        return `<div class="branch${decided ? (isExp ? ' expected' : ' dim') : ''}"><h4>${esc(v.b.cond)} ${tag}</h4><ol class="steps">${inner.html}</ol></div>`;
+        return `<div class="branch${decided ? (isExp ? ' expected' : ' dim') : ''}"><h4>${esc(v.b.cond)}</h4><ol class="steps">${inner.html}</ol></div>`;
       });
       parts.push(`<li class="fork"><h3>${esc(n.question || n.name)}</h3>${n.plain ? `<p>${esc(n.plain)}</p>` : ''}<div class="branches">${cols.join('')}</div></li>`);
       num = next; lastIdx = -1;
@@ -1015,7 +1015,6 @@ function totalText(ctx, nodes){
   const t = ctx.total;
   if (!t || t.max <= 0) return '';
   const tail = nodes && hasEndocrineTail(nodes) ? ', followed by hormone tablets' : '';
-  if (t.expected != null) return `Overall: ${durLong(t.expected)} of treatment on the expected path${tail}.`;
   if (t.max - t.min >= 4) return `Overall: ${rangeText(t.min, t.max)} of treatment, depending on results${tail}.`;
   return `Overall: ${durLong(t.max)} of treatment${tail}.`;
 }
@@ -1048,7 +1047,7 @@ function renderSheet(){
     <section class="route">${renderRoute(ctx, startDate, colors, herePos(ctx))}</section>
     <ol class="steps${o.progressBoxes ? ' withboxes' : ''}">${steps.html}</ol>
     ${bottomHtml(o)}
-    <footer class="sh-foot"><div><div class="legend">${legend}</div>This page shows the expected plan and approximate timing. Your care team sets the actual dates, which can shift with test results and how you are feeling. It does not replace your appointment schedule.${o.contact ? `<br><b style="color:var(--ink-2)">${esc(o.contact)}</b>` : ''}<br><span class="wm">ONCourse</span></div><div class="qrwrap" id="sheetqr"></div></footer>`;
+    <footer class="sh-foot"><div><div class="legend">${legend}</div>This page shows the planned steps and approximate timing. Your care team sets the actual dates, which can shift with test results and how you are feeling. It does not replace your appointment schedule.${o.contact ? `<br><b style="color:var(--ink-2)">${esc(o.contact)}</b>` : ''}<br><span class="wm">ONCourse</span></div><div class="qrwrap" id="sheetqr"></div></footer>`;
   $('#tb-title').textContent = r.title || r.name;
   renderSheetQr();
 }

@@ -983,8 +983,9 @@ const LIBRARY = [
 },
 ];
 
-const APP_VERSION = '0.5.1';
+const APP_VERSION = '0.6.0';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Decision points no longer label a branch "expected". The map and the step list lead with the path the team is planning around and keep the alternative in view, without predicting which outcome a person will have. The overall duration no longer follows one assumed outcome; it covers all the possible paths.' },
   { date:'2026-09-01', text:'Breast: added the genomic-assay pathway (Oncotype DX / MammaPrint) with a fork to chemotherapy plus radiation and endocrine therapy or radiation and endocrine therapy alone, with an optional adjuvant CDK4/6 inhibitor. Kidney: added LITESPARK-022 belzutifan + pembrolizumab (FDA-approved June 2026). Nasopharynx: added chemoradiation alone and chemoradiation followed by adjuvant cisplatin + 5-FU alongside the induction pathway.' },
   { date:'2026-09-01', text:'New categories: head and neck (definitive chemoradiation, surgery with pathology-guided radiation, KEYNOTE-689 perioperative pembrolizumab, nasopharyngeal induction then chemoradiation) and melanoma (NADINA, SWOG S1801, adjuvant immunotherapy, adjuvant dabrafenib + trametinib). GI additions: ATOMIC for mismatch-repair-deficient stage III colon cancer (NCCN-listed; FDA decision expected October 2026) and anal canal chemoradiation with response-guided salvage surgery.' },
   { date:'2026-09-01', text:'Added ctDNA-guided adjuvant atezolizumab for muscle-invasive bladder cancer after cystectomy (IMvigor011; FDA-approved May 2026 with Signatera as the companion test). The regimen picker is now searchable by drug, trial, or cancer type.' },
