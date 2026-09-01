@@ -983,8 +983,10 @@ const LIBRARY = [
 },
 ];
 
-const APP_VERSION = '0.6.0';
+const APP_VERSION = '0.7.0';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Corrected the timing shown after a radiation step whose length the radiation oncologist has not set. Later steps were dated as though radiation took no time; they now say they start after the previous step ends, and the overall figure names the radiation course separately. Seven pathways were affected. A step can also carry more than two treatment types on the map, where a third type was previously dropped from the bar while still appearing in the legend.' },
+  { date:'2026-09-01', text:'Builder: the pathway list stays open until you confirm a choice, so you can look through several first; steps can be reordered from the collapsed row; adding a treatment type to a step offers a matching sentence for the patient description. Compare pages show the diagnosis as a labelled line, draw each option in its own treatment colours, and group the pathway picker by cancer type. The "You are here" marker has been removed.' },
   { date:'2026-09-01', text:'Decision points no longer label a branch "expected". The map and the step list lead with the path the team is planning around and keep the alternative in view, without predicting which outcome a person will have. The overall duration no longer follows one assumed outcome; it covers all the possible paths.' },
   { date:'2026-09-01', text:'Breast: added the genomic-assay pathway (Oncotype DX / MammaPrint) with a fork to chemotherapy plus radiation and endocrine therapy or radiation and endocrine therapy alone, with an optional adjuvant CDK4/6 inhibitor. Kidney: added LITESPARK-022 belzutifan + pembrolizumab (FDA-approved June 2026). Nasopharynx: added chemoradiation alone and chemoradiation followed by adjuvant cisplatin + 5-FU alongside the induction pathway.' },
   { date:'2026-09-01', text:'New categories: head and neck (definitive chemoradiation, surgery with pathology-guided radiation, KEYNOTE-689 perioperative pembrolizumab, nasopharyngeal induction then chemoradiation) and melanoma (NADINA, SWOG S1801, adjuvant immunotherapy, adjuvant dabrafenib + trametinib). GI additions: ATOMIC for mismatch-repair-deficient stage III colon cancer (NCCN-listed; FDA decision expected October 2026) and anal canal chemoradiation with response-guided salvage surgery.' },
