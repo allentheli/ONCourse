@@ -84,3 +84,59 @@ Verified August 31, 2026, against primary publications, trial protocols, and str
 - **LITESPARK-022** (verified: FDA approval June 12, 2026; ASCO/Urology Times). Intermediate-high/high-risk or M1-NED clear-cell RCC after nephrectomy: pembrolizumab 400 mg q6w ×9 (or 200 q3w) up to 12 months + belzutifan 120 mg daily up to 54 weeks, starting within 12 weeks of surgery. DFS HR 0.72.
 - **Nasopharynx, chemoradiation alone** (standard-reference; Chen JNCI 2011; NCCN) for stage II / lower-risk III.
 - **Nasopharynx, Intergroup 0099** (standard-reference; Al-Sarraf JCO 1998; MAC-NPC meta-analysis). Concurrent cisplatin + RT → cisplatin 80 + 5-FU 1000 ×4 days q4w ×3.
+
+---
+## Additions and changes verified September 1, 2026 (v0.8.0)
+
+Sources retrieved from PubMed this session are marked **(fetched)**; items marked
+standard-reference match the primary publications and widely used protocol
+references as known, and were not individually re-fetched.
+
+### New pathways
+- **NATALEE** `natalee` **(fetched)** — Hortobagyi GN et al., *Ann Oncol* 2025;36:149-157
+  (doi:10.1016/j.annonc.2024.10.015) and Slamon DJ et al., *Ther Adv Med Oncol* 2023;15
+  (doi:10.1177/17588359231178125). Ribociclib 400 mg/day, 3 weeks on / 1 week off, for
+  **36 months**, plus a nonsteroidal aromatase inhibitor (letrozole 2.5 mg or anastrozole
+  1 mg) for **≥60 months**; goserelin 3.6 mg q28d for men and premenopausal women.
+  Population: anatomical stage IIA (N0 with risk factors, or N1), IIB, or III. The app
+  shows 3 years of ribociclib + hormone tablet, then 2 further years of the tablet alone
+  (156 + 104 weeks = 5 years total). Doses are not shown on the patient page.
+  Distinct from the existing `hrplus` pathway, which carries abemaciclib at 2 years
+  (monarchE); the two durations differ, which is why this is a separate pathway.
+- **Long-course chemoradiation TNT** `tnt-lcrt` **(fetched)** — Fokas E et al.,
+  *JAMA Oncol* 2022;8:e215445 (doi:10.1001/jamaoncol.2021.5445), with the pooled
+  CAO/ARO/AIO-12 + OPRA analysis, Fokas E et al., *Eur J Cancer* 2024;210:114291
+  (doi:10.1016/j.ejca.2024.114291). CRT 50.4 Gy with fluorouracil/oxaliplatin, and
+  3 cycles of FOLFOX, in either order; TME scheduled day 123 from the start of TNT.
+  The app renders the consolidation order (CRT first) because both trials reported
+  higher complete-response rates with CRT→chemotherapy, and the step text states that
+  the order may be reversed. The app places surgery at week 19 (day ~126), within the
+  protocol window. 3-year DFS was 73% in both arms, so neither order is presented as
+  superior for survival.
+
+### Changes to existing pathways
+- **KEYNOTE-522** `kn522` — adjuvant capecitabine moved to start after radiation
+  finishes, at the owner's direction, and the patient text now says so. **Not
+  trial-specified:** KEYNOTE-522 does not include capecitabine, and CREATE-X
+  (Masuda, NEJM 2017) specifies only that capecitabine start within 12 weeks of
+  surgery, without stating a sequence relative to radiation. This is a
+  practice-based ordering, not a protocol requirement. Immunotherapy continues
+  throughout, as in the trial.
+- **Genomic-assay pathway** `genomic` — dose-dense AC then paclitaxel added as a second
+  chemotherapy option alongside docetaxel + cyclophosphamide, switched off by default
+  (standard-reference; CALGB 9741 / ECOG 1199, as already cited for the `ddac-t`
+  pathway). Modelled as 8 cycles at 14 days (~16 weeks); the text also names the
+  weekly-paclitaxel-×12 variant, which the app does not separately time.
+- **All surveillance steps (28 across the library)** — now open-ended. Surveillance
+  showed fixed totals of 1, 2, 3 or 5 years, which implied an evidence-based endpoint
+  that mostly does not exist; the visit frequency is the part guidelines actually
+  specify. The map and the step list now read "ongoing" and keep the frequency line,
+  which remains editable per patient in the builder. **Note:** the `weeks` value is
+  retained on these steps because the layout engine uses it for bar length only; it is
+  no longer rendered anywhere and should not be read as a claimed duration.
+
+### Could not confirm
+- Whether any guideline specifies capecitabine sequencing relative to radiation after
+  neoadjuvant therapy for triple-negative breast cancer. Treated as practice-variable.
+- NATALEE overall survival data were still immature at the 2025 final iDFS analysis;
+  the pathway makes no survival claim.

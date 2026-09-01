@@ -54,10 +54,10 @@ const LIBRARY = [
           ]),
           Br('Some cancer remained', [
             P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:9, plain:'Immunotherapy on its own, every 3 weeks, for 9 more doses.' }),
+            RADIATION_ALONGSIDE(),
             P({ name:'Capecitabine (oral chemotherapy)', short:'Capecitabine tablets', mods:['chemo'], cycleDays:21, cycles:8, optional:true, on:true, concurrent:true,
                 visits:[{d:1,label:'Start 14 days of capecitabine tablets, then 7 days off'}],
-                plain:'Chemotherapy tablets taken at home for 2 weeks out of every 3, for about 6 months, alongside immunotherapy. If you carry a BRCA gene change, olaparib tablets for 1 year may be recommended instead.' }),
-            RADIATION_ALONGSIDE(),
+                plain:'Chemotherapy tablets taken at home for 2 weeks out of every 3, for about 6 months, starting once radiation has finished. Immunotherapy continues at the same time. If you carry a BRCA gene change, olaparib tablets for 1 year may be recommended instead.' }),
           ]),
         ] }),
   ]
@@ -152,6 +152,23 @@ const LIBRARY = [
         plain:'The hormone-blocking tablet continues on its own to complete 5 to 10 years in total.' }),
   ]
 },
+{
+  id:'natalee', plan:'Hormone therapy plus ribociclib for 3 years', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-01', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Hortobagyi GN et al. Adjuvant ribociclib plus endocrine therapy versus endocrine therapy alone in HR-positive/HER2-negative early breast cancer: final invasive disease-free survival results from NATALEE. Annals of Oncology 2025;36:149-157',q:'NATALEE ribociclib adjuvant final invasive disease-free survival Hortobagyi Annals of Oncology 2025'},{t:'Slamon DJ et al. Rationale and trial design of NATALEE. Therapeutic Advances in Medical Oncology 2023;15:17588359231178125',q:'NATALEE rationale trial design Slamon ribociclib adjuvant 2023'}], disease:'breast', name:'NATALEE: surgery, then an aromatase inhibitor with ribociclib for 3 years',
+  trial:'NATALEE', summary:'HR-positive, HER2-negative, stage IIA (with risk factors) to III. Surgery, chemotherapy if beneficial, radiation, then an aromatase inhibitor with ribociclib for 3 years.',
+  title:'Surgery, then a daily hormone tablet with ribociclib for three years',
+  subtitle:'Hormone-receptor positive, HER2-negative breast cancer, stage IIA to III',
+  nodes:[
+    SURGERY_BREAST(),
+    HEAL(4),
+    P({ name:'Chemotherapy (if beneficial)', short:'Chemotherapy', mods:['chemo'], cycleDays:21, cycles:4, optional:true, on:false,
+        plain:'Chemotherapy is beneficial for some people based on the stage and the tumor test results. Your team will say whether it is recommended for you.' }),
+    RADIATION_AFTER(true),
+    P({ name:'Aromatase inhibitor + ribociclib (Kisqali)', short:'Hormone + ribociclib', mods:['endocrine','targeted'], mode:'daily', weeks:156,
+        plain:'A daily hormone-blocking tablet (letrozole or anastrozole) plus ribociclib for 3 years. Ribociclib is taken for 3 weeks, then 1 week off, over and over. It is a targeted drug that slows the growth of cancer cells. Blood tests and a heart tracing are checked in the first cycles. If you have not been through menopause, an injection every 4 weeks switches off the ovaries.' }),
+    P({ name:'Hormone (endocrine) therapy continues', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:104,
+        plain:'The hormone-blocking tablet continues on its own to complete at least 5 years in total.' }),
+  ]
+},
 
 /* ---------------- GI ---------------- */
 {
@@ -206,7 +223,7 @@ const LIBRARY = [
         plain:'Whether surgery is needed depends on what the exam, scope, and MRI show.',
         branches:[
           Br('No tumor found (complete response)', [
-            P({ name:'Watch and wait (close monitoring)', short:'Watch and wait', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exam, scope, and MRI every 3 to 4 months',
+            P({ name:'Watch and wait (close monitoring)', short:'Watch and wait', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exam, scope, and MRI every 3 to 4 months',
                 plain:'No surgery for now. Exams, scopes, and MRIs every 3 to 4 months for 2 years, then less often. If the tumor regrows, surgery is done at that point and is still effective for most people.' }),
           ]),
           Br('Tumor still present', [
@@ -214,6 +231,24 @@ const LIBRARY = [
             R('Healing after surgery', 6, 'Recovery from surgery, followed by regular monitoring.'),
           ]),
         ] }),
+  ]
+},
+{
+  id:'tnt-lcrt', plan:'Chemoradiation and chemotherapy before surgery', group:'Rectal', added:'2026-09-01', reviewed:'2026-09-01', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Fokas E et al. Chemoradiotherapy plus induction or consolidation chemotherapy as total neoadjuvant therapy for locally advanced rectal cancer: long-term results of the CAO/ARO/AIO-12 randomized clinical trial. JAMA Oncology 2022;8:e215445',q:'CAO/ARO/AIO-12 Fokas induction consolidation total neoadjuvant rectal JAMA Oncology 2022'},{t:'Fokas E et al. Pooled analysis of the CAO/ARO/AIO-12 and OPRA randomized phase 2 trials. European Journal of Cancer 2024;210:114291',q:'CAO/ARO/AIO-12 OPRA pooled analysis total neoadjuvant sequence Fokas European Journal of Cancer 2024'}], disease:'gi', name:'Long-course chemoradiation and chemotherapy before surgery, then rectal resection',
+  trial:'CAO/ARO/AIO-12', summary:'Locally advanced rectal cancer (cT3-4 and/or node-positive). Long-course chemoradiation and FOLFOX before total mesorectal excision. The trial tested both orders and found similar long-term results.',
+  title:'Chemoradiation and chemotherapy before surgery, given in either order',
+  subtitle:'Rectal cancer, locally advanced (stage II to III)',
+  nodes:[
+    P({ name:'Chemoradiation (long course)', short:'Chemoradiation', mods:['radiation','chemo'], mode:'weekdays', weeks:6,
+        plain:'Radiation to the pelvis every weekday for about 5 to 6 weeks, with low-dose chemotherapy on radiation days to make the radiation work better. This step and the chemotherapy step can be given in either order; the trial tested both and found similar results after several years. Your team decides which order suits you, and you can ask why.' }),
+    R('Recovery', 2, 'A short break before the next step.'),
+    P({ name:'FOLFOX chemotherapy', short:'FOLFOX', mods:['chemo'], cycleDays:14, cycles:3,
+        plain:'Three cycles of chemotherapy, each given every 2 weeks, partly in clinic and partly through a small pump you take home for about two days. If your team gives the chemotherapy first instead, these same cycles come before the chemoradiation.' }),
+    RECOVER(4),
+    S('Surgery (total mesorectal excision)', 'An operation to remove the rectum together with the surrounding fatty tissue and lymph nodes. In the trial, surgery was planned for about 4 months after treatment started.'),
+    R('Healing after surgery', 6, 'Time to recover from the operation. A temporary ostomy (stoma) is common and is usually reversed later.'),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Visits, blood tests, and scans every 3 to 6 months',
+        plain:'Regular visits, blood tests, scopes, and scans. How often depends on how you are doing.' }),
   ]
 },
 {
@@ -254,7 +289,7 @@ const LIBRARY = [
         plain:'If no cancer remained in the removed tissue, no further treatment is needed. If some remained, a year of immunotherapy lowers the chance of it coming back.',
         branches:[
           Br('No remaining cancer (complete response)', [
-            P({ name:'Monitoring', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Visits and scans every 3 to 6 months',
+            P({ name:'Monitoring', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Visits and scans every 3 to 6 months',
                 plain:'No further treatment. Visits and scans on a regular schedule.' }),
           ]),
           Br('Some cancer remained', [
@@ -275,7 +310,7 @@ const LIBRARY = [
     P({ name:'CAPOX', short:'CAPOX', mods:['chemo'], cycleDays:21, cycles:4,
         visits:[{d:1,label:'Oxaliplatin by IV, then capecitabine tablets twice a day for 14 days'}],
         plain:'Oxaliplatin by IV every 3 weeks plus capecitabine tablets at home for 2 of every 3 weeks. Four cycles (3 months) for most stage III cancers; 8 cycles (6 months) for higher-risk cancers. FOLFOX every 2 weeks is an alternative.' }),
-    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Blood test every 3 to 6 months, scan yearly',
+    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Blood test every 3 to 6 months, scan yearly',
         plain:'Regular check-ups: a blood test (CEA) every 3 to 6 months, a CT scan every 6 to 12 months, and a colonoscopy about one year after surgery.' }),
   ]
 },
@@ -290,7 +325,7 @@ const LIBRARY = [
     P({ name:'mFOLFIRINOX', short:'FOLFIRINOX', mods:['chemo'], cycleDays:14, cycles:12,
         visits:[{d:1,label:'Oxaliplatin, irinotecan, leucovorin, then a 5-FU pump worn home for about 46 hours'}],
         plain:'Three chemotherapy drugs by IV every 2 weeks for 6 months. One of them (5-FU) runs through a small pump you wear home for about 2 days.' }),
-    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Visits, blood tests, and scans every 3 to 6 months',
+    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Visits, blood tests, and scans every 3 to 6 months',
         plain:'Regular visits with blood tests and scans every 3 to 6 months.' }),
   ]
 },
@@ -327,7 +362,7 @@ const LIBRARY = [
         plain:'If no cancer remained, monitoring is enough. If some remained, your doctor will discuss further treatment.',
         branches:[
           Br('No remaining cancer (complete response)', [
-            P({ name:'Monitoring', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Visits and scans every 3 to 6 months', plain:'No further treatment. Visits and CT scans on a regular schedule.' }),
+            P({ name:'Monitoring', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Visits and scans every 3 to 6 months', plain:'No further treatment. Visits and CT scans on a regular schedule.' }),
           ]),
           Br('Some cancer remained', [
             P({ name:'Further treatment (to be discussed)', short:'Further treatment', mods:['io'], cycleDays:28, cycles:13, optional:true, on:true,
@@ -374,7 +409,7 @@ const LIBRARY = [
         plain:'Cisplatin-based chemotherapy every 3 weeks, 4 times, is recommended for many stage II to III cancers before starting the targeted tablet.' }),
     P({ name:'Osimertinib (Tagrisso)', short:'Osimertinib', mods:['targeted'], mode:'daily', weeks:156, freqText:'One tablet daily; clinic visits every 2 to 3 months',
         plain:'A targeted tablet taken once a day for 3 years. It blocks the EGFR signal that drives this type of cancer. Clinic visits and scans every few months.' }),
-    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Visits and scans every 6 months', plain:'Regular visits and CT scans after the tablet is finished.' }),
+    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Visits and scans every 6 months', plain:'Regular visits and CT scans after the tablet is finished.' }),
   ]
 },
 {
@@ -387,7 +422,7 @@ const LIBRARY = [
     HEAL(6),
     P({ name:'Alectinib (Alecensa)', short:'Alectinib', mods:['targeted'], mode:'daily', weeks:104, freqText:'Tablets twice daily; clinic visits every 2 to 3 months',
         plain:'A targeted tablet taken twice a day for 2 years. It blocks the ALK signal that drives this type of cancer. Clinic visits and scans every few months.' }),
-    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Visits and scans every 6 months', plain:'Regular visits and CT scans after the tablet is finished.' }),
+    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Visits and scans every 6 months', plain:'Regular visits and CT scans after the tablet is finished.' }),
   ]
 },
 {
@@ -531,7 +566,7 @@ const LIBRARY = [
         plain:'A blood test can detect traces of cancer DNA before any scan would show a recurrence. If it is found, a year of immunotherapy lowers the chance of the cancer returning. If it is not found, no treatment is needed, and testing continues.',
         branches:[
           Br('No cancer DNA detected', [
-            P({ name:'Surveillance with repeat ctDNA tests', short:'ctDNA surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Blood test every 6 to 12 weeks for a year, with scans',
+            P({ name:'Surveillance with repeat ctDNA tests', short:'ctDNA surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Blood test every 6 to 12 weeks for a year, with scans',
                 plain:'No treatment for now. The blood test is repeated every 6 to 12 weeks for a year, alongside scans. If cancer DNA appears later, immunotherapy can start then.' }),
           ]),
           Br('Cancer DNA detected', [
@@ -559,7 +594,7 @@ const LIBRARY = [
         plain:'If cancer had grown through the bladder wall or into lymph nodes despite chemotherapy, a year of immunotherapy lowers the chance of it coming back.',
         branches:[
           Br('Little or no cancer remained', [
-            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Scans every 3 to 6 months', plain:'No further treatment. Scans and visits on a regular schedule.' }),
+            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Scans every 3 to 6 months', plain:'No further treatment. Scans and visits on a regular schedule.' }),
           ]),
           Br('High-risk cancer remained', [
             P({ name:'Nivolumab (Opdivo)', short:'Nivolumab', mods:['io'], cycleDays:28, cycles:13, plain:'Immunotherapy by IV every 2 or 4 weeks for up to one year. Pembrolizumab is an alternative.' }),
@@ -579,7 +614,7 @@ const LIBRARY = [
     R('Recovery', 3, 'A few weeks to heal before radiation begins.'),
     P({ name:'Chemoradiation', short:'Radiation + chemo', mods:['radiation','chemo'], mode:'weekdays', weeks:7,
         plain:'Radiation to the bladder every weekday for about 6 to 7 weeks, with low-dose chemotherapy (cisplatin, or 5-FU with mitomycin) to make the radiation more effective.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Scope checks every 3 months at first, plus scans',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Scope checks every 3 months at first, plus scans',
         plain:'Scope checks of the bladder every 3 months at first, then less often, with scans. If the cancer returns, surgery to remove the bladder remains an option.' }),
   ]
 },
@@ -594,7 +629,7 @@ const LIBRARY = [
     S('Surgery (nephrectomy)', 'Removal of the affected kidney, or the part of it containing the cancer.'),
     R('Healing after surgery', 8, 'Recovery from surgery. Immunotherapy starts within 12 weeks of the operation.'),
     P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:17, plain:'Immunotherapy by IV every 3 weeks for 17 doses (about one year). It helps your immune system find and destroy any remaining cancer cells.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Scans every 6 months', plain:'Regular visits and CT scans after immunotherapy is finished.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Scans every 6 months', plain:'Regular visits and CT scans after immunotherapy is finished.' }),
   ]
 },
 {
@@ -607,7 +642,7 @@ const LIBRARY = [
   nodes:[
     S('Surgery (partial or radical nephrectomy)', 'Removal of the part of the kidney containing the cancer, or the whole kidney.'),
     R('Healing after surgery', 6, 'Recovery from surgery.'),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, freqText:'Scans every 6 to 12 months',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, openEnded:true, freqText:'Scans every 6 to 12 months',
         plain:'No further treatment is needed. Blood tests and scans every 6 to 12 months for 5 years to make sure the cancer has not returned.' }),
   ]
 },
@@ -629,7 +664,7 @@ const LIBRARY = [
         plain:'Injections continue every 3 or 6 months to complete 2 to 3 years in total. Hot flashes, tiredness, and loss of muscle are common and manageable.' }),
     P({ name:'Abiraterone + prednisone tablets (very high risk)', short:'Abiraterone', mods:['endocrine'], mode:'daily', weeks:104, optional:true, on:false, concurrent:true,
         plain:'For very high-risk cancers, abiraterone tablets with low-dose prednisone every day for 2 years alongside the injections (STAMPEDE).' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, freqText:'PSA blood test every 3 to 6 months', plain:'A PSA blood test every 3 to 6 months, then yearly.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, openEnded:true, freqText:'PSA blood test every 3 to 6 months', plain:'A PSA blood test every 3 to 6 months, then yearly.' }),
   ]
 },
 {
@@ -648,7 +683,7 @@ const LIBRARY = [
     P({ name:'Hormone therapy continues', short:'Hormone therapy', mods:['endocrine'], cycleDays:84, cycles:1,
         visits:[{d:1,label:'ADT injection'}],
         plain:'One more injection to complete 4 to 6 months in total. Testosterone recovers over the following months.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, freqText:'PSA blood test every 6 months', plain:'A PSA blood test every 6 months, then yearly.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, openEnded:true, freqText:'PSA blood test every 6 months', plain:'A PSA blood test every 6 months, then yearly.' }),
   ]
 },
 {
@@ -661,7 +696,7 @@ const LIBRARY = [
   nodes:[
     S('Surgery (radical prostatectomy)', 'Removal of the prostate and, when needed, nearby lymph nodes, usually with robotic assistance.'),
     R('Healing after surgery', 6, 'Recovery, including regaining bladder control. The first PSA check is at about 6 to 8 weeks.'),
-    P({ name:'PSA surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, freqText:'PSA blood test every 3 to 6 months',
+    P({ name:'PSA surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:260, openEnded:true, freqText:'PSA blood test every 3 to 6 months',
         plain:'After surgery the PSA should be undetectable. It is checked every 3 to 6 months for the first years, then yearly.' }),
     P({ name:'Radiation if the PSA rises (salvage)', short:'Radiation if needed', mods:['radiation'], mode:'weekdays', weeks:'', optional:true, on:false,
         plain:'If the PSA rises, radiation to the area where the prostate was, sometimes with a few months of hormone therapy, can still cure the cancer.' }),
@@ -697,7 +732,7 @@ const LIBRARY = [
         plain:'Immunotherapy by IV every 2 weeks, given on the same days as chemotherapy. It helps your immune system recognize and attack cancer cells, which works particularly well in mismatch-repair-deficient cancers.' }),
     P({ name:'Atezolizumab (Tecentriq) alone', short:'Atezolizumab alone', mods:['io'], cycleDays:14, cycles:13,
         plain:'Immunotherapy continues on its own every 2 weeks for 6 more months, to complete one year in total. Each visit is short.' }),
-    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, freqText:'Blood test every 3 to 6 months, scan every 6 to 12 months',
+    P({ name:'Monitoring (surveillance)', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:52, openEnded:true, freqText:'Blood test every 3 to 6 months, scan every 6 to 12 months',
         plain:'Regular check-ups: a blood test (CEA) every 3 to 6 months, a CT scan every 6 to 12 months, and a colonoscopy about one year after surgery.' }),
   ]
 },
@@ -716,7 +751,7 @@ const LIBRARY = [
         plain:'Most people have a complete response and need no further treatment. If cancer remains or regrows, surgery can still cure it.',
         branches:[
           Br('Complete response', [
-            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:156, freqText:'Exam every 3 to 6 months for 5 years',
+            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:156, openEnded:true, freqText:'Exam every 3 to 6 months for 5 years',
                 plain:'Exams every 3 to 6 months for 5 years, with scans in the first years. No further treatment.' }),
           ]),
           Br('Cancer remains', [
@@ -743,7 +778,7 @@ const LIBRARY = [
         plain:'Most people have a complete response. If lymph nodes in the neck have not fully responded, a neck operation removes what remains.',
         branches:[
           Br('Complete response', [
-            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams every 2 to 3 months in the first year, then less often',
+            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams every 2 to 3 months in the first year, then less often',
                 plain:'Regular exams, swallowing and speech support, thyroid blood tests, and dental care. No further treatment.' }),
           ]),
           Br('Lymph nodes remain', [
@@ -794,7 +829,7 @@ const LIBRARY = [
         plain:'Radiation every weekday for about 6 weeks, with pembrolizumab every 3 weeks (3 doses) continuing through it. Cisplatin is added if the pathology showed positive margins or cancer growing outside a lymph node.' }),
     P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:12,
         plain:'Immunotherapy on its own every 3 weeks for 12 more doses (about 9 months), to complete a year in total. Each visit is short.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams every 2 to 3 months in the first year, then less often',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams every 2 to 3 months in the first year, then less often',
         plain:'Regular exams, swallowing and speech support, thyroid blood tests, and dental care.' }),
   ]
 },
@@ -812,7 +847,7 @@ const LIBRARY = [
     P({ name:'Radiation with cisplatin (chemoradiation)', short:'Radiation + cisplatin', mods:['radiation','chemo'], mode:'weekdays', weeks:7,
         plain:'Radiation to the nasopharynx and neck every weekday for about 7 weeks, with cisplatin every 3 weeks (3 doses) to make it more effective.' }),
     R('Recovery and first scan', 12, 'Side effects take 2 to 3 months to settle. An MRI or PET/CT about 12 weeks after treatment checks the response.'),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams and EBV blood tests every 3 months in the first year',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams and EBV blood tests every 3 months in the first year',
         plain:'Regular exams, scopes, and Epstein-Barr virus DNA blood tests, with hearing and thyroid checks.' }),
   ]
 },
@@ -835,7 +870,7 @@ const LIBRARY = [
         plain:'About 6 in 10 people have a major response (10 percent or less living cancer) and need no further treatment. Others receive a year of treatment after surgery.',
         branches:[
           Br('Major response (10 percent or less living cancer)', [
-            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams and scans every 3 to 4 months at first',
+            P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams and scans every 3 to 4 months at first',
                 plain:'No further treatment. Skin and lymph node exams with scans every 3 to 4 months for the first 2 years, then less often.' }),
           ]),
           Br('Less than a major response', [
@@ -860,7 +895,7 @@ const LIBRARY = [
     R('Healing after surgery', 4, 'Recovery before immunotherapy resumes.'),
     P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:15,
         plain:'Immunotherapy continues every 3 weeks for 15 more doses, completing 18 in total (about one year).' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams and scans every 3 to 6 months', plain:'Skin and lymph node exams with scans every 3 to 6 months for the first years.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams and scans every 3 to 6 months', plain:'Skin and lymph node exams with scans every 3 to 6 months for the first years.' }),
   ]
 },
 {
@@ -875,7 +910,7 @@ const LIBRARY = [
     R('Healing after surgery', 6, 'Recovery from surgery. Immunotherapy usually starts within 12 weeks.'),
     P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:17,
         plain:'Immunotherapy by IV every 3 weeks for 17 doses (one year). Nivolumab every 4 weeks for 12 doses is an equivalent option. It helps your immune system find and destroy any remaining melanoma cells.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Skin exams every 3 to 6 months, scans as advised', plain:'Skin and lymph node exams every 3 to 6 months, with scans for higher-stage disease.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Skin exams every 3 to 6 months, scans as advised', plain:'Skin and lymph node exams every 3 to 6 months, with scans for higher-stage disease.' }),
   ]
 },
 {
@@ -890,7 +925,7 @@ const LIBRARY = [
     R('Healing after surgery', 6, 'Recovery from surgery. The tablets usually start within 12 weeks.'),
     P({ name:'Dabrafenib (Tafinlar) + trametinib (Mekinist)', short:'Dabrafenib + trametinib', mods:['targeted'], mode:'daily', weeks:52, freqText:'Tablets twice daily (dabrafenib) and once daily (trametinib); clinic visits monthly at first',
         plain:'Two targeted tablets taken at home for one year. They block the BRAF signal that drives this melanoma. Fevers are the most common side effect and are managed with short breaks in treatment.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Skin exams every 3 to 6 months, scans as advised', plain:'Skin and lymph node exams every 3 to 6 months, with scans for higher-stage disease.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Skin exams every 3 to 6 months, scans as advised', plain:'Skin and lymph node exams every 3 to 6 months, with scans for higher-stage disease.' }),
   ]
 },
 /* ---------- BREAST: genomic-assay pathway ---------- */
@@ -908,8 +943,10 @@ const LIBRARY = [
         plain:'The test estimates how likely the cancer is to return and whether chemotherapy would be beneficial on top of hormone therapy. Your team will explain your number.',
         branches:[
           Br('Chemotherapy would be beneficial', [
-            P({ name:'Chemotherapy (docetaxel + cyclophosphamide)', short:'Docetaxel + cyclophosphamide', mods:['chemo'], cycleDays:21, cycles:4,
-                plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months), with a growth-factor injection after each dose. A longer regimen may be used for higher-risk cancers.' }),
+            P({ name:'Chemotherapy (docetaxel + cyclophosphamide)', short:'Docetaxel + cyclophosphamide', mods:['chemo'], cycleDays:21, cycles:4, optional:true, on:true,
+                plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months), with a growth-factor injection after each dose. This is one of two common options; your team will say which suits your cancer.' }),
+            P({ name:'Chemotherapy (dose-dense AC then paclitaxel)', short:'ddAC then paclitaxel', mods:['chemo'], cycleDays:14, cycles:8, optional:true, on:false,
+                plain:'The other common option, often used for higher-risk cancers: doxorubicin and cyclophosphamide every 2 weeks, 4 times, then paclitaxel every 2 weeks, 4 times, or weekly for 12 weeks. A growth-factor injection follows each dose.' }),
             RADIATION_AFTER(true),
             P({ name:'Hormone (endocrine) therapy', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260,
                 plain:'One tablet a day (tamoxifen, or an aromatase inhibitor such as letrozole) for 5 to 10 years, starting after chemotherapy.' }),
@@ -942,7 +979,7 @@ const LIBRARY = [
         plain:'Immunotherapy by IV every 6 weeks (or every 3 weeks) for up to one year. It helps your immune system find and destroy any remaining cancer cells.' }),
     P({ name:'Belzutifan (Welireg) tablets', short:'Belzutifan', mods:['targeted'], mode:'daily', weeks:54, concurrent:true,
         plain:'A targeted tablet taken once a day for up to 54 weeks, alongside the immunotherapy. It blocks HIF-2α, a signal that clear-cell kidney cancer depends on. Anemia and low oxygen levels are the side effects to watch, with regular blood tests.' }),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Scans every 6 months', plain:'Regular visits and CT scans after treatment is finished.' }),
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Scans every 6 months', plain:'Regular visits and CT scans after treatment is finished.' }),
   ]
 },
 
@@ -958,7 +995,7 @@ const LIBRARY = [
     P({ name:'Radiation with cisplatin (chemoradiation)', short:'Radiation + cisplatin', mods:['radiation','chemo'], mode:'weekdays', weeks:7,
         plain:'Radiation to the nasopharynx and neck every weekday for about 7 weeks, with cisplatin every 3 weeks (3 doses) or weekly to make it more effective. A dental check and nutrition plan are arranged before starting.' }),
     R('Recovery and first scan', 12, 'Side effects take 2 to 3 months to settle. An MRI or PET/CT about 12 weeks after treatment checks the response.'),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams and EBV blood tests every 3 months in the first year',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams and EBV blood tests every 3 months in the first year',
         plain:'Regular exams, scopes, and Epstein-Barr virus DNA blood tests, with hearing and thyroid checks.' }),
   ]
 },
@@ -977,14 +1014,16 @@ const LIBRARY = [
         visits:[{d:1,label:'Cisplatin, then a 5-FU pump worn for 4 days'}],
         plain:'Two chemotherapy drugs every 4 weeks, 3 times, to lower the chance of the cancer returning elsewhere. 5-FU runs through a pump worn home for 4 days each cycle.' }),
     R('Recovery and first scan', 8, 'An MRI or PET/CT about 12 weeks after radiation checks the response.'),
-    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, freqText:'Exams and EBV blood tests every 3 months in the first year',
+    P({ name:'Surveillance', short:'Surveillance', mods:['watch'], mode:'ongoing', weeks:104, openEnded:true, freqText:'Exams and EBV blood tests every 3 months in the first year',
         plain:'Regular exams, scopes, and Epstein-Barr virus DNA blood tests, with hearing and thyroid checks.' }),
   ]
 },
 ];
 
-const APP_VERSION = '0.7.0';
+const APP_VERSION = '0.8.0';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Breast: added NATALEE, an aromatase inhibitor with ribociclib for 3 years after surgery, as its own pathway, since its length differs from the 2 years of abemaciclib in monarchE. The genomic-assay pathway now offers dose-dense AC then paclitaxel as a second chemotherapy option alongside docetaxel + cyclophosphamide. Rectal: added long-course chemoradiation with FOLFOX before surgery (CAO/ARO/AIO-12), where the chemoradiation and the chemotherapy can be given in either order.' },
+  { date:'2026-09-01', text:'Surveillance no longer shows a total length anywhere in the library. It now reads as ongoing with its visit and scan frequency, which is the part guidelines actually set; the frequency line stays editable for each patient. In KEYNOTE-522, capecitabine after surgery now starts once radiation has finished rather than alongside it.' },
   { date:'2026-09-01', text:'Corrected the timing shown after a radiation step whose length the radiation oncologist has not set. Later steps were dated as though radiation took no time; they now say they start after the previous step ends, and the overall figure names the radiation course separately. Seven pathways were affected. A step can also carry more than two treatment types on the map, where a third type was previously dropped from the bar while still appearing in the legend.' },
   { date:'2026-09-01', text:'Builder: the pathway list stays open until you confirm a choice, so you can look through several first; steps can be reordered from the collapsed row; adding a treatment type to a step offers a matching sentence for the patient description. Compare pages show the diagnosis as a labelled line, draw each option in its own treatment colours, and group the pathway picker by cancer type. The "You are here" marker has been removed.' },
   { date:'2026-09-01', text:'Decision points no longer label a branch "expected". The map and the step list lead with the path the team is planning around and keep the alternative in view, without predicting which outcome a person will have. The overall duration no longer follows one assumed outcome; it covers all the possible paths.' },

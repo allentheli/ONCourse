@@ -801,6 +801,7 @@ const L = { W:960, rowH:100, barY:38, barH:24, nameY:33, durY:74, startY:86, gap
 const units = (w) => w <= 0 ? 0 : w <= 16 ? w : w <= 52 ? 16 + (w - 16) * 0.45 : 32.2 + (w - 52) * 0.08;
 const TREAT = ['chemo', 'io', 'targeted', 'radiation'];
 const lenUnknown = (n) => n.t === 'phase' && n.mode === 'weekdays' && !(+n.weeks > 0);
+const openWatch = (n) => !!n.openEnded && (n.mods || []).includes('watch');
 const counted = (n) => n.t === 'rest' || n.t === 'event' || (n.t === 'phase' && !n.openEnded && (n.mods || []).some(k => TREAT.includes(k)));
 
 function seqUnits(nodes){
@@ -963,7 +964,7 @@ function renderRoute(ctx, startDate, colors){
         let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
         if (lines.length > 1 && hasUp) lines = [trunc(label, maxC)];
         lines.forEach((ln, i) => { s += T(it.x + 2, y0 + L.nameY - (lines.length - 1 - i) * 11.5, ln, { size:11.5, weight:700, fill:'#172033' }); });
-        s += T(it.x + 2, y0 + L.durY, (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w) + (n.openEnded ? ' ongoing' : ''), { size:10 });
+        s += T(it.x + 2, y0 + L.durY, openWatch(n) ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w) + (n.openEnded ? ' ongoing' : ''), { size:10 });
         if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + L.startY, startText(it.week), { size:9.5 });
       } else {
         s += T(it.x + 1, y0 + L.durY, durShort(w), { size:9.5 });
@@ -1056,10 +1057,10 @@ function hasEndocrineTail(nodes){
 function totalText(ctx, nodes){
   const t = ctx.total;
   if (!t || t.max <= 0) return '';
-  const tail = nodes && hasEndocrineTail(nodes) ? ', followed by hormone tablets' : '';
-  const rt = ctx.unknownTreat ? ', plus the radiation course' : '';
-  const base = (t.max - t.min >= 4) ? `${rangeText(t.min, t.max)} of treatment, depending on results` : `${durLong(t.max)} of treatment`;
-  return `Overall: ${base}${tail}${rt}.`;
+  const parts = [`${(t.max - t.min >= 4) ? rangeText(t.min, t.max) : durLong(t.max)} of treatment`];
+  if (ctx.unknownTreat) parts.push('plus radiation');
+  if (nodes && hasEndocrineTail(nodes)) parts.push('then hormone tablets');
+  return `Overall: ${parts.join(', ')}.`;
 }
 function renderSheet(){
   if (state.view === 'compare'){ renderCompareSheet(); return; }
@@ -1145,7 +1146,7 @@ function renderMiniRoute(ctx, colors, width){
     else if (it.kind === 'up'){ const ly = y0 + 1 - it.lane * 3; s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="4" rx="1.5" fill="${fillFor(n)}"/>`; }
     else {
       s += `<rect x="${it.x}" y="${y0 + MINI.barY}" width="${it.w.toFixed(1)}" height="${MINI.barH}" rx="2.5" fill="${fillFor(n)}"/>`;
-      if (it.kind === 'phase' && it.w > 18){ const w = nodeWeeks(n); s += T(it.x + 1, y0 + MINI.rowH - 4, (n.mode === 'weekdays' && !(w > 0)) ? 'TBD' : durShort(w), { size:8.5 }); }
+      if (it.kind === 'phase' && it.w > 18){ const w = nodeWeeks(n); s += T(it.x + 1, y0 + MINI.rowH - 4, openWatch(n) ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'TBD' : durShort(w), { size:8.5 }); }
     }
     g += it.dim ? `<g opacity=".38">${s}</g>` : s;
   }
