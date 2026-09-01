@@ -15,7 +15,7 @@
   <div class="nav-wrap">
     <input type="checkbox" id="navtoggle" class="navcb" aria-label="Show menu">
     <label class="navtoggle" for="navtoggle"><span></span><span></span><span></span></label>
-  <nav class="main"><a href="how-it-works.html">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  <nav class="main"><a href="how-it-works.html">How it works</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
   </div>
 </div></header>
 
@@ -144,10 +144,7 @@
 </div></section>
 
 <section id="examples"><div class="wrap">
-  <h2>Explore treatment maps</h2>
-  <p class="sub">Every example opens the real product with a fictional patient. "Customize" opens the same pathway in the builder.</p>
-  <div class="gallery"><div class="gcard"><b>Triple-negative breast cancer, stage II–III</b><p>Chemo-immunotherapy, surgery, then immunotherapy — with the pathology fork</p><div class="gbtns"><a class="btn small" href="app.html#r=kn522&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=kn522">Customize</a></div></div><div class="gcard"><b>HER2-positive breast cancer</b><p>HER2-targeted therapy before surgery, continued after based on pathology</p><div class="gbtns"><a class="btn small" href="app.html#r=db11&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=db11">Customize</a></div></div><div class="gcard"><b>Locally advanced rectal cancer</b><p>Chemotherapy, then chemoradiation, then surgery</p><div class="gbtns"><a class="btn small" href="app.html#r=prodige23&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=prodige23">Customize</a></div></div><div class="gcard"><b>Stage III non-small cell lung cancer</b><p>Chemoradiation, then a year of immunotherapy</p><div class="gbtns"><a class="btn small" href="app.html#r=pacific&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=pacific">Customize</a></div></div><div class="gcard"><b>Muscle-invasive bladder cancer</b><p>Chemo-immunotherapy around cystectomy</p><div class="gbtns"><a class="btn small" href="app.html#r=niagara&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=niagara">Customize</a></div></div><div class="gcard"><b>High-risk prostate cancer</b><p>Radiation with long-course hormone therapy</p><div class="gbtns"><a class="btn small" href="app.html#r=prostate-long&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=prostate-long">Customize</a></div></div></div>
-  <p class="more-link" id="libcount"></p>
+  <p class="libline" id="libcount"></p>
 </div><div class="wrap" style="margin-top:38px">
   <h2 style="font-size:24px">Comparing two options</h2>
   <p class="sub">When more than one regimen is reasonable, the decision visit is easier with both on one time scale. Months, visits, and the trade-offs, side by side.</p>
@@ -240,8 +237,8 @@
 <script>
 (function(){
   const n = LIBRARY.length; const names = {breast:'breast', gi:'GI', lung:'lung', gu:'GU', hn:'head and neck', skin:'melanoma'}; const counts = {}; LIBRARY.forEach(r => { counts[r.disease] = (counts[r.disease] || 0) + 1; });
-  const parts = Object.keys(names).filter(k => counts[k]).map(k => `${names[k]} (${counts[k]})`);
-  document.getElementById('libcount').innerHTML = `${n} pathways across ${parts.slice(0, -1).join(', ')}, and ${parts.slice(-1)}. <a href="updates.html">See the full list and what's new →</a>`;
+  const parts = Object.keys(names).filter(k => counts[k]).map(k => names[k]);
+  document.getElementById('libcount').innerHTML = `<b>${n} pathways</b> across ${parts.slice(0, -1).join(', ')}, and ${parts.slice(-1)}, each with its sources and review date. <a href="app.html" style="white-space:nowrap">Open the full library →</a>`;
 })();
 </script>
 </body></html>
