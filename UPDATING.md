@@ -1,5 +1,14 @@
 # Keeping ONCourse current
 
+## Start here (what to actually do)
+
+1. Create a Claude Project called **ONCourse** and add two files to its project knowledge: `regimens.js` and this file. That gives every future conversation the library and the rules.
+2. When you want a change — a new approval, a correction, a new regimen — open that Project and paste one of the prompts below (they are ready to copy), plus the source.
+3. Claude returns a complete `regimens.js`. Read the verification note it gives you, spot-check the schedule against the source, then replace `regimens.js` in your GitHub repository (open the file, pencil icon, paste, commit). The site updates in about a minute; the Updates and References pages rewrite themselves.
+4. Also replace the copy in the Project's knowledge so the next conversation starts from the current library.
+
+That is the whole loop. `app.html` and the other pages only change when features change, and those come from a conversation like this one.
+
 ONCourse is a static site: a handful of files in one GitHub repository, published by GitHub Pages. There is no server to maintain. Updating the site means replacing a file and committing it.
 
 ## How the files fit together

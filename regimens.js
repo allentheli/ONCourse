@@ -493,6 +493,27 @@ const LIBRARY = [
   ]
 },
 {
+  id:'ev303', plan:'Antibody-drug and immunotherapy around bladder surgery', group:'Bladder', added:'2026-09-01', reviewed:'2026-09-01',
+  refs:[{t:'KEYNOTE-905 / EV-303: perioperative enfortumab vedotin + pembrolizumab, cisplatin-ineligible MIBC (ESMO 2025 LBA2; FDA approval Nov 2025)',q:'KEYNOTE-905 EV-303 enfortumab vedotin pembrolizumab perioperative muscle-invasive bladder'},{t:'KEYNOTE-B15 / EV-304: cisplatin-eligible MIBC, positive topline 2026',q:'KEYNOTE-B15 EV-304 enfortumab vedotin pembrolizumab cisplatin-eligible muscle-invasive bladder'}],
+  disease:'gu', name:'KEYNOTE-905 / EV-303: enfortumab vedotin + pembrolizumab, cystectomy, EV + pembrolizumab',
+  trial:'KEYNOTE-905 / EV-303', summary:'Muscle-invasive bladder cancer, cisplatin-ineligible (or declining cisplatin). EV + pembrolizumab ×3, cystectomy, EV + pembrolizumab ×6, then pembrolizumab ×8.',
+  title:'An antibody-drug medicine with immunotherapy before bladder surgery, then continued after',
+  subtitle:'Muscle-invasive bladder cancer (stage II to IIIA), when cisplatin is not an option',
+  nodes:[
+    P({ name:'Enfortumab vedotin (Padcev) + pembrolizumab (Keytruda)', short:'Enfortumab + pembrolizumab', mods:['targeted','io'], cycleDays:21, cycles:3,
+        visits:[{d:1,label:'Enfortumab vedotin and pembrolizumab'},{d:8,label:'Enfortumab vedotin'}],
+        plain:'Enfortumab vedotin is an antibody that finds bladder cancer cells and delivers chemotherapy directly into them, given by IV on days 1 and 8 of each 3-week cycle. Pembrolizumab is immunotherapy, given on day 1. Three cycles before surgery.' }),
+    R('Recovery before surgery', 5, 'About 4 to 6 weeks to recover, with scans and surgical planning.'),
+    S('Surgery (radical cystectomy)', 'Removal of the bladder with nearby lymph nodes, and creation of a new way for urine to leave the body (a urinary diversion). Recovery takes several weeks.'),
+    R('Healing after surgery', 8, 'Recovery from surgery, usually 6 to 10 weeks before treatment restarts.'),
+    P({ name:'Enfortumab vedotin + pembrolizumab', short:'Enfortumab + pembrolizumab', mods:['targeted','io'], cycleDays:21, cycles:6,
+        visits:[{d:1,label:'Enfortumab vedotin and pembrolizumab'},{d:8,label:'Enfortumab vedotin'}],
+        plain:'The same combination continues after surgery for 6 cycles (about 4 months).' }),
+    P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:8,
+        plain:'Immunotherapy on its own every 3 weeks for 8 more doses, to complete about one year of pembrolizumab in total. Each visit is short.' }),
+  ]
+},
+{
   id:'cm274', plan:'Chemo, bladder surgery, then immunotherapy', group:'Bladder', added:'2026-08-31', reviewed:'2026-08-31',
   refs:[{t:'Bajorin DF et al. CheckMate 274: adjuvant nivolumab. NEJM 2021',q:'CheckMate 274 adjuvant nivolumab urothelial Bajorin NEJM 2021'},{t:'Grossman HB et al. SWOG 8710: neoadjuvant MVAC. NEJM 2003',q:'SWOG 8710 neoadjuvant chemotherapy cystectomy Grossman NEJM 2003'}],
   disease:'gu', name:'Chemo, cystectomy, adjuvant nivolumab (CheckMate 274)',
@@ -632,8 +653,9 @@ const LIBRARY = [
 },
 ];
 
-const APP_VERSION = '0.3';
+const APP_VERSION = '0.3.1';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Added perioperative enfortumab vedotin + pembrolizumab for cisplatin-ineligible muscle-invasive bladder cancer (KEYNOTE-905 / EV-303; FDA-approved November 2025). The cisplatin-eligible trial (KEYNOTE-B15 / EV-304) read out positive in 2026 and is noted in the references.' },
   { date:'2026-08-31', text:'Added GU regimens: bladder (NIAGARA, chemotherapy then cystectomy with adjuvant nivolumab, bladder-preserving chemoradiation), kidney (KEYNOTE-564, surveillance), prostate (long- and short-course ADT with radiation, prostatectomy with PSA surveillance, active surveillance).' },
   { date:'2026-08-31', text:'Breast library regrouped by receptor status; added APT (small HER2-positive), TC ×4, and endocrine-only plans.' },
   { date:'2026-08-31', text:'Radiation steps no longer carry a default length; the radiation oncologist\'s course is entered per patient.' },

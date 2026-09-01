@@ -60,3 +60,6 @@ Verified August 31, 2026, against primary publications, trial protocols, and str
 
 ### Design change affecting all regimens
 - Radiation steps that vary by technique (adjuvant breast, post-lung-surgery, prostate, salvage) now default to a blank length; protocol-defined chemoradiation courses (CROSS, PRODIGE 23, OPRA, PACIFIC, LAURA, ADRIATIC, trimodality bladder, RAPIDO short course) keep their trial lengths.
+
+## Added September 1, 2026 (v0.3.1)
+- **KEYNOTE-905 / EV-303** (verified: FDA approval Nov 21, 2025; Merck release; ASCO Post trial summary). Cisplatin-ineligible MIBC: neoadjuvant enfortumab vedotin 1.25 mg/kg d1, d8 + pembrolizumab 200 d1 q3w ×3 → radical cystectomy + PLND → adjuvant EV + pembrolizumab ×6, then pembrolizumab alone ×8 (14 adjuvant pembrolizumab cycles; 17 total). KEYNOTE-B15 / EV-304 (cisplatin-eligible) met EFS, OS, and pCR endpoints in 2026 and is cited; the app's eligibility line stays "when cisplatin is not an option" until the label expands.
