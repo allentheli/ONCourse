@@ -26,7 +26,19 @@
     <p class="byline"><b>A tool for oncologists, built by one.</b> Physicians draw the map in minutes; patients and families take it home.</p>
     <div class="ctas"><a class="btn" href="app.html#r=kn522&demo=1" style="color:#fff">See an example</a><a class="btn sec" href="app.html">Open ONCourse</a><small>Free. Nothing you type leaves your browser.</small></div>
   </div>
-  <a class="heroimg" href="app.html#r=kn522&demo=1" aria-label="Open the example treatment map"><img src="hero.png" alt="An ONCourse treatment map for stage II–III triple-negative breast cancer: chemo-immunotherapy, surgery, a pathology decision point, then immunotherapy" width="2112" height="2732"></a>
+  <div class="heroswitch" id="heroswitch">
+    <div class="hstabs" role="tablist" aria-label="Example treatment maps">
+      <button type="button" role="tab" id="hstab-0" aria-controls="hs-0" aria-selected="true" data-i="0">Breast</button>
+      <button type="button" role="tab" id="hstab-1" aria-controls="hs-1" aria-selected="false" data-i="1">Bladder</button>
+      <button type="button" role="tab" id="hstab-2" aria-controls="hs-2" aria-selected="false" data-i="2">Stomach and GEJ</button>
+    </div>
+    <div class="hsview" id="hsview">
+      <a class="heroimg hsslide on" id="hs-0" role="tabpanel" aria-labelledby="hstab-0" href="app.html#r=kn522&demo=1" aria-label="Open the triple-negative breast cancer example"><img src="hero.png" alt="An ONCourse treatment map for stage II to III triple-negative breast cancer: chemo-immunotherapy, surgery, a pathology decision point, then immunotherapy" width="2112" height="2732"></a>
+      <a class="heroimg hsslide" id="hs-1" role="tabpanel" aria-labelledby="hstab-1" href="app.html#r=ev303&demo=1" aria-label="Open the muscle-invasive bladder cancer example"><img data-src="hero-ev303.png" alt="An ONCourse treatment map for muscle-invasive bladder cancer: enfortumab vedotin with pembrolizumab, cystectomy, then more of both" width="2112" height="1840"></a>
+      <a class="heroimg hsslide" id="hs-2" role="tabpanel" aria-labelledby="hstab-2" href="app.html#r=flot&demo=1" aria-label="Open the stomach and gastroesophageal junction cancer example"><img data-src="hero-flot.png" alt="An ONCourse treatment map for stomach or gastroesophageal junction cancer: FLOT chemotherapy with durvalumab, surgery, then more of both" width="2112" height="2070"></a>
+    </div>
+    <p class="hscap" id="hscap" aria-live="polite">Triple-negative breast cancer, stage II to III &middot; KEYNOTE-522</p>
+  </div>
 </div></div>
 
 <div class="trust"><div class="wrap">
@@ -138,7 +150,7 @@
 </div><div class="wrap" style="margin-top:38px">
   <h2 style="font-size:24px">Comparing two options</h2>
   <p class="sub">When more than one regimen is reasonable, the decision visit is easier with both on one time scale. Months, visits, and the trade-offs, side by side.</p>
-  <div class="imgcard" style="margin-top:16px"><img src="compare.png" alt="A comparison page for stage III HER2-positive breast cancer, showing two regimens side by side with their timelines, total months, visit counts, advantages and trade-offs" width="2112" height="1628"></div>
+  <div class="imgcard" style="margin-top:16px"><img src="compare.png" alt="A comparison page for stage III HER2-positive breast cancer, showing two regimens side by side with their timelines, total months, visit counts, advantages and trade-offs" width="2112" height="1476"></div>
   <p class="more-link"><a class="btn small" href="app.html#cmp=demo" style="color:#fff">Open this comparison</a> <a class="btn sec small" href="app.html">Build your own</a></p>
 </div></section>
 
@@ -188,6 +200,40 @@
   <div>ONCourse is an educational aid for conversations between patients and their care teams. It is not medical advice and does not replace your clinic's appointment schedule. See the <a href="disclaimer.html">disclaimer and terms of use</a>.</div>
   <div><a href="how-it-works.html">How it works</a> · <a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
 </div></footer>
+<script>
+(function(){
+  var root = document.getElementById('heroswitch'); if (!root) return;
+  var caps = ['Triple-negative breast cancer, stage II to III \u00b7 KEYNOTE-522',
+              'Muscle-invasive bladder cancer, cisplatin not an option \u00b7 KEYNOTE-905 / EV-303',
+              'Stomach or gastroesophageal junction cancer, stage II to III \u00b7 FLOT4 / MATTERHORN'];
+  var tabs = [].slice.call(root.querySelectorAll('[role=tab]'));
+  var slides = [].slice.call(root.querySelectorAll('.hsslide'));
+  var cap = document.getElementById('hscap');
+  var at = 0;
+  function show(i, focus){
+    at = (i + slides.length) % slides.length;
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === at); });
+    var img = slides[at].querySelector('img');
+    if (img && img.dataset.src){ img.src = img.dataset.src; delete img.dataset.src; }
+    tabs.forEach(function(t, k){ t.setAttribute('aria-selected', k === at ? 'true' : 'false'); });
+    cap.textContent = caps[at];
+    if (focus) tabs[at].focus();
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(+t.dataset.i); }); });
+  root.querySelector('.hstabs').addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ e.preventDefault(); show(at + 1, true); }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); show(at - 1, true); }
+  });
+  var x0 = null;
+  var view = document.getElementById('hsview');
+  view.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
+  view.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 45) show(at + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+})();
+</script>
 <script src="regimens.js"></script>
 <script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
 <script>

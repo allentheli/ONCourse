@@ -63,7 +63,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'db11', plan:'HER2-targeted therapy around surgery', group:'HER2-positive', added:'2026-08-31', reviewed:'2026-08-31', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'DESTINY-Breast11 primary publication (Annals of Oncology, 2026)',q:'DESTINY-Breast11 trastuzumab deruxtecan neoadjuvant'},{t:'Geyer CE et al. DESTINY-Breast05: T-DXd vs T-DM1 for residual disease. NEJM 2026',q:'DESTINY-Breast05 trastuzumab deruxtecan residual invasive disease'}], disease:'breast', name:'DESTINY-Breast11: T-DXd then THP, surgery, HER2 therapy',
+  id:'db11', plan:'HER2-targeted therapy around surgery', group:'HER2-positive', added:'2026-08-31', reviewed:'2026-08-31', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Harbeck N et al. Neoadjuvant trastuzumab deruxtecan alone or followed by paclitaxel, trastuzumab, and pertuzumab for high-risk HER2-positive early breast cancer (DESTINY-Breast11). Annals of Oncology 2026;37:166-179',q:'DESTINY-Breast11 Harbeck neoadjuvant trastuzumab deruxtecan paclitaxel trastuzumab pertuzumab Annals of Oncology'},{t:'Geyer CE et al. DESTINY-Breast05: T-DXd vs T-DM1 for residual disease. NEJM 2026',q:'DESTINY-Breast05 trastuzumab deruxtecan residual invasive disease'}], disease:'breast', name:'DESTINY-Breast11: T-DXd then THP, surgery, HER2 therapy',
   trial:'DESTINY-Breast11', summary:'HER2-positive, high-risk stage II–III. T-DXd ×4, THP ×4, surgery, adjuvant HER2 therapy by response.',
   title:'HER2-targeted treatment before surgery, then continued after',
   subtitle:'HER2-positive breast cancer, stage II to III',
@@ -80,7 +80,7 @@ const LIBRARY = [
         plain:'The report tells us whether any cancer remained. HER2-targeted treatment continues either way, to complete about one year in total.',
         branches:[
           Br('No remaining cancer (complete response)', [
-            P({ name:'Trastuzumab + pertuzumab', short:'HER2 antibodies (HP)', mods:['targeted'], cycleDays:21, cycles:13, plain:'The two HER2 antibodies continue every 3 weeks, without chemotherapy, to complete one year. Often given as an injection under the skin.' }),
+            P({ name:'Trastuzumab + pertuzumab', short:'HER2 antibodies (HP)', mods:['targeted'], cycleDays:21, cycles:9, plain:'The two HER2 antibodies continue every 3 weeks, without chemotherapy, to complete about one year of HER2-targeted treatment counting the treatment given before surgery. Often given as an injection under the skin.' }),
             RADIATION_ALONGSIDE(),
             ENDOCRINE_ALONGSIDE(),
           ]),
@@ -1031,15 +1031,17 @@ const COMPARE_EXAMPLE = {
   options:[
     { name:'Trastuzumab deruxtecan first (DESTINY-Breast11)', regimenId:'db11',
       pros:'A newer approach designed for higher-risk HER2-positive cancer\nMay increase the chance that no cancer is left by the time of surgery',
-      cons:'Newer, so we have less long-term follow-up than with TCHP\nTrastuzumab deruxtecan (Enhertu) carries a small but serious risk of lung inflammation, which we watch for closely\nMore months of treatment before surgery' },
+      cons:'Trastuzumab deruxtecan (Enhertu) carries a small but serious risk of lung inflammation, which we watch for closely\nMore months of treatment before surgery' },
     { name:'TCHP before surgery', regimenId:'tchp',
-      pros:'A long-established standard, with many years of experience and results behind it\nWell-understood side effects and a familiar schedule\nIf any cancer remains at surgery, we can switch to a different medicine afterwards\nNo signal of the lung inflammation seen with trastuzumab deruxtecan',
+      pros:'A long-established standard, with many years of experience and results behind it\nWell-understood side effects and a familiar schedule',
       cons:'Lowers blood counts more, so an injection to help them recover is often needed' },
   ],
 };
 
-const APP_VERSION = '0.9.1';
+const APP_VERSION = '0.9.2';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'DESTINY-Breast11 corrected: the HER2 antibodies after surgery now run for 9 cycles rather than 13, so the pathway adds up to the about one year its own description states, counting the treatment given before surgery. The reference is now the primary publication (Annals of Oncology 2026;37:166-179) in place of a placeholder.' },
+  { date:'2026-09-01', text:'The landing page example now switches between three cancers: triple-negative breast (KEYNOTE-522), muscle-invasive bladder (KEYNOTE-905 / EV-303), and stomach or gastroesophageal junction (FLOT4 / MATTERHORN). The worked comparison has been rebalanced so neither option carries more argument than the other.' },
   { date:'2026-09-01', text:'Map labels now all sit above their bars. Treatment given alongside another step put its label to the right of the bar, which read differently from every other step and could be covered by whatever followed it. Branch labels at a decision point are no longer crossed by the line leading to them. Maps with two alongside treatments are a little taller so each has room for its own label.' },
   { date:'2026-09-01', text:'Treatment that runs alongside another step can now be set to begin when that step finishes rather than at the same time, and the map draws it in that position. In KEYNOTE-522, capecitabine after surgery now appears after the radiation course instead of beside it, matching what the step text says.' },
   { date:'2026-09-01', text:'New How it works page walking through the builder step by step, including a worked comparison for stage III HER2-positive breast cancer and an example of building a ctDNA-guided pathway from scratch. The site now reads correctly on a phone; the header previously forced the whole page to zoom out. The regimen table lists the newest additions first.' },

@@ -78,6 +78,20 @@ table.reg td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line-2);vertica
 .refs ul{margin:0 0 6px;padding-left:0;list-style:none}
 .refs li{padding:4px 0;font-size:14.5px}
 .refs li small{color:var(--muted);display:block}
+/* hero example switcher: labelled tabs on every screen, swipe on touch */
+.heroswitch{margin-top:30px}
+.hstabs{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.hstabs button{appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink-2);font:600 13.5px/1 inherit;padding:9px 15px;border-radius:999px;cursor:pointer}
+.hstabs button:hover{border-color:var(--ink-2);color:var(--ink)}
+.hstabs button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.hsview{position:relative}
+/* .heroimg sets display:block later in this file, so scope these to win */
+.hsview .hsslide{display:none}
+.hsview .hsslide.on{display:block}
+.heroswitch .heroimg{margin-top:0}
+.hscap{margin:13px 0 0;text-align:center;font-size:13.5px;color:var(--muted)}
+@media (max-width:760px){ .hstabs button{padding:8px 12px;font-size:13px} .hscap{font-size:12.5px} }
+
 /* numbered walkthrough on the guide page */
 ol.steps-guide{margin:14px 0 18px;padding-left:0;list-style:none;counter-reset:sg}
 ol.steps-guide li{counter-increment:sg;position:relative;padding:0 0 12px 40px;line-height:1.55}

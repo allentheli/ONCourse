@@ -140,3 +140,24 @@ references as known, and were not individually re-fetched.
   neoadjuvant therapy for triple-negative breast cancer. Treated as practice-variable.
 - NATALEE overall survival data were still immature at the 2025 final iDFS analysis;
   the pathway makes no survival claim.
+
+---
+## DESTINY-Breast11 correction, September 1, 2026 (v0.9.2)
+
+- **DESTINY-Breast11** `db11` **(fetched)** — Harbeck N et al., *Ann Oncol* 2026;37:166-179
+  (doi:10.1016/j.annonc.2025.10.019). Confirms the neoadjuvant schedule already in the app:
+  T-DXd x4 followed by THP x4 (the trial randomised T-DXd x8, T-DXd-THP 4+4, and ddAC-THP 4+4;
+  the T-DXd-THP arm is the one modelled). pCR 67.3% vs 56.3% for ddAC-THP; in the
+  HR-negative subgroup 83.1% vs 67.1%. **CORRECTED:** adjuvant trastuzumab + pertuzumab
+  reduced from 13 cycles to 9. The pathway's own text said "to complete about one year",
+  but 4 + 4 + 13 q3w cycles is 63 weeks. Nine adjuvant cycles gives 17 cycles (51 weeks),
+  matching the way the TCHP pathway already counted its year (6 + 11). The reference was
+  also replaced with the real citation, which had been a placeholder.
+- **Comparison example** — note that DESTINY-Breast11's randomised comparator was
+  **ddAC-THP, not TCHP**. The worked comparison sets DB11 against TCHP because that is the
+  practical choice a clinic faces; it is not a head-to-head result from the trial, and the
+  page makes no efficacy claim between the two.
+- **Not carried into the comparison:** the trial reported adjudicated drug-related
+  interstitial lung disease at 4.4% for T-DXd-THP and 5.1% for ddAC-THP, i.e. similar
+  across arms. The retained trade-off line about lung inflammation reflects the known
+  class risk and the monitoring it requires, not a difference demonstrated in this trial.
