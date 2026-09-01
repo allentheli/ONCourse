@@ -1038,8 +1038,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.9.0';
+const APP_VERSION = '0.9.1';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Map labels now all sit above their bars. Treatment given alongside another step put its label to the right of the bar, which read differently from every other step and could be covered by whatever followed it. Branch labels at a decision point are no longer crossed by the line leading to them. Maps with two alongside treatments are a little taller so each has room for its own label.' },
   { date:'2026-09-01', text:'Treatment that runs alongside another step can now be set to begin when that step finishes rather than at the same time, and the map draws it in that position. In KEYNOTE-522, capecitabine after surgery now appears after the radiation course instead of beside it, matching what the step text says.' },
   { date:'2026-09-01', text:'New How it works page walking through the builder step by step, including a worked comparison for stage III HER2-positive breast cancer and an example of building a ctDNA-guided pathway from scratch. The site now reads correctly on a phone; the header previously forced the whole page to zoom out. The regimen table lists the newest additions first.' },
   { date:'2026-09-01', text:'Breast: added NATALEE, an aromatase inhibitor with ribociclib for 3 years after surgery, as its own pathway, since its length differs from the 2 years of abemaciclib in monarchE. The genomic-assay pathway now offers dose-dense AC then paclitaxel as a second chemotherapy option alongside docetaxel + cyclophosphamide. Rectal: added long-course chemoradiation with FOLFOX before surgery (CAO/ARO/AIO-12), where the chemoradiation and the chemotherapy can be given in either order.' },
