@@ -271,10 +271,14 @@ body.patient .main{padding:24px 20px 60px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 @media print and (orientation:portrait){
-  .sheet{width:979px;transform:scale(.72);transform-origin:top left}
+  /* narrower page: single header column, two step columns, everything at full size */
+  .sh-top,.sh-top.solo{grid-template-columns:1fr;gap:calc(var(--k,1)*6px)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .chosen li{padding:calc(var(--k,1)*1.5px) 0}
+  .cmpg{grid-template-columns:calc(var(--k,1)*80px) repeat(var(--nc,2),1fr)}
 }
 @media print{
-  @page{size:landscape;margin:.4in}
+  @page{size:landscape;margin:.35in}
   .step,.also,.branch,.fork,.chosen,.sh-foot,.cmp-c{break-inside:avoid;page-break-inside:avoid}
   body{background:#fff}
   .app{display:block;height:auto}
@@ -282,7 +286,7 @@ body.patient .main{padding:24px 20px 60px}
   .main{overflow:visible;padding:0}
   .sheet{box-shadow:none;max-width:none;padding:0;border-radius:0}
   .route{display:block!important;margin:calc(var(--k,1)*10px) 0 calc(var(--k,1)*2px)}
-  .route svg{max-height:calc(var(--k,1)*230px);width:auto;max-width:100%}
+  .route svg{max-height:var(--maph,230px);width:auto;max-width:100%}
   .steps{grid-template-columns:repeat(3,1fr);gap:calc(var(--k,1)*8px) calc(var(--k,1)*16px);margin-top:calc(var(--k,1)*4px)}
   .branches{grid-template-columns:1fr 1fr;gap:calc(var(--k,1)*12px)}
   .sh-head{padding-bottom:calc(var(--k,1)*6px);font-size:calc(var(--k,1)*10.5px)}
@@ -1063,7 +1067,7 @@ function alsoHtml(n, ctx, startDate, detail, colors, prev){
   let visits = '';
   if (detail === 'visits') visits = `<ul class="visits">${visitRows(n, wk, startDate).map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`;
   const lead = (n.afterPrev && prev) ? `After ${prev.short || prev.name}: ` : 'At the same time: ';
-  return `<div class="also">${chipHtml(n, colors)}<b>${esc(lead)}${esc(n.name)}</b> (${esc(metaText(n))})${n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
+  return `<div class="also">${chipHtml(n, colors)}<b>${esc(lead)}${esc(n.name)}</b> (${esc(metaText(n))})${!n.brief && n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
 }
 function stepsHtml(nodes, start, ctx, startDate, detail, colors){
   const parts = []; let num = start; let lastIdx = -1; let prevConcNode = null;
@@ -1262,7 +1266,7 @@ function qrSvg(text){
   } catch (e) { return ''; }
 }
 /* ===================== share links ===================== */
-const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','afterPrev','openEnded','question','emph','only','shade','done'];
+const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','afterPrev','brief','openEnded','question','emph','only','shade','done'];
 function diffNodes(A, B, base, out){
   if (A.length !== B.length) return false;
   for (let i = 0; i < A.length; i++){
@@ -1514,51 +1518,72 @@ function bind(){
 /* ===================== print fitting ===================== */
 // Mirror the @media print rules under .sheet-measure so we can measure the
 // printed height on screen, then zoom the sheet to fit one landscape page.
-let _printCssTpl = '';
+let _printCssTpl = '', _printPortraitTpl = '';
 (function mirrorPrintCss(){
   try {
-    let css = '';
+    let css = '', pcss = '';
     for (const sh of document.styleSheets){
       let rules; try { rules = sh.cssRules; } catch (e) { continue; }
       for (const r of rules){
-        if (r.media && Array.from(r.media).includes('print')){
-          for (const rr of r.cssRules){
-            if (rr.selectorText){
-              css += rr.selectorText.split(',').map(x => ':where(.sheet-measure) ' + x.trim()).join(',') + '{' + rr.style.cssText + '}';
-              _printCssTpl += rr.cssText;
-            }
-          }
+        if (!r.media) continue;
+        const mt = r.media.mediaText;
+        const portrait = /print and \(orientation:\s*portrait\)/.test(mt);
+        if (mt !== 'print' && !portrait) continue;
+        for (const rr of r.cssRules){
+          if (!rr.selectorText) continue;
+          const scoped = rr.selectorText.split(',').map(x => ':where(.sheet-measure' + (portrait ? '-p' : '') + ') ' + x.trim()).join(',') + '{' + rr.style.cssText + '}';
+          if (portrait){ pcss += scoped; _printPortraitTpl += rr.cssText; }
+          else { css += scoped; _printCssTpl += rr.cssText; }
         }
       }
     }
-    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    // portrait mirror last, so it overrides the base rules on the portrait clone
+    const st = document.createElement('style'); st.textContent = css + pcss; document.head.appendChild(st);
   } catch (e) {}
 })();
-function printFit(){
+function printFit(width, target, portrait){
   const wrap = document.createElement('div');
-  wrap.className = 'sheet-measure';
-  wrap.style.cssText = 'position:absolute;left:-99999px;top:0;width:979px;background:#fff;';
+  wrap.className = 'sheet-measure' + (portrait ? ' sheet-measure-p' : '');
+  wrap.style.cssText = `position:absolute;left:-99999px;top:0;width:${width}px;background:#fff;`;
   const cl = $('#sheet').cloneNode(true); cl.removeAttribute('id');
   wrap.appendChild(cl); document.body.appendChild(wrap);
-  const TARGET = 698;
-  let k = 1;
-  for (let pass = 0; pass < 3; pass++){
-    wrap.style.setProperty('--k', k);
-    const h = cl.getBoundingClientRect().height;
-    if (h <= TARGET) break;
-    k = Math.max(0.6, k * TARGET / h);
+  let k = 1, maph = 230;
+  const put = () => { wrap.style.setProperty('--k', k); wrap.style.setProperty('--maph', maph + 'px'); return cl.getBoundingClientRect().height; };
+  let h = put();
+  // graphics shrink more gracefully than type: pull the map's height budget
+  // down (to a floor) before scaling any text
+  const svg = cl.querySelector('.route svg');
+  if (h > target && svg){
+    const mh = svg.getBoundingClientRect().height;
+    const cap = Math.ceil(mh - (h - target));
+    if (cap < maph){ maph = Math.max(150, cap); h = put(); }
+  }
+  for (let pass = 0; pass < 3 && h > target; pass++){
+    k = Math.max(0.6, k * target / h);
+    h = put();
     if (k <= 0.601) break;
   }
   wrap.remove();
-  return k;
+  return { k: +k.toFixed(4), maph };
 }
+// content box at .35in margins: landscape height binds on A4 (727px), width on
+// Letter (985px); portrait width binds on A4 (727px), height on Letter (985px)
 function applyPrintZoom(){
-  // Some print pipelines drop custom properties, so inject the computed scale
-  // as concrete values that override the var(--k,1) defaults.
+  // Some print pipelines drop custom properties, so inject the computed values
+  // concretely, overriding the var(--k,1) / var(--maph,230px) defaults.
   let st = $('#fitcss');
   if (!st){ st = document.createElement('style'); st.id = 'fitcss'; document.head.appendChild(st); }
-  const k = printFit();
-  st.textContent = (k < 0.995 && _printCssTpl) ? '@media print{' + _printCssTpl.replace(/var\(--k[^)]*\)/g, String(k)) + '}' : '';
+  const fill = (tpl, f) => tpl.replace(/var\(--k[^)]*\)/g, String(f.k)).replace(/var\(--maph[^)]*\)/g, f.maph + 'px');
+  const L = printFit(985, 722, false);
+  const P = printFit(727, 980, true);
+  let css = '';
+  const lFits = L.k >= 0.995 && L.maph >= 230;
+  const pFits = P.k >= 0.995 && P.maph >= 230;
+  if (_printCssTpl && !lFits) css += '@media print{' + fill(_printCssTpl, L) + '}';
+  // the landscape emission above also matches portrait pages, so whenever it
+  // exists (or portrait needs its own scale) restate the portrait values
+  if (_printCssTpl && (!pFits || css)) css += '@media print and (orientation:portrait){' + fill(_printCssTpl, P) + fill(_printPortraitTpl, P) + '}';
+  st.textContent = css;
 }
 window.addEventListener('beforeprint', applyPrintZoom);
 window.addEventListener('hashchange', () => location.reload());

@@ -17,7 +17,7 @@ const D = (o) => Object.assign({ t:'decision', emph:null, only:false }, o);
 const Br = (cond, nodes, short) => short ? ({ cond, nodes, short }) : ({ cond, nodes });
 
 // reusable pieces
-const RADIATION_ALONGSIDE = () => P({ name:'Radiation (if recommended)', short:'Radiation', mods:['radiation'], mode:'weekdays', weeks:'', optional:true, on:true, concurrent:true,
+const RADIATION_ALONGSIDE = () => P({ name:'Radiation (if recommended)', short:'Radiation', mods:['radiation'], mode:'weekdays', weeks:'', optional:true, on:true, concurrent:true, brief:true,
   plain:'Daily radiation, Monday to Friday. Your radiation oncologist sets the number of sessions. Many people need this after surgery; your team will confirm.' });
 const RADIATION_AFTER = (on=true) => P({ name:'Radiation (if recommended)', short:'Radiation', mods:['radiation'], mode:'weekdays', weeks:'', optional:true, on,
   plain:'Daily radiation, Monday to Friday, starting a few weeks after the previous step ends. Your radiation oncologist sets the number of sessions.' });
@@ -57,7 +57,7 @@ const LIBRARY = [
             RADIATION_ALONGSIDE(),
             P({ name:'Capecitabine (oral chemotherapy)', short:'Capecitabine tablets', mods:['chemo'], cycleDays:21, cycles:8, optional:true, on:true, concurrent:true, afterPrev:true,
                 visits:[{d:1,label:'Start 14 days of capecitabine tablets, then 7 days off'}],
-                plain:'Chemotherapy tablets taken at home for 2 weeks out of every 3, for about 6 months, starting once radiation has finished. Immunotherapy continues at the same time. If you carry a BRCA gene change, olaparib tablets for 1 year may be recommended instead.' }),
+                plain:'Chemotherapy tablets taken at home for 2 weeks out of every 3, for about 6 months, starting once radiation has finished. Giving them after radiation is common practice rather than a rule from the trial; your team sets the exact order. Immunotherapy continues at the same time. If you carry a BRCA gene change, olaparib tablets for 1 year may be recommended instead.' }),
           ]),
         ] }),
   ]
@@ -1038,9 +1038,10 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.9.5';
+const APP_VERSION = '0.9.6';
 const CHANGELOG = [
-  { date:'2026-09-01', text:'Printing fixed. The two buttons from the phone toolbar no longer appear on the printed page, and a browser that prints portrait rather than landscape now gets the same one-page sheet, scaled to fit. The one-page fit also applies when steps show their individual visits; a few visit-heavy pathways that cannot fit one page at readable size now break onto a second page at a whole step, never mid-text.' },
+  { date:'2026-09-01', text:'KEYNOTE-522: the patient text now says that giving capecitabine after radiation is common practice rather than an order fixed by the trial. Radiation shown alongside another step now appears as a single line on the sheet instead of repeating its schedule in a paragraph, in every pathway that draws it that way.' },
+  { date:'2026-09-01', text:'Printing fixed. The two buttons from the phone toolbar no longer appear on the printed page, and printing portrait rather than landscape now gets its own layout, with the steps in two columns at full size, still on one page. When a sheet is too tall for one page, the map now gives up height before any text is made smaller, so dense pathways print with noticeably larger type than before. The one-page fit also applies when steps show their individual visits; a few visit-heavy pathways that cannot fit one page at readable size now break onto a second page at a whole step, never mid-text.' },
   { date:'2026-09-01', text:'Comparison pages are now readable on a phone. The side-by-side table used to collapse into one interleaved column (timeline, timeline, total, total, and so on) with no way to tell which entry belonged to which option; each option now stacks as its own complete card, with the row labels repeated inside it. Wide screens and print keep the aligned table.' },
   { date:'2026-09-01', text:'Fixed the site menu, which was missing on desktop after the mobile menu was added. The links are inline again on wide screens and open from the button on a phone.' },
   { date:'2026-09-01', text:'DESTINY-Breast11 corrected: the HER2 antibodies after surgery now run for 9 cycles rather than 13, so the pathway adds up to the about one year its own description states, counting the treatment given before surgery. The reference is now the primary publication (Annals of Oncology 2026;37:166-179) in place of a placeholder.' },

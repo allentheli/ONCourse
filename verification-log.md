@@ -161,3 +161,8 @@ references as known, and were not individually re-fetched.
   interstitial lung disease at 4.4% for T-DXd-THP and 5.1% for ddAC-THP, i.e. similar
   across arms. The retained trade-off line about lung inflammation reflects the known
   class risk and the monitoring it requires, not a difference demonstrated in this trial.
+
+### Wording note, September 1, 2026 (v0.9.6)
+- **KEYNOTE-522** `kn522` — the capecitabine step's patient text now states that giving
+  it after radiation is common practice rather than an order fixed by the trial,
+  making the practice-based sequencing (recorded above) visible on the handout itself.
