@@ -805,7 +805,7 @@ function layout(nodes, cfg){
           const r = row + bi;
           const isExp = n.emph === v.idx;
           const dimB = dim || (n.emph != null && !isExp);
-          ctx.forks.push({ fx:x + C.diamond, frow:row, tx:bx, trow:r, cond:v.b.cond, expected:isExp, single:vis.length === 1, dim:dimB, decided:n.emph != null });
+          ctx.forks.push({ fx:x + C.diamond, frow:row, tx:bx, trow:r, cond:v.b.short || v.b.cond, expected:isExp, single:vis.length === 1, dim:dimB, decided:n.emph != null });
           const res = place(v.b.nodes, bx, week, r, dimB);
           ends.push({ x:res.x, row:r });
           ctx.rows = Math.max(ctx.rows, r + 1);

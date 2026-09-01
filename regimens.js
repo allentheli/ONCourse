@@ -14,7 +14,7 @@ const P = (o) => Object.assign({ t:'phase', mods:['chemo'], mode:'cycles', cycle
 const R = (name, weeks, plain) => ({ t:'rest', name, weeks, plain });
 const S = (name, plain) => ({ t:'event', name, mods:['surgery'], plain });
 const D = (o) => Object.assign({ t:'decision', emph:null, only:false }, o);
-const Br = (cond, nodes) => ({ cond, nodes });
+const Br = (cond, nodes, short) => short ? ({ cond, nodes, short }) : ({ cond, nodes });
 
 // reusable pieces
 const RADIATION_ALONGSIDE = () => P({ name:'Radiation (if recommended)', short:'Radiation', mods:['radiation'], mode:'weekdays', weeks:'', optional:true, on:true, concurrent:true,
@@ -903,26 +903,26 @@ const LIBRARY = [
   subtitle:'Hormone-receptor positive, HER2-negative breast cancer, stage I to II',
   nodes:[
     SURGERY_BREAST(),
-    R('Healing and test results', 4, 'Recovery from surgery while the removed tumor is sent for a gene-expression test (Oncotype DX or MammaPrint), which takes about 2 weeks. The result estimates how likely the cancer is to return and how much chemotherapy would help.'),
+    R('Healing and test results', 4, 'Recovery from surgery while the removed tumor is sent for a gene-expression test (Oncotype DX or MammaPrint). The result takes about 2 weeks.'),
     D({ name:'Genomic test result', short:'Gene test', question:'What did the gene-expression test show?',
-        plain:'The test estimates how likely the cancer is to return and whether chemotherapy would be beneficial on top of hormone therapy. For women under 50 with a mid-range score, chemotherapy may still be beneficial; your team will explain your number.',
+        plain:'The test estimates how likely the cancer is to return and whether chemotherapy would be beneficial on top of hormone therapy. Your team will explain your number.',
         branches:[
           Br('Chemotherapy would be beneficial', [
             P({ name:'Chemotherapy (docetaxel + cyclophosphamide)', short:'Docetaxel + cyclophosphamide', mods:['chemo'], cycleDays:21, cycles:4,
-                plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months). A growth-factor injection after each dose supports your blood counts. For higher-risk cancers, a longer regimen (AC followed by paclitaxel) may be used instead.' }),
+                plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months), with a growth-factor injection after each dose. A longer regimen may be used for higher-risk cancers.' }),
             RADIATION_AFTER(true),
             P({ name:'Hormone (endocrine) therapy', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260,
-                plain:'One tablet a day (tamoxifen, or an aromatase inhibitor such as letrozole or anastrozole) for 5 to 10 years, starting after chemotherapy. For some premenopausal women, an injection to pause the ovaries is added.' }),
+                plain:'One tablet a day (tamoxifen, or an aromatase inhibitor such as letrozole) for 5 to 10 years, starting after chemotherapy.' }),
             P({ name:'Abemaciclib (Verzenio) or ribociclib (Kisqali), if higher-risk', short:'CDK4/6 inhibitor', mods:['targeted'], mode:'daily', weeks:104, optional:true, on:false, concurrent:true,
-                plain:'For cancers with lymph node involvement or other high-risk features, a targeted tablet alongside the hormone tablet lowers the chance of recurrence further: abemaciclib twice daily for 2 years, or ribociclib for 3 years.' }),
-          ]),
+                plain:'For higher-risk cancers, a targeted tablet alongside the hormone tablet: abemaciclib for 2 years or ribociclib for 3.' }),
+          ], 'Chemo beneficial'),
           Br('Chemotherapy would not add benefit', [
             RADIATION_AFTER(true),
             P({ name:'Hormone (endocrine) therapy', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260,
-                plain:'One tablet a day (tamoxifen, or an aromatase inhibitor such as letrozole or anastrozole) for 5 to 10 years. Skipping chemotherapy does not lower your chance of cure: the test shows it would add side effects without adding benefit.' }),
+                plain:'One tablet a day (tamoxifen, or an aromatase inhibitor such as letrozole) for 5 to 10 years. Skipping chemotherapy does not lower your chance of cure; the test shows it would add side effects without adding benefit.' }),
             P({ name:'Abemaciclib (Verzenio) or ribociclib (Kisqali), if higher-risk', short:'CDK4/6 inhibitor', mods:['targeted'], mode:'daily', weeks:104, optional:true, on:false, concurrent:true,
-                plain:'For cancers with lymph node involvement or other high-risk features, a targeted tablet alongside the hormone tablet: abemaciclib twice daily for 2 years, or ribociclib for 3 years.' }),
-          ]),
+                plain:'For higher-risk cancers, a targeted tablet alongside the hormone tablet: abemaciclib for 2 years or ribociclib for 3.' }),
+          ], 'Chemo not beneficial'),
         ] }),
   ]
 },
