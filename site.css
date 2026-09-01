@@ -172,12 +172,13 @@ ul.cal li.q{justify-content:center;color:var(--muted);font-style:italic}
 .imgcard{border:1px solid var(--line);border-radius:10px;padding:16px 14px 10px;background:#fff;box-shadow:0 10px 30px rgba(23,32,51,.08)}
 .imgcard img{width:100%;height:auto;display:block}
 .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
-.steps3>div{position:relative;padding-top:6px}
-.steps3 .num{font:600 13px/1 var(--serif);color:var(--accent);letter-spacing:.06em}
-.steps3 .ic{width:38px;height:38px;border-radius:10px;background:var(--line-2);display:flex;align-items:center;justify-content:center;margin:12px 0}
+/* icon, number and title share one header row; the paragraph runs below */
+.steps3>div{display:grid;grid-template-columns:38px 1fr;gap:1px 12px;align-content:start}
+.steps3 .num{grid-column:2;grid-row:1;align-self:end;font:600 12px/1 var(--serif);color:var(--accent);letter-spacing:.06em}
+.steps3 .ic{grid-column:1;grid-row:1 / span 2;width:38px;height:38px;border-radius:10px;background:var(--line-2);display:flex;align-items:center;justify-content:center;margin:0}
 .steps3 .ic svg{width:22px;height:22px;color:var(--ink)}
-.steps3 h3{font-size:17px;margin:0 0 6px}
-.steps3 p{margin:0;color:var(--ink-2);font-size:15px}
+.steps3 h3{grid-column:2;grid-row:2;font-size:17px;margin:0}
+.steps3 p{grid-column:1 / -1;grid-row:3;margin:9px 0 0;color:var(--ink-2);font-size:15px}
 .sub2{font:600 19px/1.3 var(--serif);margin:-2px 0 14px;color:var(--ink-2)}
 ul.checks li b{color:var(--ink)}
 .libline{margin:0;text-align:center;font-size:16.5px;color:var(--ink-2);max-width:64ch;margin-left:auto;margin-right:auto}
