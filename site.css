@@ -16,7 +16,7 @@ header.top .wrap{display:flex;align-items:center;justify-content:space-between;h
 nav.main{display:flex;gap:22px;align-items:center;font-size:14.5px}
 nav.main a{color:var(--ink-2);text-decoration:none}
 nav.main a:hover{color:var(--ink)}
-nav.main a.btn,nav.main a.btn:hover{color:#fff}
+nav.main a.btn,nav.main a.btn:hover,nav.main a.btn:visited{color:#fff!important}
 .btn{display:inline-block;padding:11px 18px;border-radius:8px;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;font-size:15px;border:1px solid var(--ink)}
 .btn:hover{background:#0f1626}
 .btn.sec{background:#fff;color:var(--ink);border-color:var(--line)}
