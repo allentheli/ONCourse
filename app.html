@@ -232,7 +232,7 @@ body.patient .main{padding:24px 20px 60px}
 .qrwrap svg{width:82px;height:82px;display:block;margin:0 auto 3px}
 
 .mbar{display:none}
-@media (max-width:900px){
+@media screen and (max-width:900px){
   .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(23,32,51,.08)}
   .mbar button{flex:1;padding:11px 10px;font-size:14px}
   body.patient .mbar{display:none}
@@ -270,11 +270,15 @@ body.patient .main{padding:24px 20px 60px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
+@media print and (orientation:portrait){
+  .sheet{width:979px;transform:scale(.72);transform-origin:top left}
+}
 @media print{
   @page{size:landscape;margin:.4in}
+  .step,.also,.branch,.fork,.chosen,.sh-foot,.cmp-c{break-inside:avoid;page-break-inside:avoid}
   body{background:#fff}
   .app{display:block;height:auto}
-  .sidebar,.topbar,.toast{display:none!important}
+  .sidebar,.topbar,.toast,.mbar{display:none!important}
   .main{overflow:visible;padding:0}
   .sheet{box-shadow:none;max-width:none;padding:0;border-radius:0}
   .route{display:block!important;margin:calc(var(--k,1)*10px) 0 calc(var(--k,1)*2px)}
@@ -1553,7 +1557,7 @@ function applyPrintZoom(){
   // as concrete values that override the var(--k,1) defaults.
   let st = $('#fitcss');
   if (!st){ st = document.createElement('style'); st.id = 'fitcss'; document.head.appendChild(st); }
-  const k = state.opts.detail === 'overview' ? printFit() : 1;
+  const k = printFit();
   st.textContent = (k < 0.995 && _printCssTpl) ? '@media print{' + _printCssTpl.replace(/var\(--k[^)]*\)/g, String(k)) + '}' : '';
 }
 window.addEventListener('beforeprint', applyPrintZoom);
