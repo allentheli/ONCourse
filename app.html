@@ -209,6 +209,7 @@ body.patient .main{padding:24px 20px 60px}
 .sh-diag{margin:6px 0 0;font-size:14px;color:var(--ink);display:flex;align-items:baseline;gap:10px}
 .sh-diag span{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none}
 .mini svg{display:block;width:100%;height:auto;overflow:visible}
+.mlab{display:none}
 .cmp-fact{font-size:12.5px;color:var(--ink-2)}
 .cmp-fact.none{color:var(--muted)}
 .cmp-list{list-style:none;margin:0;padding:0;font-size:12px;line-height:1.4;color:var(--ink-2)}
@@ -253,8 +254,15 @@ body.patient .main{padding:24px 20px 60px}
   .chosen{margin-top:10px}
   .steps{grid-template-columns:1fr}
   .branches{grid-template-columns:1fr}
-  .cmpg{grid-template-columns:1fr}
-  .cmp-c.lab{border-top:0;padding-bottom:0;margin-top:8px}
+  .cmpg{display:block}
+  .cmp-c.lab{display:none}
+  .cmp-c.blank{display:none}
+  .cmp-c{border-top:0;padding:9px 0}
+  .cmp-c.h{border-top:3px solid var(--line);padding-top:14px;margin-top:28px}
+  .cmpg > .cmp-c.h:first-child{margin-top:0}
+  .cmp-c.rec{background:none}
+  .cmp-c.h.rec{border-top-color:var(--ink)}
+  .mlab{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
   .route{display:none}
   .sh-foot{grid-template-columns:1fr}
   .qrwrap{text-align:left}
@@ -308,7 +316,10 @@ body.patient .main{padding:24px 20px 60px}
   .sh-notes{font-size:calc(var(--k,1)*10.5px);padding:calc(var(--k,1)*8px) calc(var(--k,1)*10px)}
   .pbox{width:calc(var(--k,1)*12px);height:calc(var(--k,1)*12px)}
   .steps.withboxes .step{grid-template-columns:calc(var(--k,1)*14px) calc(var(--k,1)*17px) 1fr}
-  .cmpg{margin-top:calc(var(--k,1)*12px);gap:0 calc(var(--k,1)*10px);grid-template-columns:calc(var(--k,1)*90px) repeat(var(--nc,2),1fr)}
+  .cmpg{display:grid;margin-top:calc(var(--k,1)*12px);gap:0 calc(var(--k,1)*10px);grid-template-columns:calc(var(--k,1)*90px) repeat(var(--nc,2),1fr)}
+  .mlab{display:none}
+  .cmp-c.lab{display:block}
+  .cmp-c.blank{display:block}
   .cmp-c{padding:calc(var(--k,1)*6px) calc(var(--k,1)*8px)}
   .cmp-c.lab{font-size:calc(var(--k,1)*9.5px)}
   .cmp-c.h h3{font-size:calc(var(--k,1)*13px)}
@@ -1195,16 +1206,29 @@ function renderCompareSheet(){
   const minis = regs.map(r => { if (!r) return ''; const cfg = Object.assign({}, MINI, { W:COLW, scale }); const ctx = layout(r.nodes, cfg); return renderMiniRoute(ctx, assignColors(r), Math.max(COLW, ctx.maxX + 4)); });
   const lines = (txt) => String(txt || '').split('\n').map(x => x.trim()).filter(Boolean);
   const recCls = (i) => c.rec === i ? ' rec' : '';
-  const row = (label, cells, cls='') => `<div class="cmp-c lab${cls}">${label}</div>` + cells.map((h, i) => `<div class="cmp-c${recCls(i)}${cls}">${h}</div>`).join('');
-  let grid = row('', c.options.map((opt, i) => `<h3>${esc(opt.name || `Option ${i + 1}`)}</h3>${c.rec === i ? '<span class="tag">Our recommendation</span>' : ''}`), ' h');
-  if (minis.some(Boolean)) grid += row('Timeline', minis.map(m => m ? `<div class="mini">${m}</div>` : `<span class="cmp-fact none">—</span>`));
+  // cells are emitted per OPTION (not per row) and pinned to grid coordinates:
+  // wide screens and print place them into the aligned table, while a phone
+  // stacks the DOM order, giving one complete card per option. Each cell carries
+  // its row label as a small heading that only the stacked layout shows.
+  let ri = 0;
+  const optCells = c.options.map(() => []), labCells = [];
+  const row = (label, cells, cls='') => {
+    ri++;
+    labCells.push(`<div class="cmp-c lab${cls}" style="grid-area:${ri}/1">${label}</div>`);
+    cells.forEach((h, i) => {
+      optCells[i].push(`<div class="cmp-c${recCls(i)}${cls}${h === '' ? ' blank' : ''}" style="grid-area:${ri}/${i + 2}">${label ? `<span class="mlab">${esc(label)}</span>` : ''}${h}</div>`);
+    });
+  };
+  row('', c.options.map((opt, i) => `<h3>${esc(opt.name || `Option ${i + 1}`)}</h3>${c.rec === i ? '<span class="tag">Our recommendation</span>' : ''}`), ' h');
+  if (minis.some(Boolean)) row('Timeline', minis.map(m => m ? `<div class="mini">${m}</div>` : `<span class="cmp-fact none">—</span>`));
   const FACT_ROWS = [['time','Total time'], ['visits','Treatment visits'], ['rt','Radiation'], ['surgery','Surgery'], ['tablets','Tablets at home']];
-  for (const [k, label] of FACT_ROWS){ if (facts.some(f => f[k])) grid += row(label, facts.map(f => `<span class="cmp-fact${f[k] ? '' : ' none'}">${esc(f[k] || '—')}</span>`)); }
+  for (const [k, label] of FACT_ROWS){ if (facts.some(f => f[k])) row(label, facts.map(f => `<span class="cmp-fact${f[k] ? '' : ' none'}">${esc(f[k] || '—')}</span>`)); }
   const pros = c.options.map(opt => lines(opt.pros)), cons = c.options.map(opt => lines(opt.cons));
-  if (pros.some(x => x.length)) grid += row("What's good about it", pros.map(x => x.length ? `<ul class="cmp-list pro">${x.map(t => `<li><i>+</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
-  if (cons.some(x => x.length)) grid += row('Trade-offs', cons.map(x => x.length ? `<ul class="cmp-list con">${x.map(t => `<li><i>−</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
+  if (pros.some(x => x.length)) row("What's good about it", pros.map(x => x.length ? `<ul class="cmp-list pro">${x.map(t => `<li><i>+</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
+  if (cons.some(x => x.length)) row('Trade-offs', cons.map(x => x.length ? `<ul class="cmp-list con">${x.map(t => `<li><i>−</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
   const why = c.recWhy && c.recWhy.trim() ? `<div class="cmp-why"><b>Why we recommend it</b>${esc(c.recWhy.trim())}</div>` : '';
-  if (why && c.rec != null) grid += row('', c.options.map((opt, i) => c.rec === i ? why : ''));
+  if (why && c.rec != null) row('', c.options.map((opt, i) => c.rec === i ? why : ''));
+  const grid = optCells.map(a => a.join('')).join('') + labCells.join('');
   const forLine = [c.diagnosis ? esc(c.diagnosis) : '', c.stage ? `stage ${esc(c.stage)}` : ''].filter(Boolean).join(', ');
   const framing = c.rec != null ? 'Each of these is a reasonable choice. Here is how they differ, and which one we suggest for you.' : 'Each of these is a reasonable choice. Here is how they differ.';
   $('#sheet').innerHTML = `
