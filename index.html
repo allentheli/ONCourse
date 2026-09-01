@@ -12,7 +12,10 @@
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21.5 L12 14.5 L16.5 18 L20.5 11 L24 14" fill="none" stroke="#2F55D4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="21.5" r="2" fill="#fff" stroke="#172033" stroke-width="1.6"/><circle cx="12" cy="14.5" r="1.3" fill="#2F55D4"/><circle cx="16.5" cy="18" r="1.3" fill="#2F55D4"/><circle cx="24" cy="14" r="2.7" fill="#2F55D4"/><circle cx="24" cy="14" r="1.05" fill="#fff"/></svg> ONCourse</a>
-  <nav class="main"><a href="index.html#how">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  <details class="nav-wrap">
+    <summary class="navtoggle" aria-label="Menu"><span></span><span></span><span></span></summary>
+  <nav class="main"><a href="how-it-works.html">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  </details>
 </div></header>
 
 <div class="hero"><div class="wrap">
@@ -23,7 +26,19 @@
     <p class="byline"><b>A tool for oncologists, built by one.</b> Physicians draw the map in minutes; patients and families take it home.</p>
     <div class="ctas"><a class="btn" href="app.html#r=kn522&demo=1" style="color:#fff">See an example</a><a class="btn sec" href="app.html">Open ONCourse</a><small>Free. Nothing you type leaves your browser.</small></div>
   </div>
-  <a class="heroimg" href="app.html#r=kn522&demo=1" aria-label="Open the example treatment map"><img src="hero.png" alt="An ONCourse treatment map for stage II–III triple-negative breast cancer: chemo-immunotherapy, surgery, a pathology decision point, then immunotherapy" width="2360" height="2456"></a>
+  <div class="heroswitch" id="heroswitch">
+    <div class="hstabs" role="tablist" aria-label="Example treatment maps">
+      <button type="button" role="tab" id="hstab-0" aria-controls="hs-0" aria-selected="true" data-i="0">Breast</button>
+      <button type="button" role="tab" id="hstab-1" aria-controls="hs-1" aria-selected="false" data-i="1">Bladder</button>
+      <button type="button" role="tab" id="hstab-2" aria-controls="hs-2" aria-selected="false" data-i="2">Stomach and GEJ</button>
+    </div>
+    <div class="hsview" id="hsview">
+      <a class="heroimg hsslide on" id="hs-0" role="tabpanel" aria-labelledby="hstab-0" href="app.html#r=kn522&demo=1" aria-label="Open the triple-negative breast cancer example"><img src="hero.png" alt="An ONCourse treatment map for stage II to III triple-negative breast cancer: chemo-immunotherapy, surgery, a pathology decision point, then immunotherapy" width="2112" height="2732"></a>
+      <a class="heroimg hsslide" id="hs-1" role="tabpanel" aria-labelledby="hstab-1" href="app.html#r=ev303&demo=1" aria-label="Open the muscle-invasive bladder cancer example"><img data-src="hero-ev303.png" alt="An ONCourse treatment map for muscle-invasive bladder cancer: enfortumab vedotin with pembrolizumab, cystectomy, then more of both" width="2112" height="1840"></a>
+      <a class="heroimg hsslide" id="hs-2" role="tabpanel" aria-labelledby="hstab-2" href="app.html#r=flot&demo=1" aria-label="Open the stomach and gastroesophageal junction cancer example"><img data-src="hero-flot.png" alt="An ONCourse treatment map for stomach or gastroesophageal junction cancer: FLOT chemotherapy with durvalumab, surgery, then more of both" width="2112" height="2070"></a>
+    </div>
+    <p class="hscap" id="hscap" aria-live="polite">Triple-negative breast cancer, stage II to III &middot; KEYNOTE-522</p>
+  </div>
 </div></div>
 
 <div class="trust"><div class="wrap">
@@ -40,7 +55,7 @@
     <div class="ba-col"><h3>A treatment calendar</h3>
       <ul class="cal"><li><time>Sep 7</time>Infusion</li><li><time>Sep 14</time>Infusion</li><li><time>Sep 21</time>Infusion</li><li><time>Sep 28</time>Infusion, labs</li><li><time>Oct 5</time>Infusion</li><li class="more">…</li><li><time>Mar 22</time>Surgery</li><li><time>Apr 5</time>Pathology results</li><li class="q">then?</li></ul>
     </div>
-    <div class="ba-col wide"><h3>A treatment map</h3><img src="route-kn522.png" alt="The same plan as a map: two chemotherapy phases, surgery, a pathology fork, and immunotherapy" width="2236" height="380"></div>
+    <div class="ba-col wide"><h3>A treatment map</h3><img src="route-kn522.png" alt="The same plan as a map: two chemotherapy phases, surgery, a pathology fork, and immunotherapy" width="1920" height="378"></div>
   </div>
   <p class="pull">A calendar tells you when. A map shows you where you're going.</p>
 </div></section>
@@ -65,7 +80,7 @@
     <p class="sub">Surgery, pathology, imaging, and how a person responds can all change what comes next. ONCourse draws those decision points as real forks, leads with the path the team is planning around, and keeps the alternative in view.</p>
     <p class="pull small">ONCourse shows not just what happens next, but what might change the path.</p>
   </div>
-  <div class="imgcard"><img src="decision.png" alt="A treatment map with a pathology decision point: one branch continues HER2 antibodies, the other switches to trastuzumab deruxtecan" width="2236" height="580"></div>
+  <div class="imgcard"><img src="decision.png" alt="A treatment map with a pathology decision point: one branch continues HER2 antibodies, the other switches to trastuzumab deruxtecan" width="1920" height="392"></div>
 </div></section>
 
 <section id="how"><div class="wrap">
@@ -105,6 +120,26 @@
     </ul>
     <p class="more-link"><a class="btn small" href="app.html" style="color:#fff">Open ONCourse</a></p>
   </div>
+</div><div class="wrap" style="margin-top:34px">
+  <h2 style="font-size:24px">Also used for</h2>
+  <p class="sub">The same map is useful anywhere a treatment sequence has to be explained or designed, not only in the clinic room.</p>
+</div><div class="wrap two" style="margin-top:6px">
+  <div>
+    <h3 class="sub2">Teaching</h3>
+    <ul class="checks">
+      <li><b>Draw a regimen from memory,</b> then check it against the pathway and its sources.</li>
+      <li><b>Show fellows and residents the shape of a plan,</b> including where the decision points sit and what moves them.</li>
+      <li><b>Compare two regimens on one time scale</b> in a teaching session, rather than describing both in prose.</li>
+    </ul>
+  </div>
+  <div>
+    <h3 class="sub2">Trial and protocol design</h3>
+    <ul class="checks">
+      <li><b>Sketch a schema</b> and see the real length of each phase before writing it up.</li>
+      <li><b>Lay arms side by side</b> on one time scale to see where they differ in visits and months.</li>
+      <li><b>Show a response-guided design,</b> such as a ctDNA-guided or pathology-guided fork, as the branching it actually is.</li>
+    </ul>
+  </div>
 </div></section>
 
 <section id="examples"><div class="wrap">
@@ -112,6 +147,11 @@
   <p class="sub">Every example opens the real product with a fictional patient. "Customize" opens the same pathway in the builder.</p>
   <div class="gallery"><div class="gcard"><b>Triple-negative breast cancer, stage II–III</b><p>Chemo-immunotherapy, surgery, then immunotherapy — with the pathology fork</p><div class="gbtns"><a class="btn small" href="app.html#r=kn522&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=kn522">Customize</a></div></div><div class="gcard"><b>HER2-positive breast cancer</b><p>HER2-targeted therapy before surgery, continued after based on pathology</p><div class="gbtns"><a class="btn small" href="app.html#r=db11&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=db11">Customize</a></div></div><div class="gcard"><b>Locally advanced rectal cancer</b><p>Chemotherapy, then chemoradiation, then surgery</p><div class="gbtns"><a class="btn small" href="app.html#r=prodige23&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=prodige23">Customize</a></div></div><div class="gcard"><b>Stage III non-small cell lung cancer</b><p>Chemoradiation, then a year of immunotherapy</p><div class="gbtns"><a class="btn small" href="app.html#r=pacific&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=pacific">Customize</a></div></div><div class="gcard"><b>Muscle-invasive bladder cancer</b><p>Chemo-immunotherapy around cystectomy</p><div class="gbtns"><a class="btn small" href="app.html#r=niagara&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=niagara">Customize</a></div></div><div class="gcard"><b>High-risk prostate cancer</b><p>Radiation with long-course hormone therapy</p><div class="gbtns"><a class="btn small" href="app.html#r=prostate-long&demo=1" style="color:#fff">View map</a><a class="btn sec small" href="app.html#r=prostate-long">Customize</a></div></div></div>
   <p class="more-link" id="libcount"></p>
+</div><div class="wrap" style="margin-top:38px">
+  <h2 style="font-size:24px">Comparing two options</h2>
+  <p class="sub">When more than one regimen is reasonable, the decision visit is easier with both on one time scale. Months, visits, and the trade-offs, side by side.</p>
+  <div class="imgcard" style="margin-top:16px"><img src="compare.png" alt="A comparison page for stage III HER2-positive breast cancer, showing two regimens side by side with their timelines, total months, visit counts, advantages and trade-offs" width="2112" height="1476"></div>
+  <p class="more-link"><a class="btn small" href="app.html#cmp=demo" style="color:#fff">Open this comparison</a> <a class="btn sec small" href="app.html">Build your own</a></p>
 </div></section>
 
 <section id="evidence"><div class="wrap two">
@@ -158,8 +198,42 @@
 
 <footer><div class="wrap">
   <div>ONCourse is an educational aid for conversations between patients and their care teams. It is not medical advice and does not replace your clinic's appointment schedule. See the <a href="disclaimer.html">disclaimer and terms of use</a>.</div>
-  <div><a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
+  <div><a href="how-it-works.html">How it works</a> · <a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
 </div></footer>
+<script>
+(function(){
+  var root = document.getElementById('heroswitch'); if (!root) return;
+  var caps = ['Triple-negative breast cancer, stage II to III \u00b7 KEYNOTE-522',
+              'Muscle-invasive bladder cancer, cisplatin not an option \u00b7 KEYNOTE-905 / EV-303',
+              'Stomach or gastroesophageal junction cancer, stage II to III \u00b7 FLOT4 / MATTERHORN'];
+  var tabs = [].slice.call(root.querySelectorAll('[role=tab]'));
+  var slides = [].slice.call(root.querySelectorAll('.hsslide'));
+  var cap = document.getElementById('hscap');
+  var at = 0;
+  function show(i, focus){
+    at = (i + slides.length) % slides.length;
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === at); });
+    var img = slides[at].querySelector('img');
+    if (img && img.dataset.src){ img.src = img.dataset.src; delete img.dataset.src; }
+    tabs.forEach(function(t, k){ t.setAttribute('aria-selected', k === at ? 'true' : 'false'); });
+    cap.textContent = caps[at];
+    if (focus) tabs[at].focus();
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(+t.dataset.i); }); });
+  root.querySelector('.hstabs').addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ e.preventDefault(); show(at + 1, true); }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); show(at - 1, true); }
+  });
+  var x0 = null;
+  var view = document.getElementById('hsview');
+  view.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
+  view.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 45) show(at + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+})();
+</script>
 <script src="regimens.js"></script>
 <script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
 <script>

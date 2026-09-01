@@ -2,7 +2,7 @@
 // Exits non-zero if the library is malformed, so it can gate a commit.
 const fs = require('fs');
 const src = fs.readFileSync(__dirname + '/../regimens.js', 'utf8');
-const ctx = {}; new Function('with(this){' + src + '; this.LIBRARY = LIBRARY; this.CHANGELOG = CHANGELOG; this.APP_VERSION = APP_VERSION; this.MODS = MODS; }').call(ctx);
+const ctx = {}; new Function('with(this){' + src + '; this.LIBRARY = LIBRARY; this.CHANGELOG = CHANGELOG; this.APP_VERSION = APP_VERSION; this.MODS = MODS; this.COMPARE_EXAMPLE = typeof COMPARE_EXAMPLE !== "undefined" ? COMPARE_EXAMPLE : null; }').call(ctx);
 const { LIBRARY, CHANGELOG, APP_VERSION, MODS } = ctx;
 const errors = [], warnings = [];
 const ids = new Set();
@@ -35,6 +35,16 @@ for (const r of LIBRARY){
       }
     }
   })(r.nodes, 0);
+}
+// the worked comparison shown by the example link must point at real pathways
+if (ctx.COMPARE_EXAMPLE){
+  const c = ctx.COMPARE_EXAMPLE;
+  for (const k of ['title','diagnosis','options']) if (!c[k]) errors.push(`COMPARE_EXAMPLE missing ${k}`);
+  for (const o of c.options || []){
+    if (!o.name) errors.push('COMPARE_EXAMPLE option without a name');
+    if (o.regimenId && !ids.has(o.regimenId)) errors.push(`COMPARE_EXAMPLE points at unknown pathway ${o.regimenId}`);
+  }
+  if ((c.options || []).length < 2) errors.push('COMPARE_EXAMPLE needs at least 2 options');
 }
 if (!/^\d+\.\d+(\.\d+)?$/.test(APP_VERSION)) errors.push('APP_VERSION must look like 0.5.1');
 for (const c of CHANGELOG){ if (!c.date || !c.text) errors.push('CHANGELOG entry missing date or text'); }

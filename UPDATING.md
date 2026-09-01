@@ -64,4 +64,6 @@ Review the list, then run the add/change prompt for the ones you want.
 - `plan` is the short title patients see; `title` is the one-sentence sequence; `subtitle` is the cancer line.
 - `group` drives the sub-headings in each tab; reuse existing group names exactly.
 - Hormone-therapy type is offered only for breast and prostate regimens.
-- Every change gets a `CHANGELOG` line. The Updates page is the public record.
+- Every clinical change gets a `CHANGELOG` line, and so does any builder change a user would notice.
+  Design, copy-editing and internal engineering stay out of it; the Updates page is the public record, not a commit log.
+- `how-it-works.html` is the builder walkthrough. If a control changes, update that page in the same commit.

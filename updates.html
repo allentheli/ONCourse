@@ -12,7 +12,10 @@
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21.5 L12 14.5 L16.5 18 L20.5 11 L24 14" fill="none" stroke="#2F55D4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="21.5" r="2" fill="#fff" stroke="#172033" stroke-width="1.6"/><circle cx="12" cy="14.5" r="1.3" fill="#2F55D4"/><circle cx="16.5" cy="18" r="1.3" fill="#2F55D4"/><circle cx="24" cy="14" r="2.7" fill="#2F55D4"/><circle cx="24" cy="14" r="1.05" fill="#fff"/></svg> ONCourse</a>
-  <nav class="main"><a href="index.html#how">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  <details class="nav-wrap">
+    <summary class="navtoggle" aria-label="Menu"><span></span><span></span><span></span></summary>
+  <nav class="main"><a href="how-it-works.html">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  </details>
 </div></header>
 
 <section style="border-top:0"><div class="wrap">
@@ -20,13 +23,14 @@
   <h1 class="display" style="font-size:40px">What changed, and when</h1>
   <ul class="updates" id="log" style="max-width:76ch"></ul>
   <h2 style="margin-top:44px">Every regimen and its review date</h2>
+  <p class="sub">Newest additions first.</p>
   <p class="sub">Physicians can open any of these in the app, adjust it, and see its sources under Regimen details.</p>
-  <table class="reg" id="regtable"></table>
+  <div class="tablescroll"><table class="reg" id="regtable"></table></div>
 </div></section>
 
 <footer><div class="wrap">
   <div>ONCourse is an educational aid for conversations between patients and their care teams. It is not medical advice and does not replace your clinic's appointment schedule. See the <a href="disclaimer.html">disclaimer and terms of use</a>.</div>
-  <div><a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
+  <div><a href="how-it-works.html">How it works</a> · <a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
 </div></footer>
 <script src="regimens.js"></script>
 <script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
@@ -36,7 +40,7 @@
   document.getElementById('log').innerHTML = CHANGELOG.map(u => `<li><time>${fmt(u.date)}</time><span>${u.text}</span></li>`).join('');
   const cat = {breast:'Breast', gi:'GI', lung:'Lung', gu:'GU', hn:'Head and neck', skin:'Melanoma'};
   document.getElementById('regtable').innerHTML = '<tr><th>Category</th><th>Group</th><th>Plan</th><th>Based on</th><th>Added</th><th>Reviewed</th></tr>' +
-    LIBRARY.map(r => `<tr><td>${cat[r.disease] || r.disease}</td><td>${r.group || ''}</td><td><b>${r.plan || r.title}</b><br><span style="color:var(--muted);font-size:12.5px">${r.name}</span></td><td>${r.trial || ''}</td><td>${r.added || ''}</td><td>${r.reviewed || ''}</td></tr>`).join('');
+    LIBRARY.slice().sort((a, b) => String(b.added || '').localeCompare(String(a.added || '')) || String(a.plan || '').localeCompare(String(b.plan || ''))).map(r => `<tr><td>${cat[r.disease] || r.disease}</td><td>${r.group || ''}</td><td><b>${r.plan || r.title}</b><br><span style="color:var(--muted);font-size:12.5px">${r.name}</span></td><td>${r.trial || ''}</td><td>${r.added || ''}</td><td>${r.reviewed || ''}</td></tr>`).join('');
 })();
 </script>
 </body></html>
