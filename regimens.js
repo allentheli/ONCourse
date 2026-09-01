@@ -1038,8 +1038,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.9.4';
+const APP_VERSION = '0.9.5';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Printing fixed. The two buttons from the phone toolbar no longer appear on the printed page, and a browser that prints portrait rather than landscape now gets the same one-page sheet, scaled to fit. The one-page fit also applies when steps show their individual visits; a few visit-heavy pathways that cannot fit one page at readable size now break onto a second page at a whole step, never mid-text.' },
   { date:'2026-09-01', text:'Comparison pages are now readable on a phone. The side-by-side table used to collapse into one interleaved column (timeline, timeline, total, total, and so on) with no way to tell which entry belonged to which option; each option now stacks as its own complete card, with the row labels repeated inside it. Wide screens and print keep the aligned table.' },
   { date:'2026-09-01', text:'Fixed the site menu, which was missing on desktop after the mobile menu was added. The links are inline again on wide screens and open from the button on a phone.' },
   { date:'2026-09-01', text:'DESTINY-Breast11 corrected: the HER2 antibodies after surgery now run for 9 cycles rather than 13, so the pathway adds up to the about one year its own description states, counting the treatment given before surgery. The reference is now the primary publication (Annals of Oncology 2026;37:166-179) in place of a placeholder.' },
