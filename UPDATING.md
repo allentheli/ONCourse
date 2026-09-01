@@ -1,0 +1,47 @@
+# Keeping ONCourse current
+
+ONCourse is a static site: a handful of files in one GitHub repository, published by GitHub Pages. There is no server to maintain. Updating the site means replacing a file and committing it.
+
+## How the files fit together
+
+| File | What it is | How often it changes |
+|---|---|---|
+| `regimens.js` | **The library.** Every regimen, its steps, plain-language text, sources, `added` / `reviewed` dates, plus `CHANGELOG` and `APP_VERSION`. | Often. This is the file almost every update touches. |
+| `app.html` | The builder and the patient page (timeline engine, editor, print fit, share links). | Only when features change. |
+| `index.html`, `about.html`, `updates.html`, `references.html`, `site.css` | The public pages. Updates and References read `regimens.js`, so they refresh themselves. | Rarely. |
+| `logo-mark.svg` | The mark. | Rarely. |
+
+Because the pages read `regimens.js` at load time, adding a regimen or a changelog line automatically updates the landing page counts, the Updates log, and the References page. Nothing else needs editing.
+
+## The update loop (5 minutes)
+
+1. Open your ONCourse Claude Project (keep `regimens.js` and this file in its project knowledge).
+2. Paste one of the prompts below with the new information.
+3. Claude returns a complete replacement `regimens.js` (never a fragment) with the new or changed regimen, updated `reviewed` dates, and a new `CHANGELOG` entry at the top.
+4. Review the plain-language text and the schedule against the source Claude cites. You are the editor of record.
+5. On GitHub, open `regimens.js`, click the pencil, replace the contents, commit. The site updates within about a minute.
+
+If you use Claude Code on the repository, step 5 becomes "commit and push" done for you; ask it to open a pull request so you still review the diff.
+
+## Prompt: add or change a regimen after a new approval
+
+> Here is a new FDA approval / practice change: [paste the approval notice, trial abstract, or link].
+> Update `regimens.js` accordingly. Rules: verify the schedule against the primary publication and a structured protocol reference (HemOnc.org or eviQ) and cite both in `refs`; write patient-facing `plain` text at an eighth-grade reading level with no promises beyond the evidence; keep protocol-specified intervals and mark practice-variable ones as such in the text; use `weeks:''` for any radiation step whose course length varies; set `added` and `reviewed` to today; add a one-line `CHANGELOG` entry at the top; bump `APP_VERSION` if a regimen was added. Return the complete file, then a short verification note listing what you checked and anything you could not confirm.
+
+## Prompt: monthly approvals sweep
+
+> Search for FDA oncology approvals, label expansions, and major guideline changes in the last [30] days relevant to early-stage or locally advanced breast, GI, lung, and GU cancers treated with curative intent (neoadjuvant, adjuvant, perioperative, chemoradiation, and surveillance regimens). For each, give one line: what changed, the trial, and whether it affects an existing ONCourse regimen or would be a new one. Do not update any files yet.
+
+Review the list, then run the add/change prompt for the ones you want.
+
+## Prompt: annual re-verification
+
+> Re-verify every regimen in `regimens.js` against its primary publication and a structured protocol reference. Report discrepancies as a table (regimen, field, current value, source value, source). Do not change anything until I confirm.
+
+## Conventions worth keeping
+
+- One regimen per object; `id` never changes once published (share links depend on it).
+- `plan` is the short title patients see; `title` is the one-sentence sequence; `subtitle` is the cancer line.
+- `group` drives the sub-headings in each tab; reuse existing group names exactly.
+- Hormone-therapy type is offered only for breast and prostate regimens.
+- Every change gets a `CHANGELOG` line. The Updates page is the public record.

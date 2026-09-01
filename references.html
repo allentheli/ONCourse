@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ONCourse — references</title>
+<meta name="description" content="Primary sources for every regimen in ONCourse.">
+<link rel="icon" href="logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21 C 12 21, 12 12, 17 12 S 22 17, 25 11" fill="none" stroke="#2F55D4" stroke-width="2.4" stroke-linecap="round"/><circle cx="8" cy="21" r="2" fill="#172033"/><circle cx="25" cy="11" r="2.2" fill="#2F55D4"/></svg> ONCourse</a>
+  <nav class="main"><a href="about.html">About</a><a href="updates.html">Updates</a><a href="references.html">References</a><a class="btn" href="app.html">Open ONCourse</a></nav>
+</div></header>
+
+<section style="border-top:0"><div class="wrap">
+  <p class="eyebrow">References</p>
+  <h1 class="display" style="font-size:40px">Sources for every plan</h1>
+  <p class="sub">Links open the citation on PubMed. Schedules are also cross-checked against structured protocol references (such as HemOnc.org and eviQ) and current FDA labeling.</p>
+  <div class="refs" id="refs"></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>ONCourse is an educational aid for conversations between patients and their care teams. It does not replace medical advice or your clinic's appointment schedule.</div>
+  <div><a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <span id="ver"></span></div>
+</div></footer>
+<script src="regimens.js"></script>
+<script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
+<script>
+(function(){
+  const cat = [['breast','Breast'],['gi','GI'],['lung','Lung'],['gu','GU']];
+  document.getElementById('refs').innerHTML = cat.map(([k,l]) => {
+    const rs = LIBRARY.filter(r => r.disease === k); const groups = [];
+    rs.forEach(r => { if (!groups.includes(r.group)) groups.push(r.group); });
+    return `<h3>${l}</h3>` + groups.map(g => `<h4>${g}</h4>` + rs.filter(r => r.group === g).map(r => `<ul>${(r.refs || []).map(x => `<li><a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(x.q || x.t)}" target="_blank" rel="noopener">${x.t}</a><small>${r.plan || r.title} · reviewed ${r.reviewed || ''}</small></li>`).join('') || `<li><small>${r.plan}: guideline-based; no trial citation listed.</small></li>`}</ul>`).join('')).join('');
+  }).join('');
+})();
+</script>
+</body></html>

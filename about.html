@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About ONCourse</title>
+<meta name="description" content="Why ONCourse exists, who builds it, and how it treats evidence.">
+<link rel="icon" href="logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21 C 12 21, 12 12, 17 12 S 22 17, 25 11" fill="none" stroke="#2F55D4" stroke-width="2.4" stroke-linecap="round"/><circle cx="8" cy="21" r="2" fill="#172033"/><circle cx="25" cy="11" r="2.2" fill="#2F55D4"/></svg> ONCourse</a>
+  <nav class="main"><a href="about.html">About</a><a href="updates.html">Updates</a><a href="references.html">References</a><a class="btn" href="app.html">Open ONCourse</a></nav>
+</div></header>
+
+<section style="border-top:0"><div class="wrap prose">
+  <p class="eyebrow">About</p>
+  <h1 class="display" style="font-size:40px">Treatment decisions belong to the people living with them.</h1>
+  <p>A cancer diagnosis arrives with a plan that can span a year or more: chemotherapy, then surgery, then a wait for a pathology report that decides what happens next. Most of that plan lives in a physician's head and an infusion calendar. Patients and families are asked to trust a course they cannot see.</p>
+  <p>ONCourse exists to make the course visible. It gives physicians a fast way to draw the whole plan, the way they would sketch it on paper for a patient, and it gives patients something they can hold: what is happening, in what order, for how long, and why this plan was chosen for them.</p>
+  <h2>What we believe</h2>
+  <p><b>There is no one-size-fits-all treatment.</b> Two people with the same diagnosis can rightly end up on different plans. The best decision weighs the evidence, the specific cancer, the person's health, and what they want from their life. That decision should be shared, and a shared decision needs a shared picture.</p>
+  <p><b>Evidence first, plainly stated.</b> Every plan in ONCourse traces to a clinical trial or guideline, with sources a physician can click. The plain-language text says what the treatment is and how it is given, without promises the evidence does not support.</p>
+  <p><b>Families are part of the care team.</b> A printed plan on the refrigerator, or a link on a daughter's phone, means everyone who is helping can help in the same direction.</p>
+  <p><b>The physician is the author.</b> ONCourse never decides a treatment. It starts from verified regimens and lets the treating physician adjust, annotate, and take responsibility for what the patient receives.</p>
+
+  <h2>Who builds it</h2>
+  <div class="team">
+    <div class="person">
+      <div class="ph">[photo]</div>
+      <div><b>[Full name], MD</b><div class="role">[Credentials and role, e.g. board-certified hematologist-oncologist] · Founder</div>
+        <p>[Two or three sentences: training and current practice; the work that led to ONCourse; treatment philosophy.]</p></div>
+    </div>
+    <div class="person">
+      <div class="ph">[photo]</div>
+      <div><b>[Collaborator name]</b><div class="role">[Role, e.g. resident physician · regimen review]</div>
+        <p>[One or two sentences.]</p></div>
+    </div>
+  </div>
+  <div class="placeholder" style="margin-top:22px">Placeholders above: send your photo, the bio paragraph, the credentials line, and any collaborators, and they drop straight in. A short "treatment philosophy" paragraph reads well here too.</div>
+
+  <h2>How ONCourse treats evidence</h2>
+  <p>Regimens are checked against the primary publication and a structured protocol reference before release, and each carries the date it was last reviewed. Between-phase intervals follow the trial protocol where one is specified; where practice varies, the default is a typical value the physician is expected to adjust. New approvals and label changes are reviewed as they arrive; see the <a href="updates.html">update log</a>.</p>
+  <h2>Privacy</h2>
+  <p>ONCourse has no accounts and no server. It runs entirely in the browser. A share link or QR code contains the plan itself, encoded in the link, and nothing else, which is why the page asks physicians never to type a patient's name. Physicians' saved regimens stay in their own browser unless they export them.</p>
+  <h2>Contact</h2>
+  <p>[Feedback email or form link]</p>
+</div></section>
+
+<footer><div class="wrap">
+  <div>ONCourse is an educational aid for conversations between patients and their care teams. It does not replace medical advice or your clinic's appointment schedule.</div>
+  <div><a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <span id="ver"></span></div>
+</div></footer>
+<script src="regimens.js"></script>
+<script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
+
+</body></html>

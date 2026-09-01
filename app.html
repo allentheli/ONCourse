@@ -1,0 +1,1395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ONCourse — build a treatment plan a patient can follow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#172033; --ink-2:#3B4557; --muted:#6B7385; --line:#D9DEE7; --line-2:#EEF1F5;
+  --paper:#FFFFFF; --app:#E9ECF1; --panel:#F7F8FA; --accent:#2F55D4;
+  --chemo:#3457D5; --io:#0E9F8E; --targeted:#7A4FD6; --endocrine:#C48A16; --radiation:#E0603C;
+  --surgery:#172033; --rest:#CBD3DD; --watch:#4C9A5B;
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Atkinson Hyperlegible', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--app);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* ---------- app frame ---------- */
+.app{display:grid;grid-template-columns:410px 1fr;height:100vh}
+.sidebar{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;overscroll-behavior:contain}
+.brand{padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.brand h1{font:600 19px/1.2 var(--serif);margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.brand h1 svg{width:26px;height:26px;flex:none}
+.brand nav{margin-top:8px;display:flex;gap:12px;font-size:12px}
+.brand nav a{color:var(--accent);text-decoration:none}
+.brand nav a:hover{text-decoration:underline}
+.reggrp{font-size:11px;font-weight:700;color:var(--muted);margin:10px 2px 4px;letter-spacing:.02em}
+.reggrp:first-child{margin-top:2px}
+.refs{list-style:none;margin:6px 0 0;padding:0;font-size:12px;line-height:1.45}
+.refs li{padding:2px 0}
+.refs a{color:var(--accent);text-decoration:none}
+.refs a:hover{text-decoration:underline}
+.brand h1 small{font:400 12px/1 var(--sans);color:var(--muted);margin-left:8px;letter-spacing:0}
+.wm{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;color:var(--muted)}
+.brand p{margin:5px 0 0;font-size:12px;color:var(--muted);line-height:1.4}
+.viewtabs{display:flex;gap:4px;padding:10px 20px;border-bottom:1px solid var(--line)}
+.viewtabs button{flex:1;padding:7px 4px;border:1px solid var(--line);background:#fff;border-radius:6px;font-size:12.5px;font-weight:600}
+.viewtabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+body.compare .roadonly{display:none}
+body:not(.compare) .componly{display:none}
+.sec{padding:16px 20px;border-bottom:1px solid var(--line)}
+.sec>h2{font-size:13px;font-weight:700;margin:0 0 10px;color:var(--ink)}
+.sec>h2 small{font-weight:400;color:var(--muted);margin-left:6px;font-size:12px}
+.tabs{display:flex;gap:4px;margin-bottom:10px}
+.tab{flex:1;padding:6px 4px;border:1px solid var(--line);background:#fff;border-radius:6px;font-size:12.5px}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.reglist{display:flex;flex-direction:column;gap:2px}
+.reg{text-align:left;padding:8px 10px;border:1px solid transparent;border-radius:6px;background:transparent;display:block;width:100%}
+.reg:hover{background:#fff;border-color:var(--line)}
+.reg.on{background:#fff;border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.reg b{display:block;font-size:13.5px}
+.reg span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.reg.blank{border:1px dashed var(--line);margin-top:6px}
+.reg.blank:hover{border-style:solid;background:#fff}
+.empty{font-size:12.5px;color:var(--muted);padding:8px 2px;line-height:1.45}
+
+/* ---------- step editor ---------- */
+.node{border:1px solid var(--line);border-radius:8px;background:#fff;margin-bottom:6px}
+.node.off{opacity:.55}
+.node.conc{margin-left:14px}
+.node-h{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer;user-select:none}
+.node-h .sw{width:10px;height:10px;border-radius:2px;flex:none;background:var(--c1)}
+.node-h .sw.two{background:linear-gradient(180deg,var(--c1) 50%,var(--c2) 50%)}
+.node-h .sw.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
+.node-h .sw.dec{width:9px;height:9px;transform:rotate(45deg);border:1.5px solid var(--ink);background:#fff;border-radius:1px}
+.node-h .nm{flex:1;font-size:13px;font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.node-h .sm{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.node-h .car{font-size:10px;color:var(--muted);transition:transform .15s}
+.node.open .node-h .car{transform:rotate(90deg)}
+.node-b{padding:2px 10px 10px;border-top:1px solid var(--line-2);display:none}
+.node.open .node-b{display:block}
+.f{display:flex;flex-direction:column;gap:3px;margin-top:8px;min-width:0}
+.f label{font-size:11.5px;color:var(--muted)}
+.f input[type=text],.f input[type=number],.f input[type=date],.f select,.f textarea{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:13px}
+.f textarea{min-height:58px;resize:vertical;line-height:1.35}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.chk{display:flex;align-items:center;gap:6px;font-size:12.5px;margin-top:8px}
+.chk input{margin:0}
+.mods{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.mod{font-size:11.5px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;display:inline-flex;align-items:center;gap:5px}
+.mod i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.mod.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.ibtn{border:1px solid var(--line);background:#fff;border-radius:6px;width:28px;height:26px;font-size:12px;color:var(--ink-2);display:inline-flex;align-items:center;justify-content:center;padding:0}
+.ibtn:hover{border-color:var(--ink-2)}
+.node-acts{display:flex;gap:4px;justify-content:flex-end;margin-top:10px}
+.add{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.add button{font-size:12px;padding:5px 8px;border:1px dashed var(--line);background:transparent;border-radius:6px;color:var(--ink-2)}
+.add button:hover{border-style:solid;background:#fff}
+.branch-ed{margin-top:10px;padding:8px 0 4px 10px;border-left:3px solid var(--line)}
+.branch-ed>.f:first-child{margin-top:0}
+.branch-ed h5{margin:0 0 4px;font-size:12px;color:var(--ink-2)}
+.radios{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px}
+.radios label{display:flex;align-items:center;gap:5px;font-size:12.5px}
+.btn{padding:8px 12px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-size:13px;font-weight:600}
+.btn:hover{background:#0f1626}
+.btn.sec{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.sec:hover{background:#fff;border-color:var(--ink-2)}
+.btn.danger{background:#fff;color:#B42318;border-color:var(--line)}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hint{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.45}
+.qr-side{margin-top:10px;display:flex;gap:12px;align-items:center}
+.qr-side svg{width:96px;height:96px;flex:none;border:1px solid var(--line);padding:4px;background:#fff;border-radius:4px}
+.linkbox{display:flex;gap:6px;margin-top:8px}
+.linkbox input{flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:#fff;min-width:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 14px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.toast.show{opacity:1}
+
+/* ---------- top bar (patient / preview mode) ---------- */
+.topbar{display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.topbar span{font-size:12.5px;color:var(--muted)}
+.topbar .tb-r{display:flex;gap:8px}
+body.patient .sidebar{display:none}
+body.patient .app{grid-template-columns:1fr;height:auto}
+body.patient .topbar{display:flex}
+body.patient .main{padding:24px 20px 60px}
+
+/* ---------- the patient sheet ---------- */
+.main{overflow:auto;padding:28px 32px 60px}
+.sheet{background:var(--paper);max-width:1056px;margin:0 auto;padding:40px 48px 32px;box-shadow:0 1px 2px rgba(23,32,51,.06),0 14px 44px rgba(23,32,51,.10);border-radius:2px}
+.sh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.sh-head b{color:var(--ink);font-weight:700;font-size:13px}
+.doclabel{font:600 12px/1 var(--serif);color:var(--ink);letter-spacing:.01em;margin-right:12px;padding-right:12px;border-right:1px solid var(--line)}
+.sh-for{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.sh-frame{margin:6px 0 0;font-size:13px;color:var(--ink-2);max-width:80ch}
+.sh-head .ph{margin-left:8px}
+.sh-top{display:grid;grid-template-columns:1fr 288px;gap:8px 32px;align-items:start}
+.sh-top.solo{grid-template-columns:1fr}
+.sh-title{font:600 28px/1.15 var(--serif);margin:20px 0 6px;letter-spacing:-.01em;max-width:36ch}
+.sh-sub{margin:0;font-size:13.5px;color:var(--ink-2);max-width:82ch}
+.sh-total{margin:5px 0 0;font-size:13px;color:var(--muted)}
+.chosen{border:1px solid var(--line);border-radius:10px;padding:13px 16px 11px;margin-top:23px}
+.chosen h2{font:600 13.5px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
+.chosen ul{list-style:none;margin:0;padding:0}
+.chosen li{display:flex;gap:8px;font-size:11.5px;line-height:1.4;padding:2.5px 0;color:var(--ink-2)}
+.chosen .ck{color:var(--ink);font-weight:700;flex:none}
+.route{margin:18px 0 6px}
+.route svg{display:block;width:100%;height:auto;overflow:visible}
+.steps{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px}
+.step{display:grid;grid-template-columns:22px 1fr;gap:6px;break-inside:avoid}
+.step-n{font:600 15px/1 var(--serif);color:var(--ink);padding-top:2px}
+.step h3{margin:0;font-size:13.5px;line-height:1.25;display:flex;align-items:flex-start;gap:7px}
+.chip{width:10px;height:10px;border-radius:2px;flex:none;margin-top:3px;background:var(--c1)}
+.chip.two{background:linear-gradient(180deg,var(--c1) 50%,var(--c2) 50%)}
+.chip.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
+.step p{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.step p.meta{color:var(--muted);font-size:11.5px}
+.step.rest .step-n{color:var(--muted)}
+.step.rest h3{font-weight:600;color:var(--ink-2)}
+.also{margin-top:6px;padding:6px 8px;background:var(--line-2);border-radius:6px;font-size:12px;line-height:1.4}
+.also b{font-weight:700}
+.also .chip{display:inline-block;vertical-align:-1px;margin:0 4px 0 0}
+.fork{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;margin-top:2px}
+.fork>h3{margin:0 0 4px;font:600 15px/1.3 var(--serif)}
+.fork>p{margin:0 0 10px;font-size:12.5px;color:var(--ink-2);max-width:90ch}
+.branches{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.branch{padding:0 0 0 12px;border-left:3px solid var(--line)}
+.branch.expected{border-left-color:var(--ink)}
+.branch.dim{opacity:.55}
+.branch h4{margin:0 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600}
+.tag.alt{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.branch .steps{grid-template-columns:1fr;gap:8px;margin:0}
+.visits{margin:6px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}
+.visits li{display:flex;gap:8px;padding:2px 0;border-top:1px dotted var(--line)}
+.visits li span:first-child{color:var(--muted);flex:none;width:112px}
+.sh-bottom{margin-top:16px;display:grid;gap:12px}
+.sh-bottom.two{grid-template-columns:1fr 1fr}
+.sh-notes{padding:12px 14px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;line-height:1.45;white-space:pre-wrap}
+.sh-notes b{display:block;margin-bottom:4px}
+.pbox{width:13px;height:13px;border:1.5px solid var(--ink);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-top:2px}
+.pbox.done{background:var(--ink)}
+.steps.withboxes .step{grid-template-columns:15px 20px 1fr}
+.step.done{opacity:.5}
+.step .dt{color:var(--ink);font-weight:700;margin-left:4px}
+/* comparison sheet */
+.cmpg{display:grid;grid-template-columns:104px repeat(var(--nc,2),1fr);gap:0 14px;margin-top:18px}
+.cmp-c{padding:8px 10px;border-top:1px solid var(--line-2);min-width:0}
+.cmp-c.lab{padding-left:0;padding-right:0;font-size:11px;color:var(--muted);font-weight:700;line-height:1.35}
+.cmp-c.h{border-top:3px solid var(--line);padding-top:10px}
+.cmp-c.h.rec{border-top-color:var(--ink)}
+.cmp-c.rec{background:#F3F5F9}
+.cmp-c.h h3{margin:0;font:600 15.5px/1.25 var(--serif)}
+.cmp-c.h .tag{display:inline-block;margin-top:6px}
+.cmp-c.first{border-top:0}
+.mini svg{display:block;width:100%;height:auto;overflow:visible}
+.cmp-fact{font-size:12.5px;color:var(--ink-2)}
+.cmp-fact.none{color:var(--muted)}
+.cmp-list{list-style:none;margin:0;padding:0;font-size:12px;line-height:1.4;color:var(--ink-2)}
+.cmp-list li{display:flex;gap:6px;padding:1.5px 0}
+.cmp-list li i{flex:none;font-style:normal;font-weight:700;width:9px;text-align:center}
+.cmp-list.pro li i{color:var(--watch)}
+.cmp-list.con li i{color:#B4551F}
+.cmp-why{padding:10px 12px;border-left:3px solid var(--ink);font-size:12px;line-height:1.45;background:var(--line-2);border-radius:0 8px 8px 0}
+.cmp-c.rec .cmp-why{background:#fff}
+.cmp-why b{display:block;margin-bottom:3px}
+.cmp-why.wide{margin-top:14px}
+.opt-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px;margin-bottom:8px}
+.opt-card .oh{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;margin-bottom:2px}
+.sh-foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;font-size:11px;color:var(--muted);line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:5px;color:var(--ink-2);font-size:11px}
+.legend i{width:9px;height:9px;border-radius:2px;background:var(--c)}
+.legend i.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
+.qrwrap{text-align:center;font-size:10px;color:var(--muted)}
+.qrwrap svg{width:82px;height:82px;display:block;margin:0 auto 3px}
+
+@media (max-width:900px){
+  .topbar{padding:8px 12px;gap:8px}
+  .topbar span{display:none}
+  .topbar .btn{padding:7px 10px;font-size:12.5px;white-space:nowrap}
+  .app{grid-template-columns:1fr;height:auto}
+  .sidebar{border-right:0;border-bottom:1px solid var(--line);overflow:visible}
+  .main{padding:16px}
+  .sheet{padding:24px 20px 24px}
+  .sh-title{font-size:23px}
+  .sh-top{grid-template-columns:1fr;gap:4px}
+  .chosen{margin-top:10px}
+  .steps{grid-template-columns:1fr}
+  .branches{grid-template-columns:1fr}
+  .cmpg{grid-template-columns:1fr}
+  .cmp-c.lab{border-top:0;padding-bottom:0;margin-top:8px}
+  .route{display:none}
+  .sh-foot{grid-template-columns:1fr}
+  .qrwrap{text-align:left}
+  .qrwrap svg{margin:0 0 3px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+@media print{
+  @page{size:landscape;margin:.4in}
+  body{background:#fff}
+  .app{display:block;height:auto}
+  .sidebar,.topbar,.toast{display:none!important}
+  .main{overflow:visible;padding:0}
+  .sheet{box-shadow:none;max-width:none;padding:0;border-radius:0}
+  .route{display:block!important;margin:calc(var(--k,1)*10px) 0 calc(var(--k,1)*2px)}
+  .route svg{max-height:calc(var(--k,1)*230px);width:auto;max-width:100%}
+  .steps{grid-template-columns:repeat(3,1fr);gap:calc(var(--k,1)*8px) calc(var(--k,1)*16px);margin-top:calc(var(--k,1)*4px)}
+  .branches{grid-template-columns:1fr 1fr;gap:calc(var(--k,1)*12px)}
+  .sh-head{padding-bottom:calc(var(--k,1)*6px);font-size:calc(var(--k,1)*10.5px)}
+  .sh-head b{font-size:calc(var(--k,1)*11.5px)}
+  .sh-title{font-size:calc(var(--k,1)*21px);margin:calc(var(--k,1)*12px) 0 calc(var(--k,1)*4px)}
+  .sh-sub{font-size:calc(var(--k,1)*11.5px)}
+  .sh-total{font-size:calc(var(--k,1)*11px);margin-top:calc(var(--k,1)*3px)}
+  .sh-top{grid-template-columns:1fr calc(var(--k,1)*252px);gap:calc(var(--k,1)*6px) calc(var(--k,1)*24px)}
+  .sh-top.solo{grid-template-columns:1fr}
+  .chosen{padding:calc(var(--k,1)*10px) calc(var(--k,1)*12px) calc(var(--k,1)*8px);margin-top:calc(var(--k,1)*15px)}
+  .chosen h2{font-size:calc(var(--k,1)*11.5px);margin-bottom:calc(var(--k,1)*5px)}
+  .chosen li{font-size:calc(var(--k,1)*9.5px);padding:calc(var(--k,1)*2px) 0;gap:calc(var(--k,1)*6px)}
+  .step{grid-template-columns:calc(var(--k,1)*18px) 1fr;gap:calc(var(--k,1)*5px)}
+  .step-n{font-size:calc(var(--k,1)*12px)}
+  .step h3{font-size:calc(var(--k,1)*11.5px)}
+  .step p{font-size:calc(var(--k,1)*10.5px);line-height:1.35;margin-top:calc(var(--k,1)*3px)}
+  .step p.meta{font-size:calc(var(--k,1)*9.5px)}
+  .chip{width:calc(var(--k,1)*9px);height:calc(var(--k,1)*9px);margin-top:calc(var(--k,1)*2px)}
+  .also{font-size:calc(var(--k,1)*10px);padding:calc(var(--k,1)*4px) calc(var(--k,1)*6px);margin-top:calc(var(--k,1)*4px)}
+  .fork{padding-top:calc(var(--k,1)*8px)}
+  .fork>h3{font-size:calc(var(--k,1)*12.5px);margin-bottom:calc(var(--k,1)*2px)}
+  .fork>p{font-size:calc(var(--k,1)*10.5px);margin-bottom:calc(var(--k,1)*6px)}
+  .branch{padding-left:calc(var(--k,1)*9px)}
+  .branch h4{font-size:calc(var(--k,1)*11px);margin-bottom:calc(var(--k,1)*4px)}
+  .branch .steps{gap:calc(var(--k,1)*6px)}
+  .tag{font-size:calc(var(--k,1)*9px);padding:calc(var(--k,1)*1.5px) calc(var(--k,1)*5px)}
+  .visits{font-size:calc(var(--k,1)*9.5px)}
+  .visits li span:first-child{width:calc(var(--k,1)*88px)}
+  .sh-notes{font-size:calc(var(--k,1)*10.5px);padding:calc(var(--k,1)*8px) calc(var(--k,1)*10px);margin-top:calc(var(--k,1)*10px)}
+  .sh-foot{grid-template-columns:1fr auto;font-size:calc(var(--k,1)*9px);margin-top:calc(var(--k,1)*10px);padding-top:calc(var(--k,1)*8px)}
+  .legend span{font-size:calc(var(--k,1)*9.5px)}
+  .legend i{width:calc(var(--k,1)*8px);height:calc(var(--k,1)*8px)}
+  .qrwrap svg{max-width:calc(var(--k,1)*134px);max-height:calc(var(--k,1)*134px)}
+  .sh-bottom{margin-top:calc(var(--k,1)*10px);gap:calc(var(--k,1)*10px)}
+  .sh-notes{font-size:calc(var(--k,1)*10.5px);padding:calc(var(--k,1)*8px) calc(var(--k,1)*10px)}
+  .pbox{width:calc(var(--k,1)*12px);height:calc(var(--k,1)*12px)}
+  .steps.withboxes .step{grid-template-columns:calc(var(--k,1)*14px) calc(var(--k,1)*17px) 1fr}
+  .cmpg{margin-top:calc(var(--k,1)*12px);gap:0 calc(var(--k,1)*10px);grid-template-columns:calc(var(--k,1)*90px) repeat(var(--nc,2),1fr)}
+  .cmp-c{padding:calc(var(--k,1)*6px) calc(var(--k,1)*8px)}
+  .cmp-c.lab{font-size:calc(var(--k,1)*9.5px)}
+  .cmp-c.h h3{font-size:calc(var(--k,1)*13px)}
+  .cmp-fact{font-size:calc(var(--k,1)*10.5px)}
+  .cmp-list{font-size:calc(var(--k,1)*10px)}
+  .cmp-why{font-size:calc(var(--k,1)*10px);padding:calc(var(--k,1)*8px) calc(var(--k,1)*10px)}
+  .sh-frame{font-size:calc(var(--k,1)*10.5px)}
+  .sh-for{font-size:calc(var(--k,1)*10px)}
+  .doclabel{font-size:calc(var(--k,1)*10.5px)}
+  .branch,.step,.sh-notes,.sh-foot{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="topbar" id="topbar">
+  <div><b id="tb-title">Your treatment plan</b> <span>This is an overview. Your care team sets the exact dates.</span></div>
+  <div class="tb-r">
+    <button class="btn sec" id="tb-back" hidden>Back to builder</button>
+    <button class="btn" id="tb-print">Print or save as PDF</button>
+  </div>
+</div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <h1><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21 C 12 21, 12 12, 17 12 S 22 17, 25 11" fill="none" stroke="#2F55D4" stroke-width="2.4" stroke-linecap="round"/><circle cx="8" cy="21" r="2" fill="#172033"/><circle cx="25" cy="11" r="2.2" fill="#2F55D4"/></svg> ONCourse <small>your treatment, mapped</small></h1>
+    <p>Build a one-page treatment plan a patient can actually follow. Everything stays in this browser; do not type patient names, because links and QR codes carry the whole page.</p>
+    <nav><a href="index.html">Home</a><a href="about.html">About</a><a href="updates.html">Updates</a><a href="references.html">References</a></nav>
+  </div>
+
+  <div class="viewtabs"><button id="vt-road" class="on">Roadmap</button><button id="vt-cmp">Compare options</button></div>
+
+  <section class="sec componly">
+    <h2>Treatment options <small>2 to 4 columns</small></h2>
+    <div class="f"><label for="c-title">Page title</label><input type="text" id="c-title" data-cm="title"></div>
+    <div class="row">
+      <div class="f"><label for="c-diag">Diagnosis</label><input type="text" id="c-diag" data-cm="diagnosis" placeholder="e.g. rectal cancer"></div>
+      <div class="f"><label for="c-stage">Stage</label><input type="text" id="c-stage" data-cm="stage" placeholder="e.g. III"></div>
+    </div>
+    <div id="cmp-editor" style="margin-top:10px"></div>
+    <div class="f"><label for="c-why">Why we recommend it (optional, shown under the columns)</label><textarea id="c-why" data-cm="recWhy"></textarea></div>
+    <p class="hint">Pros and cons are optional; leave them blank to print facts only. Picking a regimen for a column auto-fills the time and visit facts from the roadmap data.</p>
+  </section>
+
+  <section class="sec roadonly">
+    <h2>1. Choose a regimen</h2>
+    <div class="tabs" id="tabs"></div>
+    <div class="reglist" id="reglist"></div>
+  </section>
+
+  <section class="sec roadonly">
+    <h2>2. Adjust the steps <small>click a step to edit</small></h2>
+    <div id="editor"></div>
+    <div class="btns"><button class="btn sec" id="reset">Reset to original</button></div>
+    <p class="hint">Cycle length and count set each step's duration. "Runs alongside the previous step" draws a step above the timeline instead of after it (radiation during immunotherapy, for example).</p>
+  </section>
+
+  <section class="sec">
+    <h2>3. Handout details</h2>
+    <div class="row">
+      <div class="f"><label for="o-clinic">Clinic or practice</label><input type="text" id="o-clinic" data-o="clinic" placeholder="e.g. Northwest Cancer Care"></div>
+      <div class="f"><label for="o-physician">Physician</label><input type="text" id="o-physician" data-o="physician" placeholder="e.g. Dr. A. Lee"></div>
+    </div>
+    <div class="f"><label for="o-contact">Contact line (shown at the bottom)</label><input type="text" id="o-contact" data-o="contact" placeholder="e.g. Questions? Call the oncology nurse line at (555) 555-0100"></div>
+    <div class="row roadonly">
+      <div class="f"><label for="o-start">First treatment date <span style="color:var(--muted)">(optional)</span></label><input type="date" id="o-start" data-o="startDate"></div>
+      <div class="f"><label for="o-detail">Level of detail</label>
+        <select id="o-detail" data-o="detail"><option value="overview">Big picture (one page)</option><option value="visits">Big picture plus visit schedule</option></select></div>
+    </div>
+    <div class="f roadonly" style="margin-top:12px"><label>Progress</label>
+      <label class="chk" style="margin-top:2px"><input type="checkbox" data-o="progressBoxes"> Add a checkbox next to each step for the patient to tick off</label>
+      <label class="chk"><input type="checkbox" data-o="progressDim" checked> Dim steps marked completed</label>
+      <label class="chk"><input type="checkbox" data-o="progressHere"> Show a "You are here" marker on the timeline</label>
+      <p class="hint" style="margin-top:4px">Mark steps completed inside each step's editor above, then reprint at any point in treatment.</p>
+    </div>
+    <div class="f" style="margin-top:12px"><label for="o-notes">Note to the patient <span style="color:var(--muted)">(optional)</span></label><textarea id="o-notes" data-o="notes" placeholder="e.g. We will check blood counts before each treatment. Bring this page to your visits."></textarea></div>
+    <div class="f roadonly" style="margin-top:12px"><label>"How we chose this plan for you" (top right of the page)</label>
+      <label class="chk" style="margin-top:2px"><input type="checkbox" data-o="reasonsOn" checked> Show this section</label>
+      <div id="reasonlist"></div>
+      <input type="text" data-creason="0" placeholder="Add your own reason" style="margin-top:6px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:13px;width:100%">
+      <input type="text" data-creason="1" placeholder="Add another" style="margin-top:6px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:13px;width:100%">
+    </div>
+    <label class="chk roadonly"><input type="checkbox" data-o="showTrial" checked> Name the clinical trial the plan is based on</label>
+    <label class="chk"><input type="checkbox" data-o="qr" checked> Print a QR code linking to this page</label>
+  </section>
+
+  <section class="sec">
+    <h2>4. Share or print</h2>
+    <div class="btns">
+      <button class="btn" id="print">Print or save as PDF</button>
+      <button class="btn sec" id="preview">Preview as the patient</button>
+    </div>
+    <div class="linkbox"><input type="text" id="linkout" readonly placeholder="Link appears here"><button class="btn sec" id="copylink">Copy link</button></div>
+    <div class="qr-side" id="qrside"></div>
+    <p class="hint" id="linkhint"></p>
+  </section>
+
+  <section class="sec roadonly">
+    <h2>Regimen details</h2>
+    <div class="f"><label for="r-name">Regimen name (for your list)</label><input type="text" id="r-name" data-r="name"></div>
+    <div class="f"><label for="r-plan">Short plan name (the page title)</label><input type="text" id="r-plan" data-r="plan" placeholder="e.g. Chemo-immunotherapy around surgery"></div>
+    <div class="f"><label for="r-title">One-sentence sequence (shown under the title)</label><input type="text" id="r-title" data-r="title"></div>
+    <div class="f"><label for="r-subtitle">Cancer type and stage line</label><input type="text" id="r-subtitle" data-r="subtitle"></div>
+    <div class="row">
+      <div class="f"><label for="r-trial">Trial or source</label><input type="text" id="r-trial" data-r="trial"></div>
+      <div class="f"><label for="r-disease">Category</label><select id="r-disease" data-r="disease"><option value="breast">Breast</option><option value="gi">GI</option><option value="lung">Lung</option><option value="gu">GU</option><option value="other">Other</option></select></div>
+    </div>
+    <div class="f"><label for="r-summary">One-line summary (for your list)</label><input type="text" id="r-summary" data-r="summary"></div>
+    <div class="f"><label>References (not printed)</label><ul class="refs" id="refs"></ul></div>
+    <div class="btns">
+      <button class="btn" id="save">Save to my library</button>
+      <button class="btn sec" id="newreg">Start a blank regimen</button>
+      <button class="btn danger" id="delreg" hidden>Delete from my library</button>
+    </div>
+    <div class="btns">
+      <button class="btn sec" id="export">Export my library</button>
+      <button class="btn sec" id="import">Import</button>
+      <input type="file" id="importfile" accept="application/json" hidden>
+    </div>
+    <p class="hint">Your library is saved in this browser. Export it to back it up or move it to another computer.</p>
+  </section>
+</aside>
+
+<main class="main"><article class="sheet" id="sheet"></article></main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
+</script>
+<script src="regimens.js"></script>
+<script>
+/* ===================== utilities ===================== */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let _uid = 1;
+const uid = () => 'n' + (_uid++) + Math.random().toString(36).slice(2, 6);
+const clone = (o) => JSON.parse(JSON.stringify(o));
+function ensureIds(nodes){ for (const n of nodes){ if (!n.id) n.id = uid(); if (n.t === 'decision') for (const b of n.branches) ensureIds(b.nodes); } return nodes; }
+function stripIds(reg){ const r = clone(reg); (function walk(ns){ for (const n of ns){ delete n.id; if (n.t === 'decision') for (const b of n.branches) walk(b.nodes); } })(r.nodes); return r; }
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+};
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1900); }
+function download(name, text){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'application/json'})); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function parseDate(s){ if (!s) return null; const [y, m, d] = String(s).split('-').map(Number); if (!y || !m || !d) return null; return new Date(y, m - 1, d); }
+function addDays(d, n){ const x = new Date(d); x.setDate(x.getDate() + Math.round(n)); return x; }
+function fmtShort(d, ref){ return MON[d.getMonth()] + ' ' + d.getDate() + ((ref && d.getFullYear() !== ref.getFullYear()) ? ', ' + d.getFullYear() : ''); }
+function fmtLong(d){ return d.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' }); }
+
+/* ---------- durations ---------- */
+const act = (n) => n.t !== 'phase' || n.on !== false;
+function nodeWeeks(n){
+  if (n.t === 'rest') return Math.max(0, +n.weeks || 0);
+  if (n.t === 'event') return 1;
+  if (n.t === 'phase') return n.mode === 'cycles' ? Math.max(0, (+n.cycles || 0) * (+n.cycleDays || 0) / 7) : Math.max(0, +n.weeks || 0);
+  return 0;
+}
+function durLong(w){
+  if (w <= 0) return '';
+  if (w < 1.5) return '1 week';
+  if (w < 8) return `${Math.round(w)} weeks`;
+  if (w < 96){ const m = Math.round(w / 4.345); return `about ${m} month${m > 1 ? 's' : ''}`; }
+  const y = Math.round(w / 52.18 * 2) / 2; return `about ${y === 1 ? '1 year' : y + ' years'}`;
+}
+function durShort(w){
+  if (w <= 0) return '';
+  if (w < 8) return `${Math.round(w)} wk`;
+  if (w < 96) return `~${Math.round(w / 4.345)} mo`;
+  const y = Math.round(w / 52.18 * 2) / 2; return `~${y} yr`;
+}
+function rangeText(a, b){
+  if (Math.abs(a - b) < 4) return durLong(Math.max(a, b));
+  const unit = (w) => w < 96 ? [Math.round(w / 4.345), 'months'] : [Math.round(w / 52.18 * 2) / 2, 'years'];
+  const [x, ux] = unit(a), [y, uy] = unit(b);
+  if (ux === uy) return `about ${x} to ${y} ${uy}`;
+  return `${durLong(a)} to ${durLong(b).replace('about ', '')}`;
+}
+function freqText(n){
+  if (n.freqText) return n.freqText;
+  if (n.mode === 'weekdays') return 'Monday to Friday';
+  if (n.mode === 'daily') return 'Every day at home';
+  if (n.mode === 'ongoing') return 'Regular visits';
+  const d = +n.cycleDays;
+  return d === 7 ? 'Every week' : d === 14 ? 'Every 2 weeks' : d === 21 ? 'Every 3 weeks' : d === 28 ? 'Every 4 weeks' : `Every ${d} days`;
+}
+function metaText(n){
+  const w = nodeWeeks(n);
+  if (n.t === 'rest') return durLong(w);
+  if (n.t === 'event') return '';
+  if (n.mode === 'cycles'){ const c = +n.cycles || 0; return `${freqText(n)}, ${c} ${c === 1 ? 'time' : 'times'} (${durLong(w)})`; }
+  if (n.mode === 'weekdays') return w > 0 ? `${freqText(n)} for ${durLong(w)}` : `${freqText(n)}; the number of sessions is set by your radiation team`;
+  return `${freqText(n)}, ${n.openEnded ? 'ongoing' : durLong(w)}`;
+}
+function nodeSummary(n){
+  if (n.t === 'phase') return n.mode === 'cycles' ? `${n.cycles} × ${n.cycleDays} d, ${durShort(nodeWeeks(n))}` : `${durShort(nodeWeeks(n)) || 'length not set'}${n.openEnded ? '+' : ''}`;
+  if (n.t === 'rest') return durShort(nodeWeeks(n));
+  if (n.t === 'decision') return `${n.branches.length} paths`;
+  return '';
+}
+function visibleBranches(n){
+  if (n.only && n.emph !== null && n.emph !== undefined && n.branches[n.emph]) return [{ b: n.branches[n.emph], idx: n.emph }];
+  return n.branches.map((b, idx) => ({ b, idx }));
+}
+
+/* ===================== state ===================== */
+const REASONS = [
+  'The specific features of your cancer (type, stage, and test results)',
+  'National treatment guidelines',
+  'Your overall health and other medical conditions',
+  'Your preferences and goals',
+  'Expert opinion from our care team',
+  'Results from clinical trials',
+];
+const REASON_DEFAULTS = [true, true, true, true, false, false];
+const state = {
+  tab:'breast', view:'roadmap', regimen:null, origin:null, originId:null, custom:false,
+  opts:{ clinic:'', physician:'', contact:'', startDate:'', detail:'overview', notes:'', showTrial:true, qr:true,
+         reasonsOn:true, reasons:REASON_DEFAULTS.slice(), customReasons:['',''],
+         progressBoxes:false, progressDim:true, progressHere:false },
+  compare:{ title:'Your treatment options', diagnosis:'', stage:'', recWhy:'', rec:null,
+            options:[ { name:'Option 1', regimenId:'', pros:'', cons:'' }, { name:'Option 2', regimenId:'', pros:'', cons:'' } ] },
+  open:new Set(), patient:false, shared:false, link:'',
+};
+let CUSTOM = (() => { try { const j = JSON.parse(store.get('roadmap.library') || '[]'); return Array.isArray(j) ? j : []; } catch (e) { return []; } })();
+function saveCustom(){ return store.set('roadmap.library', JSON.stringify(CUSTOM)); }
+const allRegimens = () => LIBRARY.concat(CUSTOM);
+
+function loadRegimen(id){
+  const src = allRegimens().find(r => r.id === id);
+  if (!src) return false;
+  state.regimen = clone(src); ensureIds(state.regimen.nodes);
+  state.origin = clone(state.regimen);
+  state.originId = id;
+  state.custom = CUSTOM.some(r => r.id === id);
+  state.open = new Set();
+  return true;
+}
+function blankRegimen(){
+  state.regimen = { id:'c-' + Date.now().toString(36), disease: state.tab === 'mine' ? 'other' : state.tab, name:'New regimen', title:'Your treatment plan', subtitle:'', trial:'', summary:'',
+    nodes:[ P({ name:'First treatment', short:'Treatment', plain:'' }) ] };
+  ensureIds(state.regimen.nodes);
+  state.origin = clone(state.regimen); state.originId = null; state.custom = false; state.open = new Set([state.regimen.nodes[0].id]);
+}
+
+/* ---------- phase colors: one family per treatment type, shades per drug ---------- */
+function mixc(hex, f){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, bl = n & 255;
+  const m = (c) => Math.round(f >= 0 ? c + (255 - c) * f : c * (1 + f));
+  return '#' + [m(r), m(g), m(bl)].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+function shadeOf(base, i){ if (!i || i <= 0) return base; if (i === 1) return mixc(base, 0.42); if (i === 2) return mixc(base, -0.24); return mixc(base, 0.64); }
+function assignColors(reg){
+  const map = new Map(); const fam = {};
+  (function walk(ns){
+    for (const n of ns){
+      if (n.t === 'decision'){ n.branches.forEach(b => walk(b.nodes)); continue; }
+      if (n.t !== 'phase') continue;
+      const mods = (n.mods || ['chemo']).filter(k => MODS[k]);
+      const m0 = mods[0] || 'chemo';
+      const fm = fam[m0] || (fam[m0] = new Map());
+      const key = (n.name || '').toLowerCase().trim();
+      if (!fm.has(key)) fm.set(key, fm.size);
+      const idx = (n.shade != null && n.shade !== '') ? +n.shade : fm.get(key);
+      map.set(n.id, [shadeOf(MODS[m0].color, idx), mods[1] ? MODS[mods[1]].color : null]);
+    }
+  })(reg.nodes);
+  return map;
+}
+function colorsOf(n, colors){
+  const c = colors && colors.get(n.id);
+  if (c) return c;
+  const m = (n.mods || ['chemo']).filter(k => MODS[k]);
+  return [MODS[m[0] || 'chemo'].color, m[1] ? MODS[m[1]].color : null];
+}
+
+/* ===================== regimen list ===================== */
+const TABS = [['breast','Breast'], ['gi','GI'], ['lung','Lung'], ['gu','GU'], ['mine','My library']];
+function renderTabs(){ $('#tabs').innerHTML = TABS.map(([k, l]) => `<button class="tab${state.tab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join(''); }
+function renderList(){
+  const list = state.tab === 'mine' ? CUSTOM : LIBRARY.filter(r => r.disease === state.tab);
+  const btn = (r) => `<button class="reg${state.originId === r.id ? ' on' : ''}" data-reg="${esc(r.id)}"><b>${esc(r.name)}</b><span>${esc(r.summary || '')}</span></button>`;
+  let items;
+  if (!list.length) items = `<p class="empty">Nothing saved yet. Adjust any regimen and use "Save to my library", or build one from scratch.</p>`;
+  else if (state.tab === 'mine') items = list.map(btn).join('');
+  else {
+    const groups = []; for (const r of list){ const g = r.group || 'Other'; if (!groups.includes(g)) groups.push(g); }
+    items = groups.map(g => `<div class="reggrp">${esc(g)}</div>` + list.filter(r => (r.group || 'Other') === g).map(btn).join('')).join('');
+  }
+  $('#reglist').innerHTML = items + `<button class="reg blank" data-newreg="1"><b>＋ Build your own</b><span>Start a blank regimen and add steps freehand.</span></button>`;
+}
+
+/* ===================== step editor ===================== */
+function listAt(base){ if (base === '') return state.regimen.nodes; const p = base.split('.').map(Number); return state.regimen.nodes[p[0]].branches[p[1]].nodes; }
+function nodeAt(path){ const p = path.split('.').map(Number); let n = state.regimen.nodes[p[0]]; if (p.length === 3) n = n.branches[p[1]].nodes[p[2]]; return n; }
+function splitPath(path){ const i = path.lastIndexOf('.'); if (i < 0) return { base:'', idx:+path }; const base = path.slice(0, i); const parts = path.split('.'); return parts.length === 3 ? { base, idx:+parts[2] } : { base:'', idx:+path }; }
+
+function endocrineAllowed(){ const r = state.regimen; return r.disease === 'breast' || r.disease === 'other' || (r.disease === 'gu' && /prostate/i.test(r.group || '')); }
+function modButtons(n){
+  const keys = Object.keys(MODS).filter(k => k !== 'surgery' && (k !== 'endocrine' || endocrineAllowed() || (n.mods || []).includes('endocrine')));
+  return `<div class="mods">${keys.map(k => `<button type="button" class="mod${(n.mods || []).includes(k) ? ' on' : ''}" data-mod="${k}" style="--c:${MODS[k].color}"><i></i>${MODS[k].label}</button>`).join('')}</div>`;
+}
+function swatch(n, colors){
+  if (n.t === 'rest') return `<span class="sw rest"></span>`;
+  if (n.t === 'decision') return `<span class="sw dec"></span>`;
+  const [c1, c2] = colorsOf(n, colors);
+  if (c2) return `<span class="sw two" style="--c1:${c1};--c2:${c2}"></span>`;
+  return `<span class="sw" style="--c1:${c1}"></span>`;
+}
+function visitsText(n){ return (n.visits || []).map(v => `${v.d}: ${v.label}`).join('\n'); }
+function parseVisits(text){
+  return String(text).split('\n').map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/^(\d+)\s*[:.)-]\s*(.*)$/); return m ? { d:+m[1], label:m[2] } : { d:1, label:l }; });
+}
+function fieldsFor(n, path){
+  const P_ = `data-p="${path}"`;
+  const DONE = `<label class="chk"><input type="checkbox" ${P_} data-k="done" ${n.done ? 'checked' : ''}> Completed (for reprints during treatment)</label>`;
+  if (n.t === 'rest') return `
+    <div class="f"><label>Name</label><input type="text" ${P_} data-k="name" value="${esc(n.name)}"></div>
+    <div class="row"><div class="f"><label>Weeks</label><input type="number" min="0" max="52" step="1" ${P_} data-k="weeks" value="${esc(n.weeks)}"></div></div>
+    <div class="f"><label>Plain-language description</label><textarea ${P_} data-k="plain">${esc(n.plain)}</textarea></div>${DONE}`;
+  if (n.t === 'event') return `
+    <div class="f"><label>Name</label><input type="text" ${P_} data-k="name" value="${esc(n.name)}"></div>
+    <div class="f"><label>Plain-language description</label><textarea ${P_} data-k="plain">${esc(n.plain)}</textarea></div>${DONE}`;
+  if (n.t === 'decision') return `
+    <div class="row"><div class="f"><label>Name</label><input type="text" ${P_} data-k="name" value="${esc(n.name)}"></div>
+    <div class="f"><label>Short label on the timeline</label><input type="text" ${P_} data-k="short" value="${esc(n.short || '')}"></div></div>
+    <div class="f"><label>The question this answers</label><input type="text" ${P_} data-k="question" value="${esc(n.question || '')}"></div>
+    <div class="f"><label>Plain-language description</label><textarea ${P_} data-k="plain">${esc(n.plain)}</textarea></div>
+    <div class="f"><label>How the patient sees the paths</label>
+      <div class="radios">
+        <label><input type="radio" name="emph-${n.id}" ${P_} data-k="emph" value="both" ${n.emph == null ? 'checked' : ''}> Show both equally</label>
+        ${n.branches.map((b, i) => `<label><input type="radio" name="emph-${n.id}" ${P_} data-k="emph" value="${i}" ${n.emph === i ? 'checked' : ''}> Expected: ${esc(b.cond)}</label>`).join('')}
+      </div>
+      <label class="chk"><input type="checkbox" ${P_} data-k="only" ${n.only ? 'checked' : ''} ${n.emph == null ? 'disabled' : ''}> Show only the expected path</label>
+    </div>
+    ${n.branches.map((b, i) => `<div class="branch-ed"><div class="f"><label>Path ${i + 1}: shown when…</label><div style="display:flex;gap:6px"><input type="text" data-bp="${path}.${i}" data-k="cond" value="${esc(b.cond)}">${n.branches.length > 2 ? `<button type="button" class="ibtn" title="Remove this path" data-act="delbranch" data-bp="${path}.${i}">✕</button>` : ''}</div></div>
+      <div style="margin-top:8px">${renderNodes(b.nodes, `${path}.${i}`, false, assignColors(state.regimen))}</div></div>`).join('')}
+    ${n.branches.length < 3 ? `<div class="add"><button type="button" data-act="addbranch" data-p="${path}">+ Another outcome</button></div>` : ''}`;
+  // phase
+  const cyc = n.mode === 'cycles';
+  return `
+    <div class="f"><label>Name (what the patient sees)</label><input type="text" ${P_} data-k="name" value="${esc(n.name)}"></div>
+    <div class="row"><div class="f"><label>Short label on the timeline</label><input type="text" ${P_} data-k="short" value="${esc(n.short || '')}"></div>
+    <div class="f"><label>How it is given</label><select ${P_} data-k="mode">
+      <option value="cycles" ${cyc ? 'selected' : ''}>In cycles (IV or tablets)</option>
+      <option value="weekdays" ${n.mode === 'weekdays' ? 'selected' : ''}>Weekdays (radiation)</option>
+      <option value="daily" ${n.mode === 'daily' ? 'selected' : ''}>Daily tablet at home</option>
+      <option value="ongoing" ${n.mode === 'ongoing' ? 'selected' : ''}>Monitoring only</option></select></div></div>
+    ${cyc ? `<div class="row3">
+      <div class="f"><label>Cycle length (days)</label><input type="number" min="1" max="90" step="1" ${P_} data-k="cycleDays" value="${esc(n.cycleDays)}"></div>
+      <div class="f"><label>Number of cycles</label><input type="number" min="1" max="60" step="1" ${P_} data-k="cycles" value="${esc(n.cycles)}"></div>
+      <div class="f"><label>Duration</label><input type="text" disabled data-dur value="${esc(durLong(nodeWeeks(n)))}"></div></div>`
+    : `<div class="row">
+      <div class="f"><label>Weeks</label><input type="number" min="1" max="520" step="1" ${P_} data-k="weeks" value="${esc(n.weeks)}"></div>
+      <div class="f"><label>Frequency line (optional)</label><input type="text" ${P_} data-k="freqText" value="${esc(n.freqText || '')}" placeholder="${esc(freqText(Object.assign({}, n, {freqText:''})))}"></div></div>`}
+    <div class="f"><label>Type (sets the color family)</label>${modButtons(n)}</div>
+    <div class="row"><div class="f"><label>Color shade (within the family)</label><select ${P_} data-k="shade">
+      <option value="" ${n.shade == null || n.shade === '' ? 'selected' : ''}>Automatic</option>
+      <option value="0" ${n.shade === 0 ? 'selected' : ''}>Standard</option>
+      <option value="1" ${n.shade === 1 ? 'selected' : ''}>Lighter</option>
+      <option value="2" ${n.shade === 2 ? 'selected' : ''}>Darker</option></select></div></div>
+    <div class="f"><label>Plain-language description</label><textarea ${P_} data-k="plain">${esc(n.plain)}</textarea></div>
+    ${cyc ? `<div class="f"><label>Visits within each cycle, one per line as "day: what happens" (used by the visit schedule)</label><textarea ${P_} data-k="visitsText" placeholder="1: ${esc(n.short || n.name)}">${esc(visitsText(n))}</textarea></div>` : ''}
+    <label class="chk"><input type="checkbox" ${P_} data-k="concurrent" ${n.concurrent ? 'checked' : ''}> Runs alongside the previous step</label>
+    ${!cyc ? `<label class="chk"><input type="checkbox" ${P_} data-k="openEnded" ${n.openEnded ? 'checked' : ''}> Continues as long as it keeps working (no fixed end)</label>` : ''}
+    <label class="chk"><input type="checkbox" ${P_} data-k="on" ${n.on !== false ? 'checked' : ''}> Include this step</label>
+    ${DONE}`;
+}
+function renderNode(n, path, i, len, colors){
+  const open = state.open.has(n.id);
+  const nm = n.t === 'decision' ? `Decision: ${n.name}` : n.name;
+  return `<div class="node${open ? ' open' : ''}${n.t === 'phase' && n.on === false ? ' off' : ''}${n.concurrent && n.t === 'phase' ? ' conc' : ''}" data-path="${path}">
+    <div class="node-h" data-toggle="${n.id}">${swatch(n, colors)}<span class="nm">${esc(nm)}</span><span class="sm">${esc(nodeSummary(n))}</span><span class="car">▶</span></div>
+    <div class="node-b">${fieldsFor(n, path)}
+      <div class="node-acts">
+        <button type="button" class="ibtn" title="Move up" data-act="up" data-p="${path}" ${i === 0 ? 'disabled' : ''}>↑</button>
+        <button type="button" class="ibtn" title="Move down" data-act="down" data-p="${path}" ${i === len - 1 ? 'disabled' : ''}>↓</button>
+        <button type="button" class="ibtn" title="Duplicate" data-act="dup" data-p="${path}">⧉</button>
+        <button type="button" class="ibtn" title="Remove" data-act="del" data-p="${path}">✕</button>
+      </div></div></div>`;
+}
+function renderNodes(nodes, base, allowDecision, colors){
+  return nodes.map((n, i) => renderNode(n, base ? `${base}.${i}` : String(i), i, nodes.length, colors)).join('') +
+    `<div class="add"><button type="button" data-act="add" data-kind="phase" data-base="${base}">+ Treatment</button><button type="button" data-act="add" data-kind="rest" data-base="${base}">+ Recovery</button><button type="button" data-act="add" data-kind="event" data-base="${base}">+ Surgery</button>${allowDecision ? `<button type="button" data-act="add" data-kind="decision" data-base="${base}">+ Decision point</button>` : ''}</div>`;
+}
+function renderEditor(){ $('#editor').innerHTML = renderNodes(state.regimen.nodes, '', true, assignColors(state.regimen)); }
+
+function newNode(kind){
+  if (kind === 'rest') return { t:'rest', name:'Recovery', weeks:4, plain:'Time for your body to recover before the next step.' };
+  if (kind === 'event') return S('Surgery', 'Removal of the tumor. The removed tissue is examined to see how well the treatment worked.');
+  if (kind === 'decision') return D({ name:'Results', short:'Results', question:'What did the results show?', plain:'The next step depends on these results.', branches:[ Br('Outcome A', []), Br('Outcome B', []) ] });
+  return P({ name:'Treatment', short:'Treatment', plain:'' });
+}
+function setField(n, k, el){
+  let v;
+  if (el.type === 'checkbox') v = el.checked;
+  else if (el.type === 'number') v = el.value === '' ? '' : +el.value;
+  else v = el.value;
+  if (k === 'visitsText'){ n.visits = parseVisits(v); return; }
+  if (k === 'emph'){ n.emph = (v === 'both' || v === '') ? null : +v; if (n.emph == null) n.only = false; return; }
+  if (k === 'shade'){ n.shade = v === '' ? null : +v; return; }
+  if (k === 'on'){ n.on = v; if (!v) n.optional = true; return; }
+  n[k] = v;
+}
+function fillDetails(){
+  const r = state.regimen;
+  for (const el of $$('[data-r]')){ el.value = r[el.dataset.r] ?? ''; }
+  $('#refs').innerHTML = (r.refs && r.refs.length) ? r.refs.map(x => `<li><a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(x.q || x.t)}" target="_blank" rel="noopener">${esc(x.t)}</a></li>`).join('') : '<li style="color:var(--muted)">No references listed.</li>';
+  $('#delreg').hidden = !state.custom;
+  $('#save').textContent = state.custom ? 'Save changes' : 'Save to my library';
+}
+function fillOpts(){
+  for (const el of $$('[data-o]')){ const k = el.dataset.o; if (el.type === 'checkbox') el.checked = !!state.opts[k]; else el.value = state.opts[k] ?? ''; }
+  if (!Array.isArray(state.opts.reasons) || state.opts.reasons.length !== REASONS.length) state.opts.reasons = REASON_DEFAULTS.slice();
+  if (!Array.isArray(state.opts.customReasons)) state.opts.customReasons = ['', ''];
+  $('#reasonlist').innerHTML = REASONS.map((t, i) => `<label class="chk"><input type="checkbox" data-reason="${i}" ${state.opts.reasons[i] ? 'checked' : ''}> ${esc(t)}</label>`).join('');
+  $$('[data-creason]').forEach(el => { el.value = state.opts.customReasons[+el.dataset.creason] || ''; });
+  for (const el of $$('[data-cm]')){ el.value = state.compare[el.dataset.cm] ?? ''; }
+}
+function renderCompareEditor(){
+  const c = state.compare;
+  const regs = allRegimens();
+  $('#cmp-editor').innerHTML = c.options.map((o, i) => `<div class="opt-card">
+    <div class="oh"><span>Option ${i + 1}</span>${c.options.length > 2 ? `<button type="button" class="ibtn" title="Remove" data-cact="del" data-ci="${i}">✕</button>` : ''}</div>
+    <div class="f"><label>Name</label><input type="text" data-ci="${i}" data-ck="name" value="${esc(o.name)}"></div>
+    <div class="f"><label>Base on a regimen (optional, fills the facts)</label>
+      <select data-ci="${i}" data-ck="regimenId"><option value="">None</option>${regs.map(r => `<option value="${esc(r.id)}" ${o.regimenId === r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select></div>
+    <div class="f"><label>What's good about it (one per line, optional)</label><textarea data-ci="${i}" data-ck="pros">${esc(o.pros)}</textarea></div>
+    <div class="f"><label>Trade-offs (one per line, optional)</label><textarea data-ci="${i}" data-ck="cons">${esc(o.cons)}</textarea></div>
+    <label class="chk"><input type="radio" name="crec" data-crec="${i}" ${c.rec === i ? 'checked' : ''}> Our recommendation</label>
+  </div>`).join('') + `<div class="add">${c.options.length < 4 ? `<button type="button" data-cact="add">+ Another option</button>` : ''}<button type="button" data-cact="norec">Clear recommendation</button></div>`;
+}
+/* ===================== timeline layout ===================== */
+const L = { W:960, rowH:100, barY:38, barH:24, nameY:33, durY:74, startY:86, gap:4, fork:118, forkSingle:70, merge:16, evW:22, diamond:20, minPhase:58, minRest:20, maxScale:34 };
+const units = (w) => w <= 0 ? 0 : w <= 16 ? w : w <= 52 ? 16 + (w - 16) * 0.45 : 32.2 + (w - 52) * 0.08;
+const TREAT = ['chemo', 'io', 'targeted', 'radiation'];
+const counted = (n) => n.t === 'rest' || n.t === 'event' || (n.t === 'phase' && !n.openEnded && (n.mods || []).some(k => TREAT.includes(k)));
+
+function seqUnits(nodes){
+  let cursor = 0, lastStart = 0;
+  for (const n of nodes.filter(act)){
+    if (n.t === 'decision'){ cursor += Math.max(0, ...visibleBranches(n).map(v => seqUnits(v.b.nodes))); lastStart = cursor; continue; }
+    const nu = n.t === 'event' ? 0 : units(nodeWeeks(n));
+    if (n.t === 'phase' && n.concurrent) cursor = Math.max(cursor, lastStart + nu);
+    else { lastStart = cursor; cursor += nu; }
+  }
+  return cursor;
+}
+function fixedPx(nodes, C=L){
+  let px = 0;
+  for (const n of nodes.filter(act)){
+    if (n.t === 'event') px += C.evW + C.gap;
+    else if (n.t === 'decision'){ const vis = visibleBranches(n); px += C.diamond + (vis.length > 1 ? C.fork : C.forkSingle) + Math.max(0, ...vis.map(v => fixedPx(v.b.nodes, C))) + C.merge; }
+    else if (!n.concurrent) px += C.gap;
+  }
+  return px;
+}
+function layout(nodes, cfg){
+  const C = Object.assign({}, L, cfg || {});
+  const ctx = { items:[], forks:[], merges:[], rows:1, rowExt:{}, week:new Map(), branchTotals:[], maxX:0, scale:1 };
+  ctx.scale = C.scale || Math.min(C.maxScale, Math.max(200, C.W - fixedPx(nodes, C)) / Math.max(seqUnits(nodes), 1));
+  const ext = (row, a, b) => { const e = ctx.rowExt[row] || (ctx.rowExt[row] = { min:Infinity, max:-Infinity }); e.min = Math.min(e.min, a); e.max = Math.max(e.max, b); ctx.maxX = Math.max(ctx.maxX, b); };
+  function place(list, x, week, row, dim){
+    let lastStart = x, lastWeek = week, conc = 0, treat = week, hasDecision = false;
+    const active = list.filter(act);
+    active.forEach((n, i) => {
+      ctx.week.set(n.id, week);
+      if (n.t === 'decision'){
+        hasDecision = true;
+        ctx.items.push({ kind:'decision', x, row, node:n, week, dim });
+        ext(row, x, x + C.diamond);
+        const vis = visibleBranches(n);
+        const bx = x + C.diamond + (vis.length > 1 ? C.fork : C.forkSingle);
+        let maxX = bx, maxWeek = week, maxTreat = treat; const ends = [];
+        vis.forEach((v, bi) => {
+          const r = row + bi;
+          const isExp = n.emph === v.idx;
+          const dimB = dim || (n.emph != null && !isExp);
+          ctx.forks.push({ fx:x + C.diamond, frow:row, tx:bx, trow:r, cond:v.b.cond, expected:isExp, single:vis.length === 1, dim:dimB, decided:n.emph != null });
+          const res = place(v.b.nodes, bx, week, r, dimB);
+          ends.push({ x:res.x, row:r });
+          ctx.rows = Math.max(ctx.rows, r + 1);
+          ext(r, bx, Math.max(bx + 1, res.x));
+          ctx.branchTotals.push({ expected:isExp, decided:n.emph != null, treat:res.treat, end:res.week });
+          maxX = Math.max(maxX, res.x); maxWeek = Math.max(maxWeek, res.week); maxTreat = Math.max(maxTreat, res.treat);
+        });
+        x = maxX; week = maxWeek; treat = maxTreat; lastStart = x; lastWeek = week;
+        if (i < active.length - 1){ ctx.merges.push({ ends, tx:x + C.merge, trow:row }); ext(row, x, x + C.merge); x += C.merge; }
+        return;
+      }
+      const w = nodeWeeks(n);
+      if (n.t === 'event'){
+        ctx.items.push({ kind:'event', x, row, w:C.evW, node:n, week, dim });
+        ext(row, x, x + C.evW); lastStart = x; lastWeek = week; conc = 0; x += C.evW + C.gap; week += w; treat = Math.max(treat, week);
+        return;
+      }
+      const px = Math.max(n.t === 'rest' ? C.minRest : C.minPhase, units(w) * ctx.scale);
+      if (n.t === 'phase' && n.concurrent){
+        ctx.week.set(n.id, lastWeek);
+        ctx.items.push({ kind:'up', x:lastStart, row, w:px, node:n, week:lastWeek, dim, lane:Math.min(conc, 1) });
+        conc++;
+        ext(row, lastStart, lastStart + px);
+        ctx.maxX = Math.max(ctx.maxX, lastStart + px + ((n.short || n.name).length + 8) * 5.6);
+        const end = lastStart + px + C.gap;
+        if (end > x){ x = end; }
+        week = Math.max(week, lastWeek + w);
+        if (counted(n)) treat = Math.max(treat, lastWeek + w);
+        return;
+      }
+      ctx.items.push({ kind:n.t, x, row, w:px, node:n, week, dim });
+      ext(row, x, x + px); lastStart = x; lastWeek = week; conc = 0; x += px + C.gap; week += w;
+      if (counted(n)) treat = Math.max(treat, week);
+    });
+    return { x, week, treat, hasDecision };
+  }
+  const res = place(nodes, 0, 1, 0, false);
+  ctx.endWeek = res.week;
+  // totals in weeks of treatment (excluding monitoring, hormone-only, open-ended tablets)
+  const bt = ctx.branchTotals;
+  if (bt.length){
+    const exp = bt.find(b => b.expected);
+    ctx.total = { min:Math.min(...bt.map(b => b.treat)) - 1, max:Math.max(...bt.map(b => b.treat)) - 1, expected: exp ? exp.treat - 1 : null };
+  } else ctx.total = { min:res.treat - 1, max:res.treat - 1, expected:null };
+  return ctx;
+}
+
+/* ===================== SVG route ===================== */
+const trunc = (s, max) => { s = String(s || ''); return s.length <= max ? s : s.slice(0, Math.max(1, max - 1)) + '…'; };
+function T(x, y, txt, o={}){
+  return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${o.size || 10}" font-weight="${o.weight || 400}" fill="${o.fill || '#6B7385'}"${o.anchor ? ` text-anchor="${o.anchor}"` : ''}>${esc(txt)}</text>`;
+}
+function wrapText(s, max){
+  const words = String(s || '').split(/\s+/); const lines = []; let cur = '';
+  for (const w of words){ if ((cur + ' ' + w).trim().length > max && cur){ lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }
+  if (cur) lines.push(cur);
+  if (lines.length > 2){ lines.length = 2; lines[1] = trunc(lines[1], max); }
+  return lines;
+}
+function renderRoute(ctx, startDate, colors, here){
+  const width = Math.max(L.W, ctx.maxX + 6), height = ctx.rows * L.rowH - 4;
+  let defs = `<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#EEF1F5"/><rect width="2.2" height="6" fill="#CBD3DD"/></pattern>
+  <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0.5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>`;
+  const grads = new Set();
+  const fillFor = (n) => {
+    if (n.t === 'rest') return 'url(#hatch)';
+    const [c1, c2] = colorsOf(n, colors);
+    if (c2){ const id = `g-${c1.slice(1)}-${c2.slice(1)}`; if (!grads.has(id)){ grads.add(id); defs += `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0.5" stop-color="${c1}"/><stop offset="0.5" stop-color="${c2}"/></linearGradient>`; } return `url(#${id})`; }
+    return c1;
+  };
+  const startText = (week) => startDate ? fmtShort(addDays(startDate, (week - 1) * 7), startDate) : `week ${Math.round(week)}`;
+  const curve = (x1, y1, x2, y2, dim) => `<path d="M${x1.toFixed(1)} ${y1} C${(x1 + 44).toFixed(1)} ${y1}, ${(x2 - 44).toFixed(1)} ${y2}, ${x2.toFixed(1)} ${y2}" fill="none" stroke="#B8C0CC" stroke-width="2"${dim ? ' opacity=".4"' : ''}/>`;
+  const cy = (row) => row * L.rowH + L.barY + L.barH / 2;
+  let g = '';
+  for (let r = 0; r < ctx.rows; r++){ const e = ctx.rowExt[r]; if (!e || !isFinite(e.min)) continue; g += `<line x1="${e.min}" y1="${cy(r)}" x2="${e.max}" y2="${cy(r)}" stroke="#D9DEE7" stroke-width="2"/>`; }
+  for (const f of ctx.forks){
+    g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow), f.dim);
+    const lines = wrapText((f.decided && f.expected ? 'Expected: ' : '') + f.cond, 21);
+    if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 11, ln, { size:9.5, fill:'#3B4557', weight:600 }); }); }
+    else { const base = cy(f.trow) - 6 - (lines.length - 1) * 11; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 11, ln, { size:9.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400 }); }); }
+  }
+  for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
+  for (const it of ctx.items){
+    const n = it.node, y0 = it.row * L.rowH; let s = '';
+    if (it.kind === 'decision'){
+      const cx = it.x + L.diamond / 2, c = cy(it.row);
+      s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
+      s += T(cx, y0 + L.nameY, n.short || 'Results', { size:10.5, weight:700, fill:'#172033', anchor:'middle' });
+    } else if (it.kind === 'event'){
+      s += `<rect x="${it.x + 5}" y="${y0 + L.barY - 5}" width="12" height="${L.barH + 10}" rx="3" fill="#172033"/>`;
+      s += T(it.x + 11, y0 + L.nameY, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:10.5, weight:700, fill:'#172033', anchor:'middle' });
+      s += T(it.x + 11, y0 + L.startY, startText(it.week), { size:9.5, anchor:'middle' });
+    } else if (it.kind === 'up'){
+      const ly = y0 + 12 - it.lane * 10;
+      s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="${fillFor(n)}"/>`;
+      if (n.openEnded) s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="url(#fade)"/>`;
+      s += T(it.x + it.w + 5, ly + 7.5, `${n.short || n.name} ${durShort(nodeWeeks(n))}${n.openEnded ? '+' : ''}`, { size:9.5, fill:'#3B4557', weight:600 });
+    } else {
+      const w = nodeWeeks(n);
+      s += `<rect x="${it.x}" y="${y0 + L.barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="${fillFor(n)}"/>`;
+      if (n.openEnded) s += `<rect x="${it.x}" y="${y0 + L.barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="url(#fade)"/>`;
+      if (w > 52 && it.w > 70){ const bx = it.x + it.w * 0.72; s += `<path d="M${bx - 3} ${y0 + L.barY + L.barH + 3} L${bx + 3} ${y0 + L.barY - 3} M${bx + 3} ${y0 + L.barY + L.barH + 3} L${bx + 9} ${y0 + L.barY - 3}" stroke="#fff" stroke-width="2.5"/>`; }
+      if (it.kind === 'phase'){
+        const maxC = Math.max(4, Math.floor((it.w + 2) / 6.4));
+        const label = n.short || n.name;
+        const hasUp = ctx.items.some(u => u.kind === 'up' && u.row === it.row && Math.abs(u.x - it.x) < 1);
+        let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
+        if (lines.length > 1 && hasUp) lines = [trunc(label, maxC)];
+        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + L.nameY - (lines.length - 1 - i) * 11.5, ln, { size:11.5, weight:700, fill:'#172033' }); });
+        s += T(it.x + 2, y0 + L.durY, (n.mode === 'weekdays' && !(w > 0)) ? 'length to be set' : durShort(w) + (n.openEnded ? ' ongoing' : ''), { size:10 });
+        s += T(it.x + 2, y0 + L.startY, startText(it.week), { size:9.5 });
+      } else {
+        s += T(it.x + 1, y0 + L.durY, durShort(w), { size:9.5 });
+      }
+    }
+    const doneDim = state.opts.progressDim && it.node && it.node.done && it.kind !== 'decision';
+    g += (it.dim || doneDim) ? `<g opacity="${it.dim ? '.38' : '.45'}">${s}</g>` : s;
+  }
+  if (here){
+    const hx = here.x + 1, hy = here.row * L.rowH;
+    g += `<path d="M${hx} ${hy + L.barY - 3} L${hx - 4} ${hy + 20} L${hx + 4} ${hy + 20} Z" fill="#172033"/>`;
+    g += `<line x1="${hx}" y1="${hy + 20}" x2="${hx}" y2="${hy + 8}" stroke="#172033" stroke-width="1.6"/>`;
+    g += T(hx + 7, hy + 16, 'You are here', { size:9.5, weight:700, fill:'#172033' });
+  }
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif" role="img" aria-label="Treatment timeline"><defs>${defs}</defs>${g}</svg>`;
+}
+
+/* ===================== patient sheet ===================== */
+function chipHtml(n, colors){
+  if (n.t === 'rest') return `<span class="chip rest"></span>`;
+  const [c1, c2] = colorsOf(n, colors);
+  if (c2) return `<span class="chip two" style="--c1:${c1};--c2:${c2}"></span>`;
+  return `<span class="chip" style="--c1:${c1}"></span>`;
+}
+function visitRows(n, startWeek, startDate){
+  const rows = []; const day0 = (startWeek - 1) * 7;
+  const when = (day) => startDate ? fmtShort(addDays(startDate, day), startDate) : `Week ${Math.floor(day / 7) + 1}`;
+  if (n.mode === 'cycles'){
+    const vis = (n.visits && n.visits.length) ? n.visits : [{ d:1, label:n.short || n.name }];
+    const weekly = +n.cycleDays === 7;
+    for (let c = 1; c <= (+n.cycles || 0); c++) for (const v of vis){
+      const day = day0 + (c - 1) * (+n.cycleDays) + ((+v.d || 1) - 1);
+      rows.push([weekly ? `Week ${c}` : (vis.length > 1 ? `Cycle ${c}, day ${v.d}` : `Cycle ${c}`), `${when(day)}: ${v.label}`]);
+    }
+  } else if (n.mode === 'weekdays' && !(nodeWeeks(n) > 0)){
+    rows.push(['Radiation', 'Schedule set by your radiation team']);
+  } else {
+    const wk = Math.max(1, Math.round(nodeWeeks(n)));
+    rows.push([n.openEnded ? `From week ${startWeek}` : `Weeks ${startWeek} to ${startWeek + wk - 1}`, `${startDate ? 'From ' + when(day0) + ': ' : ''}${freqText(n)}`]);
+  }
+  if (rows.length > 30){ const extra = rows.length - 30; rows.length = 30; rows.push(['', `and ${extra} more visits on the same pattern`]); }
+  return rows;
+}
+function stepHtml(n, num, ctx, startDate, detail, colors){
+  const o = state.opts;
+  const wk = ctx.week.get(n.id) || 1;
+  const startTxt = startDate ? `Starts about ${fmtShort(addDays(startDate, (wk - 1) * 7), startDate)}.` : `Starts week ${Math.round(wk)}.`;
+  let meta = metaText(n); meta = meta ? meta.charAt(0).toUpperCase() + meta.slice(1) + '. ' + startTxt : startTxt;
+  let visits = '';
+  if (detail === 'visits' && n.t === 'phase') visits = `<ul class="visits">${visitRows(n, wk, startDate).map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`;
+  const done = !!n.done;
+  const box = o.progressBoxes ? `<span class="pbox${done ? ' done' : ''}">${done ? '✓' : ''}</span>` : '';
+  const tick = (!o.progressBoxes && done) ? `<span class="dt">✓</span>` : '';
+  return `<li class="step${n.t === 'rest' ? ' rest' : ''}${done && o.progressDim ? ' done' : ''}" data-id="${n.id}">${box}<div class="step-n">${num}</div><div><h3>${chipHtml(n, colors)}<span>${esc(n.name)}</span>${tick}</h3>${n.plain ? `<p>${esc(n.plain)}</p>` : ''}<p class="meta">${esc(meta)}</p>${visits}</div></li>`;
+}
+function alsoHtml(n, ctx, startDate, detail, colors){
+  const wk = ctx.week.get(n.id) || 1;
+  const w = nodeWeeks(n);
+  let visits = '';
+  if (detail === 'visits') visits = `<ul class="visits">${visitRows(n, wk, startDate).map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`;
+  return `<div class="also">${chipHtml(n, colors)}<b>At the same time: ${esc(n.name)}</b> (${esc(metaText(n))})${n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
+}
+function stepsHtml(nodes, start, ctx, startDate, detail, colors){
+  const parts = []; let num = start; let lastIdx = -1;
+  for (const n of nodes.filter(act)){
+    if (n.t === 'decision'){
+      const vis = visibleBranches(n); let next = num;
+      const cols = vis.map(v => {
+        const isExp = n.emph === v.idx, decided = n.emph != null;
+        const inner = stepsHtml(v.b.nodes, num, ctx, startDate, detail, colors);
+        next = Math.max(next, inner.next);
+        const tag = decided ? (isExp ? `<span class="tag">Expected path</span>` : `<span class="tag alt">If results differ</span>`) : '';
+        return `<div class="branch${decided ? (isExp ? ' expected' : ' dim') : ''}"><h4>${esc(v.b.cond)} ${tag}</h4><ol class="steps">${inner.html}</ol></div>`;
+      });
+      parts.push(`<li class="fork"><h3>${esc(n.question || n.name)}</h3>${n.plain ? `<p>${esc(n.plain)}</p>` : ''}<div class="branches">${cols.join('')}</div></li>`);
+      num = next; lastIdx = -1;
+      continue;
+    }
+    if (n.t === 'phase' && n.concurrent && lastIdx >= 0){
+      parts[lastIdx] = parts[lastIdx].replace(/<\/div><\/li>$/, alsoHtml(n, ctx, startDate, detail, colors) + '</div></li>');
+      continue;
+    }
+    parts.push(stepHtml(n, num, ctx, startDate, detail, colors)); lastIdx = parts.length - 1; num++;
+  }
+  return { html: parts.join(''), next: num };
+}
+function usedMods(nodes, set){
+  for (const n of nodes.filter(act)){ if (n.t === 'decision'){ for (const v of visibleBranches(n)) usedMods(v.b.nodes, set); continue; } if (n.t === 'rest') set.add('rest'); else (n.mods || []).forEach(k => set.add(k)); }
+  return set;
+}
+function totalText(ctx){
+  const t = ctx.total;
+  if (!t || t.max <= 0) return '';
+  if (t.expected != null) return `Overall: ${durLong(t.expected)} of treatment on the expected path.`;
+  if (t.max - t.min >= 4) return `Overall: ${rangeText(t.min, t.max)} of treatment, depending on results.`;
+  return `Overall: ${durLong(t.max)} of treatment.`;
+}
+function herePos(ctx){
+  if (!state.opts.progressHere) return null;
+  const seq = ctx.items.filter(it => it.kind !== 'decision' && it.kind !== 'up' && !it.dim);
+  const next = seq.find(it => !it.node.done);
+  if (next) return { x:next.x, row:next.row };
+  const last = seq[seq.length - 1];
+  return last ? { x:last.x + last.w, row:last.row } : null;
+}
+function renderSheet(){
+  if (state.view === 'compare'){ renderCompareSheet(); return; }
+  const r = state.regimen, o = state.opts, startDate = parseDate(o.startDate);
+  const ctx = layout(r.nodes);
+  const colors = assignColors(r);
+  const legend = Array.from(usedMods(r.nodes, new Set())).map(k => k === 'rest' ? `<span><i class="rest"></i>Recovery</span>` : `<span><i style="--c:${MODS[k].color}"></i>${MODS[k].label}</span>`).join('');
+  const who = [o.clinic, o.physician].filter(Boolean);
+  const steps = stepsHtml(r.nodes, 1, ctx, startDate, o.detail, colors);
+  const picked = REASONS.filter((t, i) => o.reasons && o.reasons[i]).concat((o.customReasons || []).map(x => (x || '').trim()).filter(Boolean));
+  const chosen = (o.reasonsOn && picked.length) ? `<aside class="chosen"><h2>How we chose this plan for you</h2><ul>${picked.map(t => `<li><span class="ck">✓</span><span>${esc(t)}</span></li>`).join('')}</ul></aside>` : '';
+  $('#sheet').innerHTML = `
+    <header class="sh-head"><div><span class="doclabel">Your treatment plan</span>${who.length ? `<b>${esc(o.clinic || o.physician)}</b>${o.clinic && o.physician ? `<span class="ph">${esc(o.physician)}</span>` : ''}` : ''}</div><div>Prepared ${fmtLong(new Date())}</div></header>
+    <div class="sh-top${chosen ? '' : ' solo'}"><div>
+    <h1 class="sh-title">${esc(r.plan || r.title || r.name)}</h1>
+    ${r.plan && r.title ? `<p class="sh-sub">${esc(r.title.replace(/\.?$/, '.'))}</p>` : ''}
+    <p class="sh-for">${r.subtitle ? `For ${esc(r.subtitle)}.` : ''}${o.showTrial && r.trial ? ` Based on the ${esc(r.trial)} ${/trial|study|standard|collaboration/i.test(r.trial) ? '' : 'study'}.` : ''}</p>
+    ${totalText(ctx) ? `<p class="sh-total">${esc(totalText(ctx))}</p>` : ''}
+    </div>${chosen}</div>
+    <section class="route">${renderRoute(ctx, startDate, colors, herePos(ctx))}</section>
+    <ol class="steps${o.progressBoxes ? ' withboxes' : ''}">${steps.html}</ol>
+    ${bottomHtml(o)}
+    <footer class="sh-foot"><div><div class="legend">${legend}</div>This page shows the expected plan and approximate timing. Your care team sets the actual dates, which can shift with test results and how you are feeling. It does not replace your appointment schedule.${o.contact ? `<br><b style="color:var(--ink-2)">${esc(o.contact)}</b>` : ''}<br><span class="wm">ONCourse</span></div><div class="qrwrap" id="sheetqr"></div></footer>`;
+  $('#tb-title').textContent = r.title || r.name;
+  renderSheetQr();
+}
+function bottomHtml(o){
+  const notes = (o.notes && o.notes.trim()) ? `<section class="sh-notes"><b>A note from your care team</b>${esc(o.notes.trim())}</section>` : '';
+  return notes ? `<div class="sh-bottom">${notes}</div>` : '';
+}
+function regimenFacts(reg){
+  const f = {};
+  try {
+    const ctx = layout(reg.nodes);
+    if (ctx.total && ctx.total.max > 0) f.time = (ctx.total.max - ctx.total.min >= 4 ? rangeText(ctx.total.min, ctx.total.max) : durLong(ctx.total.max)).replace(/^about /, 'About ');
+    let iv = 0, rt = 0, rtTbd = false, oral = false, surg = false, ongoing = false;
+    (function walk(ns){
+      for (const n of ns.filter(act)){
+        if (n.t === 'decision'){ const vis = visibleBranches(n); const use = (n.emph != null && vis.length > 1) ? [vis.find(v => v.idx === n.emph) || vis[0]] : [vis[0]]; use.forEach(v => walk(v.b.nodes)); continue; }
+        if (n.t === 'event'){ surg = true; continue; }
+        if (n.t !== 'phase') continue;
+        if (n.mode === 'cycles') iv += (+n.cycles || 0) * ((n.visits && n.visits.length) || 1);
+        else if (n.mode === 'weekdays'){ if (+n.weeks > 0) rt += Math.round(+n.weeks * 5); else rtTbd = true; }
+        else if (n.mode === 'daily'){ oral = true; if (n.openEnded) ongoing = true; }
+      }
+    })(reg.nodes);
+    if (iv) f.visits = `About ${iv}`;
+    if (rt) f.rt = `${rt} sessions`; else if (rtTbd) f.rt = 'Yes, course to be set';
+    if (surg) f.surgery = 'Yes';
+    if (oral) f.tablets = ongoing ? 'Yes, ongoing' : 'Yes';
+  } catch (e) {}
+  return f;
+}
+const MINI = { rowH:36, barY:8, barH:14, gap:2, fork:40, forkSingle:22, merge:8, evW:9, diamond:11, minPhase:9, minRest:3, maxScale:14 };
+function renderMiniRoute(ctx, colors, width){
+  const height = ctx.rows * MINI.rowH - 2;
+  let defs = `<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#EEF1F5"/><rect width="2.2" height="6" fill="#CBD3DD"/></pattern>`;
+  const grads = new Set();
+  const fillFor = (n) => {
+    if (n.t === 'rest') return 'url(#hatch)';
+    const [c1, c2] = colorsOf(n, colors);
+    if (c2){ const id = `g-${c1.slice(1)}-${c2.slice(1)}`; if (!grads.has(id)){ grads.add(id); defs += `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0.5" stop-color="${c1}"/><stop offset="0.5" stop-color="${c2}"/></linearGradient>`; } return `url(#${id})`; }
+    return c1;
+  };
+  const cy = (row) => row * MINI.rowH + MINI.barY + MINI.barH / 2;
+  const curve = (x1, y1, x2, y2) => `<path d="M${x1.toFixed(1)} ${y1} C${(x1 + 14).toFixed(1)} ${y1}, ${(x2 - 14).toFixed(1)} ${y2}, ${x2.toFixed(1)} ${y2}" fill="none" stroke="#B8C0CC" stroke-width="1.4"/>`;
+  let g = '';
+  for (let r = 0; r < ctx.rows; r++){ const e = ctx.rowExt[r]; if (!e || !isFinite(e.min)) continue; g += `<line x1="${e.min}" y1="${cy(r)}" x2="${e.max}" y2="${cy(r)}" stroke="#E3E7ED" stroke-width="1.4"/>`; }
+  for (const f of ctx.forks){ g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow)); }
+  for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
+  for (const it of ctx.items){
+    const n = it.node, y0 = it.row * MINI.rowH; let s = '';
+    if (it.kind === 'decision'){ const cx = it.x + MINI.diamond / 2, c = cy(it.row); s += `<path d="M${cx} ${c - 5.5} L${cx + 5.5} ${c} L${cx} ${c + 5.5} L${cx - 5.5} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.3"/>`; }
+    else if (it.kind === 'event'){ s += `<rect x="${it.x + 2}" y="${y0 + MINI.barY - 3}" width="5" height="${MINI.barH + 6}" rx="1.5" fill="#172033"/>`; s += T(it.x + 4.5, y0 + MINI.rowH - 4, 'surgery', { size:8, anchor:'middle' }); }
+    else if (it.kind === 'up'){ const ly = y0 + 1 - it.lane * 3; s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="4" rx="1.5" fill="${fillFor(n)}"/>`; }
+    else {
+      s += `<rect x="${it.x}" y="${y0 + MINI.barY}" width="${it.w.toFixed(1)}" height="${MINI.barH}" rx="2.5" fill="${fillFor(n)}"/>`;
+      if (it.kind === 'phase' && it.w > 18){ const w = nodeWeeks(n); s += T(it.x + 1, y0 + MINI.rowH - 4, (n.mode === 'weekdays' && !(w > 0)) ? 'TBD' : durShort(w), { size:8.5 }); }
+    }
+    g += it.dim ? `<g opacity=".38">${s}</g>` : s;
+  }
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif"><defs>${defs}</defs>${g}</svg>`;
+}
+function renderCompareSheet(){
+  const c = state.compare, o = state.opts;
+  const who = [o.clinic, o.physician].filter(Boolean);
+  const n = c.options.length;
+  const regs = c.options.map(opt => opt.regimenId ? allRegimens().find(r => r.id === opt.regimenId) : null);
+  const facts = regs.map(r => r ? regimenFacts(r) : {});
+  // one shared time scale for every mini timeline
+  const COLW = 260;
+  let scale = MINI.maxScale;
+  regs.forEach(r => { if (!r) return; const u = seqUnits(r.nodes); if (u > 0) scale = Math.min(scale, Math.max(20, COLW - fixedPx(r.nodes, MINI)) / u); });
+  const minis = regs.map(r => { if (!r) return ''; const cfg = Object.assign({}, MINI, { W:COLW, scale }); const ctx = layout(r.nodes, cfg); return renderMiniRoute(ctx, assignColors(r), Math.max(COLW, ctx.maxX + 4)); });
+  const lines = (txt) => String(txt || '').split('\n').map(x => x.trim()).filter(Boolean);
+  const recCls = (i) => c.rec === i ? ' rec' : '';
+  const row = (label, cells, cls='') => `<div class="cmp-c lab${cls}">${label}</div>` + cells.map((h, i) => `<div class="cmp-c${recCls(i)}${cls}">${h}</div>`).join('');
+  let grid = row('', c.options.map((opt, i) => `<h3>${esc(opt.name || `Option ${i + 1}`)}</h3>${c.rec === i ? '<span class="tag">Our recommendation</span>' : ''}`), ' h');
+  if (minis.some(Boolean)) grid += row('Timeline', minis.map(m => m ? `<div class="mini">${m}</div>` : `<span class="cmp-fact none">—</span>`));
+  const FACT_ROWS = [['time','Total time'], ['visits','Treatment visits'], ['rt','Radiation'], ['surgery','Surgery'], ['tablets','Tablets at home']];
+  for (const [k, label] of FACT_ROWS){ if (facts.some(f => f[k])) grid += row(label, facts.map(f => `<span class="cmp-fact${f[k] ? '' : ' none'}">${esc(f[k] || '—')}</span>`)); }
+  const pros = c.options.map(opt => lines(opt.pros)), cons = c.options.map(opt => lines(opt.cons));
+  if (pros.some(x => x.length)) grid += row("What's good about it", pros.map(x => x.length ? `<ul class="cmp-list pro">${x.map(t => `<li><i>+</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
+  if (cons.some(x => x.length)) grid += row('Trade-offs', cons.map(x => x.length ? `<ul class="cmp-list con">${x.map(t => `<li><i>−</i><span>${esc(t)}</span></li>`).join('')}</ul>` : `<span class="cmp-fact none">—</span>`));
+  const why = c.recWhy && c.recWhy.trim() ? `<div class="cmp-why"><b>Why we recommend it</b>${esc(c.recWhy.trim())}</div>` : '';
+  if (why && c.rec != null) grid += row('', c.options.map((opt, i) => c.rec === i ? why : ''));
+  const forLine = [c.diagnosis ? `For ${esc(c.diagnosis)}` : '', c.stage ? `stage ${esc(c.stage)}` : ''].filter(Boolean).join(', ');
+  const framing = c.rec != null ? 'Each of these is a reasonable choice. Here is how they differ, and which one we suggest for you.' : 'Each of these is a reasonable choice. Here is how they differ.';
+  $('#sheet').innerHTML = `
+    <header class="sh-head"><div><span class="doclabel">Your treatment options</span>${who.length ? `<b>${esc(o.clinic || o.physician)}</b>${o.clinic && o.physician ? `<span class="ph">${esc(o.physician)}</span>` : ''}` : ''}</div><div>Prepared ${fmtLong(new Date())}</div></header>
+    <div class="sh-top solo"><div>
+      <h1 class="sh-title">${esc(c.title || 'Your treatment options')}</h1>
+      ${forLine ? `<p class="sh-sub">${forLine}.</p>` : ''}
+      <p class="sh-frame">${framing}</p>
+    </div></div>
+    <div class="cmpg" style="--nc:${n}">${grid}</div>
+    ${why && c.rec == null ? `<div class="cmp-why wide"><b>Why we recommend it</b>${esc(c.recWhy.trim())}</div>` : ''}
+    ${bottomHtml(o)}
+    <footer class="sh-foot"><div>These options and the reasons behind them are a starting point for a conversation, not a final decision. Times and visit counts are approximate.${o.contact ? `<br><b style="color:var(--ink-2)">${esc(o.contact)}</b>` : ''}<br><span class="wm">ONCourse</span></div><div class="qrwrap" id="sheetqr"></div></footer>`;
+  $('#tb-title').textContent = c.title || 'Your treatment options';
+  renderSheetQr();
+}
+function renderSheetQr(){
+  const el = $('#sheetqr'); if (!el) return;
+  if (state.opts.qr && state.link){ el.innerHTML = qrSvg(state.link) + 'Scan to open this plan on your phone'; el.hidden = false; }
+  else { el.innerHTML = ''; el.hidden = true; }
+}
+function qrSvg(text){
+  try {
+    const q = qrcode(0, 'L'); q.addData(text, 'Byte'); q.make();
+    const size = Math.max(82, Math.min(state.view === 'compare' ? 150 : 190, Math.round(q.getModuleCount() * 1.5)));
+    return q.createSvgTag({ cellSize:2, margin:0, scalable:true }).replace('<svg ', `<svg style="width:${size}px;height:${size}px" `);
+  } catch (e) { return ''; }
+}
+/* ===================== share links ===================== */
+const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','openEnded','question','emph','only','shade','done'];
+function diffNodes(A, B, base, out){
+  if (A.length !== B.length) return false;
+  for (let i = 0; i < A.length; i++){
+    const a = A[i], b = B[i], p = base ? `${base}.${i}` : String(i);
+    if (a.t !== b.t) return false;
+    for (const k of NODE_KEYS){
+      const va = JSON.stringify(a[k] === undefined ? null : a[k]), vb = JSON.stringify(b[k] === undefined ? null : b[k]);
+      if (va !== vb) out.push([p, k, b[k] === undefined ? null : b[k]]);
+    }
+    if (a.t === 'decision'){
+      if (a.branches.length !== b.branches.length) return false;
+      for (let j = 0; j < a.branches.length; j++){
+        if ((a.branches[j].cond || '') !== (b.branches[j].cond || '')) out.push([`${p}.${j}`, 'cond', b.branches[j].cond]);
+        if (!diffNodes(a.branches[j].nodes, b.branches[j].nodes, `${p}.${j}`, out)) return false;
+      }
+    }
+  }
+  return true;
+}
+function diffRegimen(a, b){
+  const out = [];
+  for (const k of ['name','title','subtitle','trial','summary','disease']) if ((a[k] || '') !== (b[k] || '')) out.push(['r', k, b[k]]);
+  return diffNodes(a.nodes, b.nodes, '', out) ? out : null;
+}
+function applyPatch(reg, patch){
+  for (const [p, k, v] of patch){
+    if (p === 'r'){ reg[k] = v; continue; }
+    const parts = String(p).split('.').map(Number);
+    let node = reg.nodes[parts[0]]; if (!node) continue;
+    if (parts.length === 2){ if (node.branches && node.branches[parts[1]]) node.branches[parts[1]][k] = v; continue; }
+    if (parts.length === 3) node = node.branches[parts[1]].nodes[parts[2]];
+    if (node) node[k] = v;
+  }
+}
+function payload(){
+  const o = clone(state.opts);
+  if (state.view === 'compare') return { v:1, view:'compare', cmp:clone(state.compare), o };
+  const builtin = LIBRARY.find(r => r.id === state.originId);
+  if (builtin && !state.custom){ const p = diffRegimen(builtin, state.regimen); if (p) return { v:1, id:builtin.id, p, o }; }
+  return { v:1, r:stripIds(state.regimen), o };
+}
+async function deflateStr(s){ const cs = new CompressionStream('deflate-raw'); const w = cs.writable.getWriter(); w.write(new TextEncoder().encode(s)); w.close(); return new Uint8Array(await new Response(cs.readable).arrayBuffer()); }
+async function inflateStr(bytes){ const ds = new DecompressionStream('deflate-raw'); const w = ds.writable.getWriter(); w.write(bytes); w.close(); return await new Response(ds.readable).text(); }
+function b64u(bytes){ let s = ''; for (const b of bytes) s += String.fromCharCode(b); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function unb64u(str){ str = str.replace(/-/g, '+').replace(/_/g, '/'); while (str.length % 4) str += '='; const s = atob(str); const out = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i); return out; }
+const hosted = () => /^https?:$/.test(location.protocol);
+let _shareSeq = 0;
+async function updateShare(){
+  const seq = ++_shareSeq;
+  const json = JSON.stringify(payload());
+  let enc;
+  try { enc = 'z' + b64u(await deflateStr(json)); } catch (e) { enc = 'j' + b64u(new TextEncoder().encode(json)); }
+  if (seq !== _shareSeq) return;
+  const link = location.href.split('#')[0] + '#p=' + enc;
+  if (hosted()){
+    state.link = link;
+    $('#linkout').value = link;
+    $('#qrside').innerHTML = qrSvg(link) + `<div class="hint" style="margin:0">Scan with a phone camera to open this exact page. The link is ${link.length.toLocaleString()} characters; shorter plans make cleaner codes.</div>`;
+    $('#linkhint').textContent = 'The link contains everything on the page, so it works without a server. Do not type patient names anywhere on the page.';
+  } else {
+    state.link = '';
+    $('#linkout').value = '';
+    $('#qrside').innerHTML = '';
+    $('#linkhint').textContent = 'Links and QR codes work once this file is hosted at a web address (for example GitHub Pages or Netlify). Opened straight from your computer, a link would only point to a local file. Printing works either way.';
+  }
+  renderSheetQr();
+}
+async function loadFromHash(){
+  const m = location.hash.match(/[#&]p=([^&]+)/); if (!m) return false;
+  try {
+    const raw = m[1], kind = raw[0], data = raw.slice(1);
+    const json = kind === 'z' ? await inflateStr(unb64u(data)) : new TextDecoder().decode(unb64u(data));
+    const pl = JSON.parse(json);
+    Object.assign(state.opts, pl.o || {});
+    if (pl.view === 'compare' && pl.cmp){
+      state.view = 'compare'; Object.assign(state.compare, pl.cmp);
+      loadRegimen(LIBRARY[0].id);
+      return true;
+    }
+    let reg;
+    if (pl.id){ const b = LIBRARY.find(r => r.id === pl.id); if (!b) throw new Error('unknown regimen'); reg = clone(b); if (pl.p) applyPatch(reg, pl.p); }
+    else if (pl.r) reg = pl.r; else throw new Error('empty');
+    ensureIds(reg.nodes); state.regimen = reg; state.origin = clone(state.regimen); state.originId = pl.id || null; state.custom = false;
+    return true;
+  } catch (e) { console.warn('Could not read the shared plan', e); return false; }
+}
+
+/* ===================== rendering orchestration ===================== */
+let _sheetT = null;
+function scheduleSheet(){ clearTimeout(_sheetT); _sheetT = setTimeout(() => { renderSheet(); updateShare(); }, 120); }
+function renderAll(){ renderTabs(); renderList(); renderEditor(); fillDetails(); renderSheet(); updateShare(); }
+
+/* ===================== events ===================== */
+function setView(v){
+  state.view = v;
+  document.body.classList.toggle('compare', v === 'compare');
+  $('#vt-road').classList.toggle('on', v === 'roadmap');
+  $('#vt-cmp').classList.toggle('on', v === 'compare');
+  if (v === 'compare') renderCompareEditor();
+  renderSheet(); updateShare();
+}
+function bind(){
+  const side = $('#sidebar');
+  $('#vt-road').onclick = () => setView('roadmap');
+  $('#vt-cmp').onclick = () => setView('compare');
+  side.addEventListener('click', (e) => {
+    const t = e.target.closest('button, .node-h'); if (!t) return;
+    if (t.dataset.cact){
+      if (t.dataset.cact === 'add' && state.compare.options.length < 4) state.compare.options.push({ name:`Option ${state.compare.options.length + 1}`, regimenId:'', pros:'', cons:'' });
+      else if (t.dataset.cact === 'del'){ const i = +t.dataset.ci; state.compare.options.splice(i, 1); if (state.compare.rec === i) state.compare.rec = null; else if (state.compare.rec > i) state.compare.rec--; }
+      else if (t.dataset.cact === 'norec') state.compare.rec = null;
+      renderCompareEditor(); scheduleSheet(); return;
+    }
+    if (t.dataset.tab){ state.tab = t.dataset.tab; renderTabs(); renderList(); return; }
+    if (t.dataset.reg){ if (loadRegimen(t.dataset.reg)) renderAll(); return; }
+    if (t.dataset.newreg){ blankRegimen(); renderAll(); return; }
+    if (t.dataset.toggle){
+      const id = t.dataset.toggle; const node = t.closest('.node');
+      if (state.open.has(id)){ state.open.delete(id); node.classList.remove('open'); } else { state.open.add(id); node.classList.add('open'); }
+      return;
+    }
+    if (t.dataset.mod){
+      const n = nodeAt(t.closest('.node').dataset.path); const k = t.dataset.mod; n.mods = n.mods || [];
+      if (k === 'watch'){ n.mods = ['watch']; }
+      else {
+        n.mods = n.mods.filter(x => x !== 'watch');
+        if (n.mods.includes(k)){ if (n.mods.length > 1) n.mods = n.mods.filter(x => x !== k); } else n.mods.push(k);
+      }
+      renderEditor(); scheduleSheet(); return;
+    }
+    const actn = t.dataset.act; if (!actn) return;
+    if (actn === 'add'){ const list = listAt(t.dataset.base); const n = ensureIds([newNode(t.dataset.kind)])[0]; list.push(n); state.open.add(n.id); }
+    else if (actn === 'addbranch'){ nodeAt(t.dataset.p).branches.push(Br('Another outcome', [])); }
+    else if (actn === 'delbranch'){ const [dp, bi] = [t.dataset.bp.slice(0, t.dataset.bp.lastIndexOf('.')), +t.dataset.bp.split('.').pop()]; const d = nodeAt(dp); if (d.branches.length > 2){ d.branches.splice(bi, 1); if (d.emph === bi) d.emph = null; else if (d.emph > bi) d.emph--; } }
+    else {
+      const { base, idx } = splitPath(t.dataset.p); const list = listAt(base); const n = list[idx];
+      if (actn === 'up' && idx > 0){ list.splice(idx, 1); list.splice(idx - 1, 0, n); }
+      else if (actn === 'down' && idx < list.length - 1){ list.splice(idx, 1); list.splice(idx + 1, 0, n); }
+      else if (actn === 'dup'){ const c = ensureIds([clone(n)].map(x => { delete x.id; if (x.t === 'decision') x.branches.forEach(b => b.nodes.forEach(y => delete y.id)); return x; }))[0]; list.splice(idx + 1, 0, c); }
+      else if (actn === 'del'){ list.splice(idx, 1); }
+    }
+    renderEditor(); scheduleSheet();
+  });
+  const onEdit = (e) => {
+    const el = e.target;
+    if (el.dataset.reason !== undefined){ state.opts.reasons[+el.dataset.reason] = el.checked; scheduleSheet(); return; }
+    if (el.dataset.creason !== undefined){ state.opts.customReasons[+el.dataset.creason] = el.value; scheduleSheet(); return; }
+    if (el.dataset.cm){ state.compare[el.dataset.cm] = el.value; scheduleSheet(); return; }
+    if (el.dataset.crec !== undefined){ state.compare.rec = +el.dataset.crec; scheduleSheet(); return; }
+    if (el.dataset.ci !== undefined && el.dataset.ck){ state.compare.options[+el.dataset.ci][el.dataset.ck] = el.value; scheduleSheet(); return; }
+    if (el.dataset.o){
+      const k = el.dataset.o; state.opts[k] = el.type === 'checkbox' ? el.checked : el.value;
+      if (['clinic','physician','contact'].includes(k)) store.set('roadmap.header', JSON.stringify({ clinic:state.opts.clinic, physician:state.opts.physician, contact:state.opts.contact }));
+      scheduleSheet(); return;
+    }
+    if (el.dataset.r){ state.regimen[el.dataset.r] = el.value; scheduleSheet(); return; }
+    if (el.dataset.bp && el.dataset.k === 'cond'){
+      const bp = el.dataset.bp; const d = nodeAt(bp.slice(0, bp.lastIndexOf('.'))); d.branches[+bp.split('.').pop()].cond = el.value; scheduleSheet(); return;
+    }
+    if (!el.dataset.p || !el.dataset.k) return;
+    const n = nodeAt(el.dataset.p); const k = el.dataset.k;
+    setField(n, k, el);
+    const card = el.closest('.node');
+    if (k === 'mode' || k === 'emph' || k === 'only' || k === 'shade'){ if (e.type === 'change'){ renderEditor(); scheduleSheet(); } return; }
+    if (k === 'on') card.classList.toggle('off', n.on === false);
+    if (k === 'concurrent') card.classList.toggle('conc', !!n.concurrent);
+    const sm = card.querySelector('.node-h .sm'); if (sm) sm.textContent = nodeSummary(n);
+    const nm = card.querySelector('.node-h .nm'); if (nm && k === 'name') nm.textContent = n.t === 'decision' ? `Decision: ${n.name}` : n.name;
+    const dur = card.querySelector('[data-dur]'); if (dur) dur.value = durLong(nodeWeeks(n));
+    scheduleSheet();
+  };
+  side.addEventListener('input', (e) => { if (e.target.type === 'radio' || e.target.type === 'checkbox' || e.target.tagName === 'SELECT') return; onEdit(e); });
+  side.addEventListener('change', onEdit);
+
+  $('#reset').onclick = () => { if (state.originId && loadRegimen(state.originId)) renderAll(); else { state.regimen = clone(state.origin); renderAll(); } toast('Reset'); };
+  $('#print').onclick = () => { applyPrintZoom(); window.print(); };
+  $('#tb-print').onclick = () => { applyPrintZoom(); window.print(); };
+  $('#preview').onclick = () => { document.body.classList.add('patient'); $('#tb-back').hidden = false; window.scrollTo(0, 0); };
+  $('#tb-back').onclick = () => { document.body.classList.remove('patient'); };
+  $('#copylink').onclick = async () => {
+    if (!state.link){ toast('Host this file online first to get a link'); return; }
+    try { await navigator.clipboard.writeText(state.link); toast('Link copied'); } catch (e) { $('#linkout').select(); toast('Select the link and copy it'); }
+  };
+  $('#save').onclick = () => {
+    const r = stripIds(state.regimen);
+    if (state.custom){ const i = CUSTOM.findIndex(x => x.id === r.id); if (i >= 0) CUSTOM[i] = r; else CUSTOM.push(r); }
+    else { r.id = 'c-' + Date.now().toString(36); CUSTOM.push(r); state.regimen.id = r.id; state.originId = r.id; state.custom = true; }
+    state.origin = clone(state.regimen);
+    const ok = saveCustom();
+    state.tab = 'mine'; renderTabs(); renderList(); fillDetails(); updateShare();
+    toast(ok ? 'Saved to my library' : 'Saved for this session only. Export to keep it.');
+  };
+  $('#newreg').onclick = () => { blankRegimen(); renderAll(); state.open = new Set([state.regimen.nodes[0].id]); renderEditor(); };
+  $('#delreg').onclick = () => {
+    if (!state.custom || !confirm(`Delete "${state.regimen.name}" from your library?`)) return;
+    CUSTOM = CUSTOM.filter(x => x.id !== state.originId); saveCustom();
+    loadRegimen(LIBRARY[0].id); state.tab = 'breast'; renderAll(); toast('Deleted');
+  };
+  $('#export').onclick = () => { download('oncourse-library.json', JSON.stringify(CUSTOM, null, 2)); };
+  $('#import').onclick = () => $('#importfile').click();
+  $('#importfile').onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const arr = JSON.parse(await f.text()); if (!Array.isArray(arr)) throw new Error('not a list');
+      let n = 0; for (const r of arr){ if (!r || !r.id || !Array.isArray(r.nodes)) continue; const i = CUSTOM.findIndex(x => x.id === r.id); if (i >= 0) CUSTOM[i] = r; else CUSTOM.push(r); n++; }
+      saveCustom(); state.tab = 'mine'; renderTabs(); renderList(); toast(`Imported ${n} regimen${n === 1 ? '' : 's'}`);
+    } catch (err) { toast('That file is not an ONCourse library export'); }
+    e.target.value = '';
+  };
+}
+
+/* ===================== print fitting ===================== */
+// Mirror the @media print rules under .sheet-measure so we can measure the
+// printed height on screen, then zoom the sheet to fit one landscape page.
+let _printCssTpl = '';
+(function mirrorPrintCss(){
+  try {
+    let css = '';
+    for (const sh of document.styleSheets){
+      let rules; try { rules = sh.cssRules; } catch (e) { continue; }
+      for (const r of rules){
+        if (r.media && Array.from(r.media).includes('print')){
+          for (const rr of r.cssRules){
+            if (rr.selectorText){
+              css += rr.selectorText.split(',').map(x => ':where(.sheet-measure) ' + x.trim()).join(',') + '{' + rr.style.cssText + '}';
+              _printCssTpl += rr.cssText;
+            }
+          }
+        }
+      }
+    }
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  } catch (e) {}
+})();
+function printFit(){
+  const wrap = document.createElement('div');
+  wrap.className = 'sheet-measure';
+  wrap.style.cssText = 'position:absolute;left:-99999px;top:0;width:979px;background:#fff;';
+  const cl = $('#sheet').cloneNode(true); cl.removeAttribute('id');
+  wrap.appendChild(cl); document.body.appendChild(wrap);
+  const TARGET = 708;
+  let k = 1;
+  for (let pass = 0; pass < 3; pass++){
+    wrap.style.setProperty('--k', k);
+    const h = cl.getBoundingClientRect().height;
+    if (h <= TARGET) break;
+    k = Math.max(0.6, k * TARGET / h);
+    if (k <= 0.601) break;
+  }
+  wrap.remove();
+  return k;
+}
+function applyPrintZoom(){
+  // Some print pipelines drop custom properties, so inject the computed scale
+  // as concrete values that override the var(--k,1) defaults.
+  let st = $('#fitcss');
+  if (!st){ st = document.createElement('style'); st.id = 'fitcss'; document.head.appendChild(st); }
+  const k = state.opts.detail === 'overview' ? printFit() : 1;
+  st.textContent = (k < 0.995 && _printCssTpl) ? '@media print{' + _printCssTpl.replace(/var\(--k[^)]*\)/g, String(k)) + '}' : '';
+}
+window.addEventListener('beforeprint', applyPrintZoom);
+window.addEventListener('afterprint', () => { const st = $('#fitcss'); if (st) st.textContent = ''; });
+
+/* ===================== init ===================== */
+(async function init(){
+  try { Object.assign(state.opts, JSON.parse(store.get('roadmap.header') || '{}')); } catch (e) {}
+  const shared = await loadFromHash();
+  if (shared){ state.shared = true; document.body.classList.add('patient'); $('#tb-back').hidden = true; }
+  else loadRegimen(LIBRARY[0].id);
+  fillOpts();
+  bind();
+  renderAll();
+  if (state.view === 'compare') setView('compare');
+})();
+</script>
+</body></html>
