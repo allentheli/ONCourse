@@ -1038,8 +1038,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.9.2';
+const APP_VERSION = '0.9.3';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Fixed the site menu, which was missing on desktop after the mobile menu was added. The links are inline again on wide screens and open from the button on a phone.' },
   { date:'2026-09-01', text:'DESTINY-Breast11 corrected: the HER2 antibodies after surgery now run for 9 cycles rather than 13, so the pathway adds up to the about one year its own description states, counting the treatment given before surgery. The reference is now the primary publication (Annals of Oncology 2026;37:166-179) in place of a placeholder.' },
   { date:'2026-09-01', text:'The landing page example now switches between three cancers: triple-negative breast (KEYNOTE-522), muscle-invasive bladder (KEYNOTE-905 / EV-303), and stomach or gastroesophageal junction (FLOT4 / MATTERHORN). The worked comparison has been rebalanced so neither option carries more argument than the other.' },
   { date:'2026-09-01', text:'Map labels now all sit above their bars. Treatment given alongside another step put its label to the right of the bar, which read differently from every other step and could be covered by whatever followed it. Branch labels at a decision point are no longer crossed by the line leading to them. Maps with two alongside treatments are a little taller so each has room for its own label.' },
