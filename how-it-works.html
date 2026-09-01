@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to use ONCourse</title>
+<meta name="description" content="A walkthrough of the ONCourse builder: choosing a pathway, adjusting the steps, and sharing or printing the map.">
+<link rel="icon" href="logo-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="site.css?v=040">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="#172033" stroke-width="2.6"/><path d="M8 21.5 L12 14.5 L16.5 18 L20.5 11 L24 14" fill="none" stroke="#2F55D4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="21.5" r="2" fill="#fff" stroke="#172033" stroke-width="1.6"/><circle cx="12" cy="14.5" r="1.3" fill="#2F55D4"/><circle cx="16.5" cy="18" r="1.3" fill="#2F55D4"/><circle cx="24" cy="14" r="2.7" fill="#2F55D4"/><circle cx="24" cy="14" r="1.05" fill="#fff"/></svg> ONCourse</a>
+  <details class="nav-wrap">
+    <summary class="navtoggle" aria-label="Menu"><span></span><span></span><span></span></summary>
+  <nav class="main"><a href="how-it-works.html">How it works</a><a href="index.html#examples">Examples</a><a href="index.html#who">Who it's for</a><a href="index.html#evidence">Evidence</a><a href="about.html">About</a><a class="btn" href="app.html" style="color:#fff">Open ONCourse</a></nav>
+  </details>
+</div></header>
+
+<section style="border-top:0"><div class="wrap prose">
+  <p class="eyebrow">Guide</p>
+  <h1 class="display" style="font-size:40px">How to use the builder</h1>
+  <p class="lede" style="max-width:60ch">ONCourse starts you from an evidence-reviewed pathway and lets you change anything on it. Nothing you type leaves your browser. This page walks through the four steps, says what is safe to change, and ends with a worked example built from scratch.</p>
+
+  <h2>The four steps</h2>
+
+  <h3>1. Choose a pathway</h3>
+  <p>Pick a cancer type, then a pathway. Clicking one loads its map straight away, and the list stays open so you can look through several and compare before deciding. When you have the one you want, click <b>Use this pathway</b> to collapse the list and move on. <b>Change</b> reopens it at any time.</p>
+  <p>If nothing fits, <b>Start from blank</b> gives you an empty map to build yourself. See the worked example below.</p>
+
+  <h3>2. Adjust the steps</h3>
+  <p>This is where most of the work happens. Every step is a row; click one to open it. You can change all of it:</p>
+  <ul class="checks">
+    <li><b>Name and description.</b> The description is what the patient reads, so keep it plain. Drug doses do not belong on the patient page.</li>
+    <li><b>Schedule.</b> Cycle length and number of cycles for infusions; weeks for daily tablets, radiation, or monitoring. The duration updates as you type.</li>
+    <li><b>Treatment type.</b> Sets the colour of the bar and what appears in the legend. A step can carry more than one type. If you add a type the description does not mention, the builder offers a sentence you can drop in.</li>
+    <li><b>Include this step.</b> Switch optional steps on or off. Anything switched off disappears from the map, the step list, and the totals.</li>
+    <li><b>Alongside the step before it.</b> Draws the step on its own thin bar above the main one, for treatment that runs at the same time. If it should instead begin when that alongside step finishes, tick <b>starts after</b> and the map will place it there.</li>
+    <li><b>Order.</b> The arrows on each row move a step earlier or later. You do not need to open a step to move it.</li>
+    <li><b>Add, duplicate, remove.</b> At the bottom of each open step, and at the end of the list.</li>
+  </ul>
+  <p>A <b>decision point</b> is a step with two or three branches, for a fork the results will settle: pathology, imaging, a genomic assay, a ctDNA result. Each branch holds its own steps. You can mark one branch to be drawn first and in full colour, with the other kept in view but dimmed.</p>
+
+  <h3>3. Handout details</h3>
+  <p>Clinic name, physician name, a contact line, and a first treatment date. Adding a date turns week numbers into real dates throughout. The reasons panel, the trial line, and the QR code can each be switched off.</p>
+  <p class="pull small">Never type a patient's name. A share link carries the whole plan inside the link itself, so a name would travel with it.</p>
+
+  <h3>4. Share or print</h3>
+  <p>Print gives one page, Letter or A4. The share link encodes the plan in the URL, so it needs no server and no account. <b>Save to my library</b> keeps an edited pathway in your own browser for next time, and you can export your library to a file to move it to another machine.</p>
+
+  <h2>Comparing options side by side</h2>
+  <p>Switch from <b>Roadmap</b> to <b>Compare options</b> for the decision visit. Fill in the diagnosis and stage, then give each column a name and, if you want the timing and visit counts filled in automatically, base it on a pathway. Add what is good about each option and its trade-offs, and mark one as your recommendation if you have one.</p>
+  <p class="more-link"><a class="btn small" href="app.html#cmp=demo" style="color:#fff">See a worked comparison</a> <span style="color:var(--muted);font-size:13px">Stage III HER2-positive breast cancer, two regimens</span></p>
+
+  <h2>Worked example: a ctDNA-guided pathway from scratch</h2>
+  <p>Response-guided designs are the case a static handout handles worst, and the one the builder is best at. Here is how to build one, in the shape of the trials that test whether circulating tumour DNA after surgery should decide who gets more treatment.</p>
+  <ol class="steps-guide">
+    <li><b>Start from blank</b> in step 1, and give the plan a title and a cancer line.</li>
+    <li><b>Add surgery</b> as an event, then a recovery step of four to six weeks.</li>
+    <li><b>Add a step for the blood test</b> itself, set to monitoring, with a description saying what ctDNA is: a blood test looking for fragments of tumour DNA, which can show cancer left behind before a scan can.</li>
+    <li><b>Add a decision point</b> with two branches, "ctDNA detected" and "ctDNA not detected".</li>
+    <li><b>In the detected branch,</b> add the treatment being tested, with its real cycle length and number of cycles.</li>
+    <li><b>In the not-detected branch,</b> add a monitoring step with the repeat testing interval. Leave it open-ended; surveillance has a frequency, not an end date.</li>
+    <li><b>Set the schedule</b> on each step so the months come out right, then read the total at the top of the map.</li>
+  </ol>
+  <p>The map now shows the fork as a fork, with both arms drawn on the same time scale, which is the thing a paragraph cannot do. The same method works for any response-guided design: pathology after neoadjuvant therapy, an interim PET, a genomic assay.</p>
+  <p class="more-link"><a class="btn small" href="app.html#r=imvigor011&demo=1" style="color:#fff">See a ctDNA-guided pathway in the library</a></p>
+
+  <h2>What ONCourse will not do</h2>
+  <ul class="checks">
+    <li><b>It is not a scheduler.</b> Dates are approximate and the clinic's own schedule governs.</li>
+    <li><b>It does not check your plan.</b> Editing a pathway does not re-verify it; the review date and sources shown belong to the pathway as published.</li>
+    <li><b>It does not store anything for you.</b> Saved pathways live in your browser. Clearing site data clears them, so export anything you want to keep.</li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">
+  <div>ONCourse is an educational aid for conversations between patients and their care teams. It is not medical advice and does not replace your clinic's appointment schedule. See the <a href="disclaimer.html">disclaimer and terms of use</a>.</div>
+  <div><a href="how-it-works.html">How it works</a> · <a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
+</div></footer>
+<script src="regimens.js"></script>
+<script>document.getElementById('ver').textContent = 'Version ' + APP_VERSION;</script>
+
+</body></html>

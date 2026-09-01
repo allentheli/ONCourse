@@ -55,7 +55,7 @@ const LIBRARY = [
           Br('Some cancer remained', [
             P({ name:'Pembrolizumab (Keytruda)', short:'Pembrolizumab', mods:['io'], cycleDays:21, cycles:9, plain:'Immunotherapy on its own, every 3 weeks, for 9 more doses.' }),
             RADIATION_ALONGSIDE(),
-            P({ name:'Capecitabine (oral chemotherapy)', short:'Capecitabine tablets', mods:['chemo'], cycleDays:21, cycles:8, optional:true, on:true, concurrent:true,
+            P({ name:'Capecitabine (oral chemotherapy)', short:'Capecitabine tablets', mods:['chemo'], cycleDays:21, cycles:8, optional:true, on:true, concurrent:true, afterPrev:true,
                 visits:[{d:1,label:'Start 14 days of capecitabine tablets, then 7 days off'}],
                 plain:'Chemotherapy tablets taken at home for 2 weeks out of every 3, for about 6 months, starting once radiation has finished. Immunotherapy continues at the same time. If you carry a BRCA gene change, olaparib tablets for 1 year may be recommended instead.' }),
           ]),
@@ -1020,17 +1020,35 @@ const LIBRARY = [
 },
 ];
 
-const APP_VERSION = '0.8.0';
+/* A worked comparison, used by the "See a comparison" example link.
+   Patient-facing wording; the trade-offs are the ones a clinic would actually discuss. */
+const COMPARE_EXAMPLE = {
+  title:'Your treatment options',
+  diagnosis:'hormone-receptor negative, HER2-positive breast cancer',
+  stage:'III',
+  rec:null,
+  recWhy:'',
+  options:[
+    { name:'Trastuzumab deruxtecan first (DESTINY-Breast11)', regimenId:'db11',
+      pros:'A newer approach designed for higher-risk HER2-positive cancer\nMay increase the chance that no cancer is left by the time of surgery',
+      cons:'Newer, so we have less long-term follow-up than with TCHP\nTrastuzumab deruxtecan (Enhertu) carries a small but serious risk of lung inflammation, which we watch for closely\nMore months of treatment before surgery' },
+    { name:'TCHP before surgery', regimenId:'tchp',
+      pros:'A long-established standard, with many years of experience and results behind it\nWell-understood side effects and a familiar schedule\nIf any cancer remains at surgery, we can switch to a different medicine afterwards\nNo signal of the lung inflammation seen with trastuzumab deruxtecan',
+      cons:'Lowers blood counts more, so an injection to help them recover is often needed' },
+  ],
+};
+
+const APP_VERSION = '0.9.0';
 const CHANGELOG = [
+  { date:'2026-09-01', text:'Treatment that runs alongside another step can now be set to begin when that step finishes rather than at the same time, and the map draws it in that position. In KEYNOTE-522, capecitabine after surgery now appears after the radiation course instead of beside it, matching what the step text says.' },
+  { date:'2026-09-01', text:'New How it works page walking through the builder step by step, including a worked comparison for stage III HER2-positive breast cancer and an example of building a ctDNA-guided pathway from scratch. The site now reads correctly on a phone; the header previously forced the whole page to zoom out. The regimen table lists the newest additions first.' },
   { date:'2026-09-01', text:'Breast: added NATALEE, an aromatase inhibitor with ribociclib for 3 years after surgery, as its own pathway, since its length differs from the 2 years of abemaciclib in monarchE. The genomic-assay pathway now offers dose-dense AC then paclitaxel as a second chemotherapy option alongside docetaxel + cyclophosphamide. Rectal: added long-course chemoradiation with FOLFOX before surgery (CAO/ARO/AIO-12), where the chemoradiation and the chemotherapy can be given in either order.' },
   { date:'2026-09-01', text:'Surveillance no longer shows a total length anywhere in the library. It now reads as ongoing with its visit and scan frequency, which is the part guidelines actually set; the frequency line stays editable for each patient. In KEYNOTE-522, capecitabine after surgery now starts once radiation has finished rather than alongside it.' },
   { date:'2026-09-01', text:'Corrected the timing shown after a radiation step whose length the radiation oncologist has not set. Later steps were dated as though radiation took no time; they now say they start after the previous step ends, and the overall figure names the radiation course separately. Seven pathways were affected. A step can also carry more than two treatment types on the map, where a third type was previously dropped from the bar while still appearing in the legend.' },
   { date:'2026-09-01', text:'Builder: the pathway list stays open until you confirm a choice, so you can look through several first; steps can be reordered from the collapsed row; adding a treatment type to a step offers a matching sentence for the patient description. Compare pages show the diagnosis as a labelled line, draw each option in its own treatment colours, and group the pathway picker by cancer type. The "You are here" marker has been removed.' },
-  { date:'2026-09-01', text:'Decision points no longer label a branch "expected". The map and the step list lead with the path the team is planning around and keep the alternative in view, without predicting which outcome a person will have. The overall duration no longer follows one assumed outcome; it covers all the possible paths.' },
   { date:'2026-09-01', text:'Breast: added the genomic-assay pathway (Oncotype DX / MammaPrint) with a fork to chemotherapy plus radiation and endocrine therapy or radiation and endocrine therapy alone, with an optional adjuvant CDK4/6 inhibitor. Kidney: added LITESPARK-022 belzutifan + pembrolizumab (FDA-approved June 2026). Nasopharynx: added chemoradiation alone and chemoradiation followed by adjuvant cisplatin + 5-FU alongside the induction pathway.' },
   { date:'2026-09-01', text:'New categories: head and neck (definitive chemoradiation, surgery with pathology-guided radiation, KEYNOTE-689 perioperative pembrolizumab, nasopharyngeal induction then chemoradiation) and melanoma (NADINA, SWOG S1801, adjuvant immunotherapy, adjuvant dabrafenib + trametinib). GI additions: ATOMIC for mismatch-repair-deficient stage III colon cancer (NCCN-listed; FDA decision expected October 2026) and anal canal chemoradiation with response-guided salvage surgery.' },
   { date:'2026-09-01', text:'Added ctDNA-guided adjuvant atezolizumab for muscle-invasive bladder cancer after cystectomy (IMvigor011; FDA-approved May 2026 with Signatera as the companion test). The regimen picker is now searchable by drug, trial, or cancer type.' },
-  { date:'2026-09-01', text:'Site redesign around the treatment map: new landing page with a live example, before-and-after comparison, decision-point section, three-step workflow, pathway gallery, and evidence section. Fonts are now self-hosted, so no third-party requests are made when using ONCourse. Wording changed from "verified" to "evidence-reviewed" throughout; each pathway now records who reviewed it.' },
   { date:'2026-09-01', text:'Added perioperative enfortumab vedotin + pembrolizumab for cisplatin-ineligible muscle-invasive bladder cancer (KEYNOTE-905 / EV-303; FDA-approved November 2025). The cisplatin-eligible trial (KEYNOTE-B15 / EV-304) read out positive in 2026 and is noted in the references.' },
   { date:'2026-08-31', text:'Added GU regimens: bladder (NIAGARA, chemotherapy then cystectomy with adjuvant nivolumab, bladder-preserving chemoradiation), kidney (KEYNOTE-564, surveillance), prostate (long- and short-course ADT with radiation, prostatectomy with PSA surveillance, active surveillance).' },
   { date:'2026-08-31', text:'Breast library regrouped by receptor status; added APT (small HER2-positive), TC ×4, and endocrine-only plans.' },

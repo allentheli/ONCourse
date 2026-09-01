@@ -352,7 +352,7 @@ body.patient .main{padding:24px 20px 60px}
     </div>
     <div id="cmp-editor" style="margin-top:10px"></div>
     <div class="f"><label for="c-why">Why we recommend it (optional, shown under the columns)</label><textarea id="c-why" data-cm="recWhy"></textarea></div>
-    <p class="hint">Pros and cons are optional; leave them blank to print facts only. Picking a regimen for a column auto-fills the time and visit facts from the roadmap data.</p>
+    <p class="hint">Pros and cons are optional; leave them blank to print facts only. Picking a regimen for a column auto-fills the time and visit facts from the roadmap data. <a href="app.html#cmp=demo" target="_blank" rel="noopener">See a worked comparison</a></p>
   </section>
 
   <section class="sec roadonly" id="sec-regimen">
@@ -370,6 +370,7 @@ body.patient .main{padding:24px 20px 60px}
 
   <section class="sec roadonly">
     <h2>2. Adjust the steps <small>click a step to edit</small></h2>
+    <p class="hint">Everything here is editable: names, schedules, treatment type, order, and which optional steps are included. The arrows on each row move a step earlier or later. <a href="how-it-works.html" target="_blank" rel="noopener">How to use the builder</a></p>
     <div id="editor"></div>
     <div class="btns"><button class="btn sec" id="reset">Reset to original</button></div>
     <p class="hint">Cycle length and count set each step's duration. "Runs alongside the previous step" draws a step above the timeline instead of after it (radiation during immunotherapy, for example).</p>
@@ -732,6 +733,7 @@ function fieldsFor(n, path){
     <label class="chk"><input type="checkbox" ${P_} data-k="concurrent" ${n.concurrent ? 'checked' : ''}> Runs alongside the previous step</label>
     ${!cyc ? `<label class="chk"><input type="checkbox" ${P_} data-k="openEnded" ${n.openEnded ? 'checked' : ''}> Continues as long as it keeps working (no fixed end)</label>` : ''}
     <label class="chk"><input type="checkbox" ${P_} data-k="on" ${n.on !== false ? 'checked' : ''}> Include this step</label>
+    ${n.concurrent ? `<label class="chk"><input type="checkbox" ${P_} data-k="afterPrev" ${n.afterPrev ? 'checked' : ''}> Starts after the alongside step above it, not at the same time</label>` : ''}
     ${DONE}`;
 }
 function renderNode(n, path, i, len, colors){
@@ -829,7 +831,7 @@ function layout(nodes, cfg){
   ctx.scale = C.scale || Math.min(C.maxScale, Math.max(200, C.W - fixedPx(nodes, C)) / Math.max(seqUnits(nodes), 1));
   const ext = (row, a, b) => { const e = ctx.rowExt[row] || (ctx.rowExt[row] = { min:Infinity, max:-Infinity }); e.min = Math.min(e.min, a); e.max = Math.max(e.max, b); ctx.maxX = Math.max(ctx.maxX, b); };
   function place(list, x, week, row, dim, unk){
-    let lastStart = x, lastWeek = week, conc = 0, treat = week, hasDecision = false;
+    let lastStart = x, lastWeek = week, conc = 0, treat = week, hasDecision = false, prevConc = null;
     const active = list.filter(act);
     active.forEach((n, i) => {
       ctx.week.set(n.id, week);
@@ -861,24 +863,34 @@ function layout(nodes, cfg){
       const w = nodeWeeks(n);
       if (n.t === 'event'){
         ctx.items.push({ kind:'event', x, row, w:C.evW, node:n, week, dim });
-        ext(row, x, x + C.evW); lastStart = x; lastWeek = week; conc = 0; x += C.evW + C.gap; week += w; treat = Math.max(treat, week);
+        ext(row, x, x + C.evW); lastStart = x; lastWeek = week; conc = 0; prevConc = null; x += C.evW + C.gap; week += w; treat = Math.max(treat, week);
         return;
       }
       const px = Math.max(n.t === 'rest' ? C.minRest : C.minPhase, units(w) * ctx.scale);
       if (n.t === 'phase' && n.concurrent){
-        ctx.week.set(n.id, lastWeek);
-        ctx.items.push({ kind:'up', x:lastStart, row, w:px, node:n, week:lastWeek, dim, lane:Math.min(conc, 1) });
-        conc++;
-        ext(row, lastStart, lastStart + px);
-        ctx.maxX = Math.max(ctx.maxX, lastStart + px + ((n.short || n.name).length + 8) * 5.6);
-        const end = lastStart + px + C.gap;
+        const follow = n.afterPrev && prevConc;
+        const cx = follow ? prevConc.x + prevConc.w + C.gap : lastStart;
+        const cw = follow ? prevConc.week + prevConc.weeks : lastWeek;
+        const lane = follow ? prevConc.lane : Math.min(conc, 1);
+        // if it follows a step of unknown length, its own start is not knowable either
+        if (follow && prevConc.unknown) ctx.noDate.add(n.id);
+        ctx.week.set(n.id, cw);
+        ctx.items.push({ kind:'up', x:cx, row, w:px, node:n, week:cw, dim, lane });
+        // chained bars share one label at the end, so reserve room for the whole chain
+        const own = (n.short || n.name) + (durShort(w) ? ' ' + durShort(w) : '');
+        const label = follow ? prevConc.label + ', then ' + own : own;
+        prevConc = { x:cx, w:px, week:cw, weeks:w, lane, label, unknown:lenUnknown(n) || (follow && prevConc.unknown) };
+        if (!follow) conc++;
+        ext(row, cx, cx + px);
+        ctx.maxX = Math.max(ctx.maxX, cx + px + (label.length + 8) * 5.6);
+        const end = cx + px + C.gap;
         if (end > x){ x = end; }
-        week = Math.max(week, lastWeek + w);
-        if (counted(n)) treat = Math.max(treat, lastWeek + w);
+        week = Math.max(week, cw + w);
+        if (counted(n)) treat = Math.max(treat, cw + w);
         return;
       }
       ctx.items.push({ kind:n.t, x, row, w:px, node:n, week, dim });
-      ext(row, x, x + px); lastStart = x; lastWeek = week; conc = 0; x += px + C.gap; week += w;
+      ext(row, x, x + px); lastStart = x; lastWeek = week; conc = 0; prevConc = null; x += px + C.gap; week += w;
       if (counted(n)) treat = Math.max(treat, week);
       if (lenUnknown(n)){ unk = true; if (counted(n)) ctx.unknownTreat = true; }
     });
@@ -937,8 +949,17 @@ function renderRoute(ctx, startDate, colors){
     else { const base = cy(f.trow) - 6 - (lines.length - 1) * 11; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 11, ln, { size:9.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400 }); }); }
   }
   for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
+  const prevUp = (i) => { const it = ctx.items[i]; for (let j = i - 1; j >= 0; j--){ const q = ctx.items[j]; if (q.kind === 'up' && q.row === it.row && q.lane === it.lane) return j; } return -1; };
+  const continued = new Set();
+  ctx.items.forEach((it, i) => { if (it.kind === 'up' && it.node.afterPrev){ const j = prevUp(i); if (j >= 0) continued.add(j); } });
+  const chainLabel = (i) => {
+    const parts = []; let k = i;
+    while (k >= 0){ const q = ctx.items[k]; const d = durShort(nodeWeeks(q.node)); parts.unshift((q.node.short || q.node.name) + (d ? ' ' + d : '') + (q.node.openEnded ? '+' : ''));
+      if (!q.node.afterPrev) break; k = prevUp(k); }
+    return parts.join(', then ');
+  };
   for (const it of ctx.items){
-    const n = it.node, y0 = it.row * L.rowH; let s = '';
+    const n = it.node, y0 = it.row * L.rowH, idx = ctx.items.indexOf(it); let s = '';
     if (it.kind === 'decision'){
       const cx = it.x + L.diamond / 2, c = cy(it.row);
       s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
@@ -951,7 +972,7 @@ function renderRoute(ctx, startDate, colors){
       const ly = y0 + 12 - it.lane * 10;
       s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="url(#fade)"/>`;
-      s += T(it.x + it.w + 5, ly + 7.5, `${n.short || n.name} ${durShort(nodeWeeks(n))}${n.openEnded ? '+' : ''}`, { size:9.5, fill:'#3B4557', weight:600 });
+      if (!continued.has(idx)) s += T(it.x + it.w + 5, ly + 7.5, chainLabel(idx), { size:9.5, fill:'#3B4557', weight:600 });
     } else {
       const w = nodeWeeks(n);
       s += `<rect x="${it.x}" y="${y0 + L.barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="${fillFor(n)}"/>`;
@@ -1015,15 +1036,16 @@ function stepHtml(n, num, ctx, startDate, detail, colors){
   const tick = (!o.progressBoxes && done) ? `<span class="dt">✓</span>` : '';
   return `<li class="step${n.t === 'rest' ? ' rest' : ''}${done && o.progressDim ? ' done' : ''}" data-id="${n.id}">${box}<div class="step-n">${num}</div><div><h3>${chipHtml(n, colors)}<span>${esc(n.name)}</span>${tick}</h3>${n.plain ? `<p>${esc(n.plain)}</p>` : ''}<p class="meta">${esc(meta)}</p>${visits}</div></li>`;
 }
-function alsoHtml(n, ctx, startDate, detail, colors){
+function alsoHtml(n, ctx, startDate, detail, colors, prev){
   const wk = ctx.week.get(n.id) || 1;
   const w = nodeWeeks(n);
   let visits = '';
   if (detail === 'visits') visits = `<ul class="visits">${visitRows(n, wk, startDate).map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`;
-  return `<div class="also">${chipHtml(n, colors)}<b>At the same time: ${esc(n.name)}</b> (${esc(metaText(n))})${n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
+  const lead = (n.afterPrev && prev) ? `After ${prev.short || prev.name}: ` : 'At the same time: ';
+  return `<div class="also">${chipHtml(n, colors)}<b>${esc(lead)}${esc(n.name)}</b> (${esc(metaText(n))})${n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
 }
 function stepsHtml(nodes, start, ctx, startDate, detail, colors){
-  const parts = []; let num = start; let lastIdx = -1;
+  const parts = []; let num = start; let lastIdx = -1; let prevConcNode = null;
   for (const n of nodes.filter(act)){
     if (n.t === 'decision'){
       const vis = visibleBranches(n); let next = num;
@@ -1034,14 +1056,15 @@ function stepsHtml(nodes, start, ctx, startDate, detail, colors){
         return `<div class="branch${decided ? (isExp ? ' expected' : ' dim') : ''}"><h4>${esc(v.b.cond)}</h4><ol class="steps">${inner.html}</ol></div>`;
       });
       parts.push(`<li class="fork"><h3>${esc(n.question || n.name)}</h3>${n.plain ? `<p>${esc(n.plain)}</p>` : ''}<div class="branches">${cols.join('')}</div></li>`);
-      num = next; lastIdx = -1;
+      num = next; lastIdx = -1; prevConcNode = null;
       continue;
     }
     if (n.t === 'phase' && n.concurrent && lastIdx >= 0){
-      parts[lastIdx] = parts[lastIdx].replace(/<\/div><\/li>$/, alsoHtml(n, ctx, startDate, detail, colors) + '</div></li>');
+      parts[lastIdx] = parts[lastIdx].replace(/<\/div><\/li>$/, alsoHtml(n, ctx, startDate, detail, colors, prevConcNode) + '</div></li>');
+      prevConcNode = n;
       continue;
     }
-    parts.push(stepHtml(n, num, ctx, startDate, detail, colors)); lastIdx = parts.length - 1; num++;
+    parts.push(stepHtml(n, num, ctx, startDate, detail, colors)); lastIdx = parts.length - 1; prevConcNode = null; num++;
   }
   return { html: parts.join(''), next: num };
 }
@@ -1205,7 +1228,7 @@ function qrSvg(text){
   } catch (e) { return ''; }
 }
 /* ===================== share links ===================== */
-const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','openEnded','question','emph','only','shade','done'];
+const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','afterPrev','openEnded','question','emph','only','shade','done'];
 function diffNodes(A, B, base, out){
   if (A.length !== B.length) return false;
   for (let i = 0; i < A.length; i++){
@@ -1274,6 +1297,14 @@ async function updateShare(){
   renderSheetQr();
 }
 function nextMonday(){ const d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return d.toISOString().slice(0, 10); }
+function loadCompareDemo(){
+  if (!/[#&]cmp=demo/.test(location.hash) || typeof COMPARE_EXAMPLE === 'undefined') return false;
+  Object.assign(state.compare, clone(COMPARE_EXAMPLE));
+  Object.assign(state.opts, { clinic:'Riverbend Cancer Center', physician:'Dr. J. Morgan', qr:false });
+  state.view = 'compare'; state.demo = true;
+  loadRegimen(LIBRARY[0].id);
+  return true;
+}
 function loadDeepLink(){
   const rm = location.hash.match(/[#&]r=([^&]+)/); if (!rm) return false;
   const id = decodeURIComponent(rm[1]);
@@ -1397,7 +1428,7 @@ function bind(){
     const card = el.closest('.node');
     if (k === 'mode' || k === 'emph' || k === 'only' || k === 'shade'){ if (e.type === 'change'){ renderEditor(); scheduleSheet(); } return; }
     if (k === 'on') card.classList.toggle('off', n.on === false);
-    if (k === 'concurrent') card.classList.toggle('conc', !!n.concurrent);
+    if (k === 'concurrent'){ card.classList.toggle('conc', !!n.concurrent); if (!n.concurrent) n.afterPrev = false; renderEditor(); }
     const sm = card.querySelector('.node-h .sm'); if (sm) sm.textContent = nodeSummary(n);
     const nm = card.querySelector('.node-h .nm'); if (nm && k === 'name') nm.textContent = n.t === 'decision' ? `Decision: ${n.name}` : n.name;
     const dur = card.querySelector('[data-dur]'); if (dur) dur.value = durLong(nodeWeeks(n));
@@ -1504,6 +1535,9 @@ window.addEventListener('afterprint', () => { const st = $('#fitcss'); if (st) s
   try { Object.assign(state.opts, JSON.parse(store.get('roadmap.header') || '{}')); } catch (e) {}
   const shared = await loadFromHash();
   if (shared){ state.shared = true; document.body.classList.add('patient'); $('#tb-back').hidden = true; }
+  else if (loadCompareDemo()){
+    document.body.classList.add('patient'); const b = $('#tb-back'); b.hidden = false; b.textContent = 'Customize this comparison';
+  }
   else if (loadDeepLink()){
     if (state.demo){ document.body.classList.add('patient'); const b = $('#tb-back'); b.hidden = false; b.textContent = 'Customize this map'; }
   }

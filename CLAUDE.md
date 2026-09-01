@@ -19,6 +19,9 @@ ONCourse is a static site (GitHub Pages) that turns cancer treatment regimens in
 5. Use existing `group` names exactly (they become sub-headings). Hormone-therapy steps only in breast and prostate pathways. Surveillance is `mods:['watch']` alone. Decisions are top-level only, 2–3 branches.
 6. Set `added` (new) and `reviewed` (any change) to today; set `reviewedBy` to `'AI-assisted source check; physician review pending'` unless the owner has signed off, in which case use their initials and the date.
 7. Add a one-line `CHANGELOG` entry at the top. Bump `APP_VERSION`: patch for content, minor for features.
+   The changelog is the public update log, so it carries clinical changes (pathways added or corrected, schedules re-verified)
+   and builder changes a user would notice (a new picker, a control that behaves differently). Keep design, copy-editing and
+   internal engineering out of it; those belong in the commit message.
 8. Never change an existing `id` (share links depend on it). Never delete a pathway without the owner's explicit instruction; deprecate by prefixing `name` with "(Superseded) " and explaining in the changelog.
 9. Append to `verification-log.md`: what you checked, the source, and anything you could not confirm.
 10. Run `node tests/check.js`. Open a pull request for clinical changes so the owner reviews the diff; commit typo fixes directly.
