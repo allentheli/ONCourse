@@ -1067,7 +1067,7 @@ function alsoHtml(n, ctx, startDate, detail, colors, prev){
   let visits = '';
   if (detail === 'visits') visits = `<ul class="visits">${visitRows(n, wk, startDate).map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`;
   const lead = (n.afterPrev && prev) ? `After ${prev.short || prev.name}: ` : 'At the same time: ';
-  return `<div class="also">${chipHtml(n, colors)}<b>${esc(lead)}${esc(n.name)}</b> (${esc(metaText(n))})${n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
+  return `<div class="also">${chipHtml(n, colors)}<b>${esc(lead)}${esc(n.name)}</b> (${esc(metaText(n))})${!n.brief && n.plain ? ` ${esc(n.plain)}` : ''}${visits}</div>`;
 }
 function stepsHtml(nodes, start, ctx, startDate, detail, colors){
   const parts = []; let num = start; let lastIdx = -1; let prevConcNode = null;
@@ -1266,7 +1266,7 @@ function qrSvg(text){
   } catch (e) { return ''; }
 }
 /* ===================== share links ===================== */
-const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','afterPrev','openEnded','question','emph','only','shade','done'];
+const NODE_KEYS = ['name','short','plain','mods','mode','cycleDays','cycles','weeks','visits','freqText','optional','on','concurrent','afterPrev','brief','openEnded','question','emph','only','shade','done'];
 function diffNodes(A, B, base, out){
   if (A.length !== B.length) return false;
   for (let i = 0; i < A.length; i++){
