@@ -64,7 +64,8 @@ footer a{color:var(--muted)}
 .prose p{color:var(--ink-2)}
 .placeholder{background:#FFF7E0;border:1px dashed #E0B84C;border-radius:8px;padding:12px 14px;color:#6b5300;font-size:14px}
 .team{display:grid;grid-template-columns:1fr;gap:30px;margin-top:20px;max-width:70ch}
-.person{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:start}
+.person{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.person:has(.ph){grid-template-columns:96px 1fr}
 .person .ph{width:96px;height:96px;border-radius:50%;background:var(--line-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;overflow:hidden}
 .person .ph img{width:100%;height:100%;object-fit:cover}
 .person b{display:block;font:600 18px/1.2 var(--serif)}
