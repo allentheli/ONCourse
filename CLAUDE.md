@@ -18,7 +18,7 @@ ONCourse is a static site (GitHub Pages) that turns cancer treatment regimens in
 3. Prefer "beneficial" over "needed" when a test guides chemotherapy; treatment is a choice the evidence informs.
 4. Protocol-specified intervals stay as protocol; practice-variable intervals get a typical default and text saying the team sets it. Radiation whose course varies uses `weeks:''`.
 5. Use existing `group` names exactly (they become sub-headings). Hormone-therapy steps only in breast and prostate pathways. Surveillance is `mods:['watch']` alone. Decisions are top-level only, 2–3 branches.
-6. Set `added` (new) and `reviewed` (any change) to today; set `reviewedBy` to `'AI-assisted source check; physician review pending'` unless the owner has signed off, in which case use their initials and the date.
+6. Set `added` (new) and `reviewed` (any change) to today; set `reviewedBy` to `'Source-checked; physician sign-off pending'` unless the owner has signed off, in which case use their initials and the date.
 7. Add a one-line `CHANGELOG` entry at the top. Bump `APP_VERSION`: patch for content, minor for features.
    The changelog is the public update log, so it carries clinical changes (pathways added or corrected, schedules re-verified)
    and builder changes a user would notice (a new picker, a control that behaves differently). Keep design, copy-editing and
