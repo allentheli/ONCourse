@@ -236,3 +236,14 @@ and reviewed the resulting diff. The 13 pathways changed in this round (adriatic
 laura, mel-adj-io, prostate-short, trimodality, genomic, s1801, capox, cm274, cm816,
 hn-crt, ls022) now carry reviewedBy 'AL, 2026-09-02'. The 37 pathways confirmed without
 change keep 'physician review pending' until individually signed off.
+
+### Breast section sign-off, September 2, 2026 (v0.13.1)
+Owner (AL) reviewed all ten breast pathways; all now carry reviewedBy 'AL, 2026-09-02'. Content
+changes made at the owner's direction in the same review: `kn522` names CREATE-X (Masuda, NEJM
+2017; PMID 28564564, fetched in the September 2 re-verification) as the source of the capecitabine
+step, in the trial line, the option name, and the references; `apt` states that trastuzumab after
+the 12 paclitaxel weeks may be given weekly or every 3 weeks, as the trial allowed (map bar keeps
+the every-3-week cadence); `hrplus` and `natalee` gain the same two switchable chemotherapy options
+as the genomic-test pathway (docetaxel + cyclophosphamide q21 x4; dose-dense AC q14 x4 then
+paclitaxel, CALGB 9741 / E1199), both off by default, with the option name and summary saying so;
+`genomic` option name and summary now say the chemotherapy regimen is a choice between the two.
