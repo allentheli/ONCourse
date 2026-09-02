@@ -7,7 +7,7 @@
 <meta name="description" content="ONCourse turns a cancer treatment plan into a clear visual map: where you are, what comes next, and where the path may change. Built by a practicing oncologist, customized by your care team.">
 <link rel="icon" href="logo-mark.svg" type="image/svg+xml">
 <link rel="stylesheet" href="fonts/fonts.css">
-<link rel="stylesheet" href="site.css?v=040">
+<link rel="stylesheet" href="site.css?v=041">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -98,6 +98,10 @@
     <div><span class="num">02</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M12.5 7.5l4 4"/></svg></div><h3>Make it yours</h3><p>Adjust cycles, phases, timing, and decision points for the person in front of you. Add why this plan was chosen for them.</p></div>
     <div><span class="num">03</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><path d="M14 14h3v3M20 14v6h-6"/></svg></div><h3>Share the map</h3><p>Print it on one page, or hand over a QR code that opens the same map on a phone.</p></div>
   </div>
+  <figure class="demo imgcard" id="demo">
+    <video id="demovid" muted loop playsinline preload="none" poster="demo-builder-poster.jpg" width="1280" height="800" aria-label="Silent demo of the ONCourse builder on a desktop. A pathway is chosen from the list, immunotherapy is added to a chemotherapy step, and the number of cycles is reduced. The treatment map redraws after each change."><source data-src="demo-builder.webm" type="video/webm"><source data-src="demo-builder.mp4" type="video/mp4"></video>
+    <figcaption>A short silent look at the builder on a desktop. Choose a pathway, click a step to edit it, and the map redraws as you go. <a href="app.html">Try it yourself</a>.</figcaption>
+  </figure>
 </div></section>
 
 <section id="who"><div class="wrap">
@@ -200,6 +204,22 @@
   <div>ONCourse is an educational aid for conversations between patients and their care teams. It is not medical advice and does not replace your clinic's appointment schedule. See the <a href="disclaimer.html">disclaimer and terms of use</a>.</div>
   <div><a href="how-it-works.html">How it works</a> · <a href="about.html">About</a> · <a href="updates.html">Updates</a> · <a href="references.html">References</a> · <a href="disclaimer.html">Disclaimer</a> · <span id="ver"></span></div>
 </div></footer>
+<script>
+(function(){
+  var v = document.getElementById('demovid'); if (!v) return;
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still){ v.controls = true; }
+  var loaded = false;
+  function load(){ if (loaded) return; loaded = true; [].forEach.call(v.querySelectorAll('source'), function(s){ s.src = s.dataset.src; }); v.load(); }
+  if (!('IntersectionObserver' in window)){ load(); if (!still) v.play().catch(function(){ v.controls = true; }); return; }
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){ load(); if (!still) v.play().catch(function(){ v.controls = true; }); }
+      else if (!v.paused) v.pause();
+    });
+  }, { rootMargin: '200px 0px', threshold: 0.15 }).observe(v);
+})();
+</script>
 <script>
 (function(){
   var root = document.getElementById('heroswitch'); if (!root) return;
