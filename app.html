@@ -14,6 +14,7 @@
   --surgery:#172033; --rest:#CBD3DD; --watch:#4C9A5B;
   --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans:'Atkinson Hyperlegible', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --doc:'Source Sans 3', 'Atkinson Hyperlegible', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -146,24 +147,24 @@ body.patient .main{padding:24px 20px 60px}
 
 /* ---------- the patient sheet ---------- */
 .main{overflow:auto;padding:28px 32px 60px}
-.sheet{background:var(--paper);max-width:1056px;margin:0 auto;padding:40px 48px 32px;box-shadow:0 1px 2px rgba(23,32,51,.06),0 14px 44px rgba(23,32,51,.10);border-radius:2px}
-.sh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.sheet{font-family:var(--doc);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;text-rendering:optimizeLegibility;background:var(--paper);max-width:1056px;margin:0 auto;padding:40px 48px 32px;box-shadow:0 1px 2px rgba(23,32,51,.06),0 14px 44px rgba(23,32,51,.10);border-radius:2px}
+.sh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
 .sh-prep{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-.sh-prep .prepfor b{color:var(--ink);font-size:12.5px;font-weight:700}
+.sh-prep .prepfor b{color:var(--ink);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
 .sh-prep .fillline{display:inline-block;width:180px;border-bottom:1px solid var(--ink);height:1.05em;margin-left:7px;vertical-align:baseline}
 .sh-head b{color:var(--ink);font-weight:700;font-size:13px}
-.doclabel{font:600 12px/1 var(--serif);color:var(--ink);letter-spacing:.01em;margin-right:12px;padding-right:12px;border-right:1px solid var(--line)}
-.sh-for{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.doclabel{font:600 10.5px/1 var(--doc);color:var(--ink);letter-spacing:.11em;text-transform:uppercase;margin-right:12px;padding-right:12px;border-right:1px solid var(--line)}
+.sh-for{margin:5px 0 0;font-size:13px;color:var(--muted)}
 .sh-frame{margin:6px 0 0;font-size:13px;color:var(--ink-2);max-width:80ch}
 .sh-head .ph{margin-left:8px}
 .sh-top{display:grid;grid-template-columns:1fr 288px;gap:8px 32px;align-items:start}
 .sh-top.solo{grid-template-columns:1fr}
-.sh-title{font:600 28px/1.15 var(--serif);margin:20px 0 6px;letter-spacing:-.01em;max-width:36ch}
-.sh-sub{margin:0;font-size:13.5px;color:var(--ink-2);max-width:82ch}
+.sh-title{font:600 30px/1.1 var(--serif);margin:20px 0 8px;letter-spacing:-.018em;max-width:36ch;color:var(--ink)}
+.sh-sub{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink-2);max-width:82ch}
 .sh-basis{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--muted);max-width:82ch}
 .sh-total{margin:5px 0 0;font-size:13px;color:var(--muted)}
 .chosen{border:1px solid var(--line);border-radius:10px;padding:13px 16px 11px;margin-top:23px}
-.chosen h2{font:600 13.5px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
+.chosen h2{font:600 14px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
 .chosen ul{list-style:none;margin:0;padding:0}
 .chosen li{display:flex;gap:8px;font-size:11.5px;line-height:1.4;padding:2.5px 0;color:var(--ink-2)}
 .chosen .ck{color:var(--ink);font-weight:700;flex:none}
@@ -172,11 +173,11 @@ body.patient .main{padding:24px 20px 60px}
 .steps{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px}
 .step{display:grid;grid-template-columns:22px 1fr;gap:6px;break-inside:avoid}
 .step-n{font:600 15px/1 var(--serif);color:var(--ink);padding-top:2px}
-.step h3{margin:0;font-size:14px;line-height:1.25;display:flex;align-items:flex-start;gap:7px}
+.step h3{margin:0;font:600 14.5px/1.3 var(--serif);letter-spacing:-.005em;display:flex;align-items:flex-start;gap:7px}
 .chip{width:10px;height:10px;border-radius:2px;flex:none;margin-top:3px;background:var(--c1)}
 .chip.two{background:linear-gradient(180deg,var(--c1) 50%,var(--c2) 50%)}
 .chip.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
-.step p{margin:4px 0 0;font-size:13px;line-height:1.48;color:var(--ink-2)}
+.step p{margin:4px 0 0;font-size:13.25px;line-height:1.5;color:var(--ink-2)}
 .step p.meta{color:var(--muted);font-size:12px}
 .step.rest .step-n{color:var(--muted)}
 .step.rest h3{font-weight:600;color:var(--ink-2)}
@@ -190,8 +191,8 @@ body.patient .main{padding:24px 20px 60px}
 .branch{padding:0 0 0 12px;border-left:3px solid var(--line)}
 .branch.expected{border-left-color:var(--ink)}
 .branch.dim{opacity:.55}
-.branch h4{margin:0 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600}
+.branch h4{margin:0 0 8px;font:600 13.5px/1.3 var(--serif);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font:600 10px/1.4 var(--doc);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--ink);color:#fff}
 .branch .steps{grid-template-columns:1fr;gap:8px;margin:0}
 .visits{margin:6px 0 0;padding:0;list-style:none;font-size:12px;color:var(--ink-2)}
 .visits li{display:flex;gap:8px;padding:2px 0;border-top:1px dotted var(--line)}
@@ -1046,7 +1047,7 @@ function renderRoute(ctx, startDate, colors){
     g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow), f.dim);
     const lines = wrapText(f.cond, 21);
     if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 12, ln, { size:10.5, fill:'#3B4557', weight:600, halo:3.5 }); }); }
-    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 12; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 12, ln, { size:10.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400, halo:3.5 }); }); }
+    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 12; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 12, ln, { size:10.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 600 : 400, halo:3.5 }); }); }
   }
   for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
   const prevUp = (i) => { const it = ctx.items[i]; for (let j = i - 1; j >= 0; j--){ const q = ctx.items[j]; if (q.kind === 'up' && q.row === it.row && q.lane === it.lane) return j; } return -1; };
@@ -1063,10 +1064,10 @@ function renderRoute(ctx, startDate, colors){
     if (it.kind === 'decision'){
       const cx = it.x + L.diamond / 2, c = cy(it.row);
       s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
-      s += T(cx, y0 + durY + 2, n.short || 'Results', { size:11.5, weight:700, fill:'#172033', anchor:'middle', halo:3.5 });
+      s += T(cx, y0 + durY + 2, n.short || 'Results', { size:11.5, weight:600, fill:'#172033', anchor:'middle', halo:3.5 });
     } else if (it.kind === 'event'){
       s += `<rect x="${it.x + 5}" y="${y0 + barY - 5}" width="12" height="${L.barH + 10}" rx="3" fill="#172033"/>`;
-      s += T(it.x + 11, y0 + nameY - 5, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
+      s += T(it.x + 11, y0 + nameY - 5, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:600, fill:'#172033', anchor:'middle' });
       if (!ctx.noDate.has(n.id)) s += T(it.x + 11, y0 + startY, startText(it.week), { size:10.5, anchor:'middle' });
     } else if (it.kind === 'up'){
       const ly = y0 + extra + 12 - it.lane * 20;
@@ -1082,7 +1083,7 @@ function renderRoute(ctx, startDate, colors){
         }
         if (laneEnd == null){ const e = ctx.rowExt[it.row]; laneEnd = (e && isFinite(e.max) ? e.max : it.x + it.w) + 12; }
         const budget = Math.max(8, Math.floor((Math.min(laneEnd, width - 4) - ci.x) / 7.2));
-        s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:12.5, fill:'#172033', weight:700 });
+        s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:12.5, fill:'#172033', weight:600 });
       }
     } else {
       const w = nodeWeeks(n);
@@ -1117,7 +1118,7 @@ function renderRoute(ctx, startDate, colors){
           lines = [truncL(segs.join(' + '), maxC), truncL(last, maxC)];
         } else lines = wrapText(label, maxC).map(l => truncL(l, maxC));
         if (lines.length > 1 && hasUp) lines = [truncL(label, maxC)];
-        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 12.5, ln, { size:12.5, weight:700, fill:'#172033' }); });
+        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 12.5, ln, { size:12.5, weight:600, fill:'#172033' }); });
         s += T(it.x + 2, y0 + durY, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w), { size:11 });
         if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + startY, startText(it.week), { size:10.5 });
       } else {
@@ -1127,7 +1128,7 @@ function renderRoute(ctx, startDate, colors){
     const doneDim = state.opts.progressDim && it.node && it.node.done && it.kind !== 'decision';
     g += (it.dim || doneDim) ? `<g opacity="${it.dim ? '.38' : '.45'}">${s}</g>` : s;
   }
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif" role="img" aria-label="Treatment timeline"><defs>${defs}</defs>${g}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Source Sans 3, Atkinson Hyperlegible, Segoe UI, Arial, sans-serif" role="img" aria-label="Treatment timeline"><defs>${defs}</defs>${g}</svg>`;
 }
 
 /* ===================== patient sheet ===================== */
@@ -1348,7 +1349,7 @@ function renderMiniRoute(ctx, colors, width){
     }
     g += it.dim ? `<g opacity=".38">${s}</g>` : s;
   }
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif"><defs>${defs}</defs>${g}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Source Sans 3, Atkinson Hyperlegible, Segoe UI, Arial, sans-serif"><defs>${defs}</defs>${g}</svg>`;
 }
 function renderCompareSheet(){
   const c = state.compare, o = state.opts;
@@ -1752,7 +1753,7 @@ async function saveImage(){
 }
 // self-hosted fonts as data URIs, so an exported image renders with the site's own type
 async function fontCss(css){
-  const fontFiles = ['atkinson-hyperlegible-latin-400-normal','atkinson-hyperlegible-latin-400-italic','atkinson-hyperlegible-latin-700-normal','source-serif-4-latin-500-normal','source-serif-4-latin-600-normal'];
+  const fontFiles = ['atkinson-hyperlegible-latin-400-normal','atkinson-hyperlegible-latin-400-italic','atkinson-hyperlegible-latin-700-normal','source-serif-4-latin-500-normal','source-serif-4-latin-600-normal','source-sans-3-latin-400-normal','source-sans-3-latin-400-italic','source-sans-3-latin-600-normal','source-sans-3-latin-700-normal'];
   let out = css;
   for (const f of fontFiles){
     try {

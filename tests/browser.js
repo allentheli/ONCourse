@@ -39,7 +39,7 @@ const BASE = `http://localhost:${PORT}`;
       const r = await p.evaluate(() => {
         const svg = document.querySelector('.route svg');
         if (!svg || svg.getBoundingClientRect().height < 40) return { ok: false };
-        const bold = [...svg.querySelectorAll('text')].filter(t => t.getAttribute('font-weight') === '700');
+        const bold = [...svg.querySelectorAll('text')].filter(t => +t.getAttribute('font-weight') >= 600);
         let overlaps = 0;
         for (let i = 0; i < bold.length; i++) for (let j = i + 1; j < bold.length; j++){
           const a = bold[i].getBoundingClientRect(), c = bold[j].getBoundingClientRect();
