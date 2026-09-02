@@ -2,7 +2,8 @@
 // Run it after builder changes that alter what the clip shows. Needs Playwright (npm i playwright) and an
 // ffmpeg with libx264 and libvpx-vp9 (set FFMPEG to its path; defaults to `ffmpeg` on PATH).
 //   node tests/record-demo.js
-// Serves the repo locally, drives the builder at 1280x800 with a drawn cursor, then encodes:
+// Serves the repo locally, drives the builder at 1280x800 with a drawn cursor (search for NATALEE, include the
+// optional TC chemotherapy, set six cycles, print the handout), then encodes:
 // WebM (VP9, listed first for Chromium builds without H.264), MP4 (H.264, Safari), JPEG poster.
 const { spawn, execFileSync } = require('child_process');
 const fs = require('fs');
@@ -49,20 +50,34 @@ const CURSOR = `(() => {
     const box = sel => p.locator(sel).first().boundingBox();
     const click = async () => { await p.mouse.down(); await sleep(90); await p.mouse.up(); };
 
+    const shots = process.env.DEMO_SHOTS; let sn = 0;
+    const shot = async () => { if (shots) await p.screenshot({ path: path.join(shots, `k${++sn}.png`) }); };
+    await p.addInitScript(() => { window.print = () => setTimeout(() => window.dispatchEvent(new Event('afterprint')), 400); });
     await p.goto(`${BASE}/app.html`, { waitUntil: 'load' });
-    await p.mouse.move(cx, cy); await sleep(1400);
-    // 1. choose a pathway, then confirm it
-    let bb = await box('.reg[data-reg="ddac-t"]'); await glide(bb.x + bb.width / 2 - 60, bb.y + bb.height / 2 - 10, 900); await click(); await sleep(1100);
+    await p.mouse.move(cx, cy); await sleep(300);
+    // the share box should show the public address, not the local server
+    await p.evaluate(() => { const orig = window.updateShare; const fix = () => { const lk = document.getElementById('linkout'); if (lk) lk.value = lk.value.replace(/^https?:\/\/[^\/]+\//, 'https://allentheli.github.io/ONCourse/'); };
+      window.updateShare = async function(){ await orig.apply(this, arguments); fix(); }; fix(); });
+    await sleep(900);
+    // 1. search for the pathway, choose it, confirm it
+    let bb = await box('#regsearch'); await glide(bb.x + 120, bb.y + bb.height / 2, 800); await click(); await sleep(300);
+    await p.keyboard.type('NATALEE', { delay: 110 }); await sleep(900); await shot();
+    bb = await box('.reg[data-reg="natalee"]'); await glide(bb.x + bb.width / 2 - 60, bb.y + bb.height / 2 - 10, 700); await click(); await sleep(1100);
     bb = await box('#picker-confirm'); await glide(bb.x + bb.width / 2 - 30, bb.y + bb.height / 2, 600); await click(); await sleep(900);
     await p.evaluate(() => { const h = document.querySelector('#editor .node-h'); const sb = document.querySelector('.sidebar'); sb.scrollTo({ top: h.getBoundingClientRect().top + sb.scrollTop - 72, behavior: 'smooth' }); });
-    await sleep(900);
-    // 2. open the paclitaxel step and add immunotherapy: the map label and colour change
-    bb = await p.locator('#editor .node-h', { hasText: 'aclitaxel' }).first().boundingBox(); await glide(bb.x + 120, bb.y + bb.height / 2, 800); await click(); await sleep(900);
-    bb = await p.locator('.node.open button.mod', { hasText: 'Immunotherapy' }).first().boundingBox(); await glide(bb.x + bb.width / 2, bb.y + bb.height / 2, 800); await click(); await sleep(1500);
-    // 3. fewer cycles: the bar shortens and the Overall line updates
+    await sleep(900); await shot();
+    // 2. open the optional TC step and include it: a chemotherapy phase appears on the map
+    bb = await p.locator('#editor .node-h', { hasText: 'docetaxel + cyclophosphamide' }).first().boundingBox(); await glide(bb.x + 120, bb.y + bb.height / 2, 800); await click(); await sleep(700);
+    await p.evaluate(() => { const el = document.querySelector('.node.open input[data-k="on"]'); const sb = document.querySelector('.sidebar'); sb.scrollTo({ top: el.getBoundingClientRect().top + sb.scrollTop - 560, behavior: 'smooth' }); });
+    await sleep(700);
+    bb = await box('.node.open input[data-k="on"]'); await glide(bb.x + bb.width / 2, bb.y + bb.height / 2, 700); await click(); await sleep(1500); await shot();
+    // 3. six cycles instead of four: the bar lengthens and the Overall line updates
     bb = await box('.node.open input[data-k="cycles"]'); await glide(bb.x + bb.width - 24, bb.y + bb.height / 2, 900); await click(); await sleep(250);
-    await p.keyboard.press('Control+A'); await sleep(120); await p.keyboard.type('8', { delay: 90 }); await sleep(1700);
-    await glide(cx + 90, cy + 120, 600); await sleep(1500);
+    await p.keyboard.press('Control+A'); await sleep(120); await p.keyboard.type('6', { delay: 90 }); await sleep(1500); await shot();
+    // 4. scroll to the print step and print the handout
+    await p.evaluate(() => { const el = document.getElementById('print'); const sb = document.querySelector('.sidebar'); sb.scrollTo({ top: el.getBoundingClientRect().top + sb.scrollTop - 260, behavior: 'smooth' }); });
+    await sleep(1100);
+    bb = await box('#print'); await glide(bb.x + bb.width / 2 - 20, bb.y + bb.height / 2, 900); await click(); await sleep(1300); await shot();
     const vid = p.video(); await ctx.close();
     const raw = await vid.path();
     const run = args => execFileSync(FFMPEG, ['-y', '-hide_banner', '-loglevel', 'error', ...args], { stdio: 'inherit' });
@@ -72,8 +87,8 @@ const CURSOR = `(() => {
     catch (e){ const m = /Duration: (\d+):(\d+):([\d.]+)/.exec(String(e.stderr)); if (m) dur = +m[1] * 3600 + +m[2] * 60 + +m[3]; }
     if (!dur) throw new Error('could not read the recording length from ffmpeg');
     const fade = `fps=24,fade=t=in:st=0:d=0.35,fade=t=out:st=${(dur - 0.5 - 0.45).toFixed(2)}:d=0.45`;
-    run(['-ss', '0.5', '-i', raw, '-vf', fade, '-c:v', 'libvpx-vp9', '-crf', '38', '-b:v', '0', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', '-an', path.join(root, 'demo-builder.webm')]);
-    run(['-ss', '0.5', '-i', raw, '-vf', fade + ',format=yuv420p', '-c:v', 'libx264', '-preset', 'slow', '-crf', '28', '-tune', 'animation', '-movflags', '+faststart', '-an', path.join(root, 'demo-builder.mp4')]);
+    run(['-ss', '0.5', '-i', raw, '-vf', fade, '-c:v', 'libvpx-vp9', '-crf', '40', '-b:v', '0', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', '-an', path.join(root, 'demo-builder.webm')]);
+    run(['-ss', '0.5', '-i', raw, '-vf', fade + ',format=yuv420p', '-c:v', 'libx264', '-preset', 'slow', '-crf', '30', '-tune', 'animation', '-movflags', '+faststart', '-an', path.join(root, 'demo-builder.mp4')]);
     run(['-ss', '0.6', '-i', raw, '-frames:v', '1', '-q:v', '4', path.join(root, 'demo-builder-poster.jpg')]);
     console.log('Wrote demo-builder.webm, demo-builder.mp4, demo-builder-poster.jpg');
   } finally {
