@@ -123,6 +123,8 @@ body:not(.compare) .componly{display:none}
 .btn.danger{background:#fff;color:#B42318;border-color:var(--line)}
 .btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .hint{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.45}
+.reaspanel{border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:8px;padding:10px 12px 11px;background:#faf9f6}
+.reaspanel .rp-title{font-weight:700;color:var(--ink);font-size:12.5px}
 .qr-side{margin-top:10px;display:flex;gap:12px;align-items:center}
 .qr-side svg{width:96px;height:96px;flex:none;border:1px solid var(--line);padding:4px;background:#fff;border-radius:4px}
 .linkbox{display:flex;gap:6px;margin-top:8px}
@@ -153,8 +155,8 @@ body.patient .main{padding:24px 20px 60px}
 .sh-title{font:600 28px/1.15 var(--serif);margin:20px 0 6px;letter-spacing:-.01em;max-width:36ch}
 .sh-sub{margin:0;font-size:13.5px;color:var(--ink-2);max-width:82ch}
 .sh-total{margin:5px 0 0;font-size:13px;color:var(--muted)}
-.chosen{border:1px solid var(--ink);border-left:4px solid var(--ink);border-radius:10px;padding:14px 16px 12px;margin-top:23px;background:#faf9f6}
-.chosen h2{font:600 14.5px/1.3 var(--serif);margin:0 0 8px;color:var(--ink)}
+.chosen{border:1px solid var(--line);border-radius:10px;padding:13px 16px 11px;margin-top:23px}
+.chosen h2{font:600 13.5px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
 .chosen ul{list-style:none;margin:0;padding:0}
 .chosen li{display:flex;gap:8px;font-size:11.5px;line-height:1.4;padding:2.5px 0;color:var(--ink-2)}
 .chosen .ck{color:var(--ink);font-weight:700;flex:none}
@@ -419,7 +421,8 @@ body.patient .main{padding:24px 20px 60px}
       <p class="hint" style="margin-top:4px">Mark steps completed inside each step's editor above, then reprint at any point in treatment.</p>
     </div>
     <div class="f" style="margin-top:12px"><label for="o-notes">Note to the patient <span style="color:var(--muted)">(optional)</span></label><textarea id="o-notes" data-o="notes" placeholder="e.g. We will check blood counts before each treatment. Bring this page to your visits."></textarea></div>
-    <div class="f roadonly" style="margin-top:12px"><label>"How we chose this plan for you" (top right of the page)</label>
+    <div class="f roadonly reaspanel" style="margin-top:12px"><label class="rp-title">"How we chose this plan for you"</label>
+      <p class="hint" style="margin:2px 0 4px">Printed at the top right of the handout. Tick the reasons that fit this patient, or write your own below.</p>
       <label class="chk" style="margin-top:2px"><input type="checkbox" data-o="reasonsOn" checked> Show this section</label>
       <div id="reasonlist"></div>
       <input type="text" data-creason="0" placeholder="Add your own reason" style="margin-top:6px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:13px;width:100%">
