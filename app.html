@@ -251,6 +251,19 @@ body.patient .main{padding:24px 20px 60px}
   .main{order:-1}
   .sidebar{border-right:0;border-top:1px solid var(--line);overflow:visible}
   .main{padding:16px}
+  body.mpick .main,body.mpick .mbar{display:none!important}
+  body.mpick section.sec:not(#sec-regimen){display:none}
+  #mpeek{margin:14px 0 4px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:14px 14px 12px;box-shadow:0 4px 14px rgba(23,32,51,.06)}
+  #mpeek b{display:block;font:600 17px/1.25 var(--serif);margin-bottom:2px}
+  #mpeek .sub{font-size:12.5px;color:var(--ink-2);margin:0 0 8px}
+  #mpeek .route{display:block;margin:0 0 4px}
+  #mpeek .route svg{width:100%;height:auto;max-width:100%}
+  #mpeek .btn{width:100%;margin-top:8px}
+  #mpeek .hint{margin-top:6px;text-align:center}
+  body.msheet .sheet>.sh-head,body.msheet .sheet>.steps,body.msheet .sheet>.sh-bottom,body.msheet .sheet>.sh-foot{display:none}
+  body.msheet .sheet .sh-top .chosen{display:none}
+  body.msheet .sheet{padding-bottom:10px}
+  #mexpand{width:100%;margin-top:8px}
   section.sec>h2{cursor:pointer}
   section.sec:not(#sec-regimen)>h2{display:flex;align-items:center}
   section.sec:not(#sec-regimen)>h2::after{content:"\25BE";margin-left:auto;color:var(--muted);font-size:11px}
@@ -276,6 +289,7 @@ body.patient .main{padding:24px 20px 60px}
   .qrwrap{text-align:left}
   .qrwrap svg{margin:0 0 3px}
 }
+@media screen and (min-width:901px){#mexpand{display:none!important}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 @media print and (orientation:portrait){
@@ -290,7 +304,7 @@ body.patient .main{padding:24px 20px 60px}
   .step,.also,.branch,.fork,.chosen,.sh-foot,.cmp-c{break-inside:avoid;page-break-inside:avoid}
   body{background:#fff}
   .app{display:block;height:auto}
-  .sidebar,.topbar,.toast,.mbar{display:none!important}
+  .sidebar,.topbar,.toast,.mbar,#mexpand{display:none!important}
   .main{overflow:visible;padding:0}
   .sheet{box-shadow:none;max-width:none;padding:0;border-radius:0}
   .route{display:block!important;margin:calc(var(--k,1)*10px) 0 calc(var(--k,1)*2px)}
@@ -394,6 +408,7 @@ body.patient .main{padding:24px 20px 60px}
       </div>
     </div>
   </section>
+  <div id="mpeek" hidden></div>
 
   <section class="sec roadonly">
     <h2>2. Adjust the steps <small>click a step to edit</small></h2>
@@ -470,7 +485,7 @@ body.patient .main{padding:24px 20px 60px}
   </section>
 </aside>
 
-<main class="main"><article class="sheet" id="sheet"></article></main>
+<main class="main"><article class="sheet" id="sheet"></article><button type="button" class="btn sec" id="mexpand" hidden>Show the full handout</button></main>
 </div>
 <div class="mbar"><button class="btn sec" id="m-preview">Preview the map</button><button class="btn" id="m-print">Print or save PDF</button></div>
 <div class="toast" id="toast"></div>
@@ -1155,6 +1170,26 @@ function renderSheet(){
     <footer class="sh-foot"><div><div class="legend">${legend}</div>This page shows the planned steps and approximate timing. Your care team sets the actual dates, which can shift with test results and how you are feeling. It does not replace your appointment schedule.${o.contact ? `<br><b style="color:var(--ink-2)">${esc(o.contact)}</b>` : ''}<br><span class="wm">ONCourse</span></div><div class="qrwrap" id="sheetqr"></div></footer>`;
   $('#tb-title').textContent = r.title || r.name;
   renderSheetQr();
+  renderPeek();
+}
+function renderPeek(){
+  const peek = $('#mpeek');
+  if (!document.body.classList.contains('mpick')){ peek.hidden = true; return; }
+  const r = state.regimen, route = $('#sheet .route');
+  peek.hidden = false;
+  peek.innerHTML = `<b>${esc(r.plan || r.title || r.name)}</b>` +
+    `<p class="sub">${r.subtitle ? `For ${esc(r.subtitle)}.` : ''}</p>` +
+    (route ? `<section class="route">${route.innerHTML}</section>` : '') +
+    `<button type="button" class="btn primary" data-mconfirm>Use this pathway</button>` +
+    `<p class="hint">or tap another pathway in the list above to preview it here</p>`;
+}
+function mConfirm(){
+  document.body.classList.remove('mpick');
+  document.body.classList.add('msheet');
+  $('#mpeek').hidden = true;
+  $('#mexpand').hidden = false;
+  collapsePicker(true);
+  window.scrollTo(0, 0);
 }
 function bottomHtml(o){
   const notes = (o.notes && o.notes.trim()) ? `<section class="sh-notes"><b>A note from your care team</b>${esc(o.notes.trim())}</section>` : '';
@@ -1410,6 +1445,7 @@ function collapsePicker(on){
 }
 function setView(v){
   state.view = v;
+  if (v === 'compare'){ document.body.classList.remove('mpick', 'msheet'); $('#mpeek').hidden = true; $('#mexpand').hidden = true; }
   document.body.classList.toggle('compare', v === 'compare');
   $('#vt-road').classList.toggle('on', v === 'roadmap');
   $('#vt-cmp').classList.toggle('on', v === 'compare');
@@ -1432,7 +1468,8 @@ function bind(){
     if (t.dataset.reg){ if (loadRegimen(t.dataset.reg)) renderAll(); return; }
     if (t.dataset.newreg){ blankRegimen(); renderAll(); collapsePicker(true); return; }
     if (t.id === 'picker-toggle'){ collapsePicker(false); return; }
-    if (t.id === 'picker-confirm'){ collapsePicker(true); return; }
+    if (t.id === 'picker-confirm'){ if (document.body.classList.contains('mpick')) mConfirm(); else collapsePicker(true); return; }
+    if (t.dataset.mconfirm !== undefined){ mConfirm(); return; }
     if (t.dataset.toggle){
       const id = t.dataset.toggle; const node = t.closest('.node');
       if (state.open.has(id)){ state.open.delete(id); node.classList.remove('open'); } else { state.open.add(id); node.classList.add('open'); }
@@ -1510,6 +1547,10 @@ function bind(){
 
   $('#reset').onclick = () => { if (state.originId && loadRegimen(state.originId)) renderAll(); else { state.regimen = clone(state.origin); renderAll(); } toast('Reset'); };
   $('#saveimg').onclick = () => saveImage().catch(() => toast('Could not create the image in this browser'));
+  $('#mexpand').onclick = () => {
+    const collapsed = document.body.classList.toggle('msheet');
+    $('#mexpand').textContent = collapsed ? 'Show the full handout' : 'Show just the map';
+  };
   const phoneMq = matchMedia('(max-width:900px)');
   if (phoneMq.matches) $$('section.sec').forEach(s => { if (s.id !== 'sec-regimen') s.classList.add('mclosed'); });
   $('#sidebar').addEventListener('click', (e) => {
@@ -1692,6 +1733,7 @@ window.addEventListener('afterprint', () => { const st = $('#fitcss'); if (st) s
   else loadRegimen(LIBRARY[0].id);
   fillOpts();
   bind();
+  if (matchMedia('(max-width:900px)').matches && !shared && !state.demo && !location.hash.match(/[#&](r|p|cmp)=/)) document.body.classList.add('mpick');
   renderAll();
   if (state.demo || (!shared && location.hash.match(/[#&]r=/))) collapsePicker(true);
   if (state.view === 'compare') setView('compare');
