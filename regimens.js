@@ -300,7 +300,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'capox', plan:'Chemotherapy after colon surgery', group:'Colon', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Grothey A et al. IDEA collaboration: 3 vs 6 months. NEJM 2018',q:'IDEA collaboration duration adjuvant oxaliplatin colon Grothey NEJM 2018'}], disease:'gi', name:'Colon stage III: surgery, CAPOX (3 or 6 months)',
+  id:'capox', plan:'Chemotherapy after colon surgery', group:'Colon', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Grothey A et al. IDEA collaboration: 3 vs 6 months. NEJM 2018',q:'IDEA collaboration duration adjuvant oxaliplatin colon Grothey NEJM 2018'}], disease:'gi', name:'Colon stage III: surgery, CAPOX (3 or 6 months)',
   trial:'IDEA collaboration', summary:'Stage III colon cancer. Surgery, adjuvant CAPOX ×4 (3 months) or ×8 (6 months), surveillance.',
   title:'Surgery, then chemotherapy to lower the chance of the cancer returning',
   subtitle:'Colon cancer, stage III',
@@ -348,7 +348,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'cm816', plan:'Chemo-immunotherapy before lung surgery', group:'Non-small cell, operable', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Forde PM et al. CheckMate 816. NEJM 2022',q:'CheckMate 816 neoadjuvant nivolumab Forde NEJM 2022'}], disease:'lung', name:'CheckMate 816: chemo + nivolumab, then surgery',
+  id:'cm816', plan:'Chemo-immunotherapy before lung surgery', group:'Non-small cell, operable', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Forde PM et al. CheckMate 816. NEJM 2022',q:'CheckMate 816 neoadjuvant nivolumab Forde NEJM 2022'}], disease:'lung', name:'CheckMate 816: chemo + nivolumab, then surgery',
   trial:'CheckMate 816', summary:'Resectable NSCLC, stage IB–IIIA. Platinum doublet + nivolumab ×3, surgery, then treatment based on pathology.',
   title:'Chemotherapy with immunotherapy before surgery',
   subtitle:'Non-small cell lung cancer, stage IB to IIIA (operable)',
@@ -386,7 +386,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'pacific', plan:'Chemoradiation, then immunotherapy', group:'Non-small cell, stage III', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Antonia SJ et al. PACIFIC. NEJM 2017 (durvalumab 10 mg/kg every 2 weeks for up to 12 months)',q:'PACIFIC durvalumab stage III Antonia NEJM 2017'},{t:'FDA labeling: durvalumab (Imfinzi) 1500 mg every 4 weeks alternative dosing, approved November 2020',q:'FDA durvalumab Imfinzi 1500 mg four week dosing approval 2020'}], disease:'lung', name:'PACIFIC: chemoradiation, then durvalumab',
+  id:'pacific', plan:'Chemoradiation, then immunotherapy', group:'Non-small cell, stage III', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Antonia SJ et al. PACIFIC. NEJM 2017 (durvalumab 10 mg/kg every 2 weeks for up to 12 months)',q:'PACIFIC durvalumab stage III Antonia NEJM 2017'},{t:'FDA labeling: durvalumab (Imfinzi) 1500 mg every 4 weeks alternative dosing, approved November 2020',q:'FDA durvalumab Imfinzi 1500 mg four week dosing approval 2020'}], disease:'lung', name:'PACIFIC: chemoradiation, then durvalumab',
   trial:'PACIFIC', summary:'Unresectable stage III NSCLC. Concurrent chemoradiation, then durvalumab for up to 12 months.',
   title:'Chemoradiation, then a year of immunotherapy',
   subtitle:'Non-small cell lung cancer, stage III (not treated with surgery)',
@@ -426,7 +426,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'laura', plan:'Chemoradiation, then a targeted tablet', group:'Non-small cell, stage III', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Lu S et al. LAURA. NEJM 2024',q:'LAURA osimertinib after chemoradiotherapy stage III NEJM 2024'}], disease:'lung', name:'LAURA: chemoradiation, then osimertinib',
+  id:'laura', plan:'Chemoradiation, then a targeted tablet', group:'Non-small cell, stage III', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Lu S et al. LAURA. NEJM 2024',q:'LAURA osimertinib after chemoradiotherapy stage III NEJM 2024'}], disease:'lung', name:'LAURA: chemoradiation, then osimertinib',
   trial:'LAURA', summary:'EGFR-mutated unresectable stage III NSCLC. Chemoradiation, then osimertinib daily as long as it keeps working.',
   title:'Chemoradiation, then a daily targeted tablet',
   subtitle:'Non-small cell lung cancer with an EGFR mutation, stage III (not treated with surgery)',
@@ -439,7 +439,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'adriatic', plan:'Chemoradiation, then immunotherapy', group:'Small cell', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Cheng Y et al. ADRIATIC. NEJM 2024 (durvalumab every 4 weeks for up to 24 months)',q:'ADRIATIC durvalumab limited-stage small-cell Cheng NEJM 2024'}], disease:'lung', name:'Limited-stage SCLC: chemoradiation, then durvalumab',
+  id:'adriatic', plan:'Chemoradiation, then immunotherapy', group:'Small cell', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Cheng Y et al. ADRIATIC. NEJM 2024 (durvalumab every 4 weeks for up to 24 months)',q:'ADRIATIC durvalumab limited-stage small-cell Cheng NEJM 2024'}], disease:'lung', name:'Limited-stage SCLC: chemoradiation, then durvalumab',
   trial:'ADRIATIC', summary:'Limited-stage small cell lung cancer. Cisplatin/etoposide ×4 with concurrent chest radiation, optional PCI, durvalumab for up to 2 years.',
   title:'Chemotherapy with radiation, then up to two years of immunotherapy',
   subtitle:'Small cell lung cancer, limited stage',
@@ -577,7 +577,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'cm274', plan:'Chemo, bladder surgery, then immunotherapy', group:'Bladder', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'cm274', plan:'Chemo, bladder surgery, then immunotherapy', group:'Bladder', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Bajorin DF et al. CheckMate 274: adjuvant nivolumab (240 mg every 2 weeks in the trial). NEJM 2021',q:'CheckMate 274 adjuvant nivolumab urothelial Bajorin NEJM 2021'},{t:'Grossman HB et al. SWOG 8710: neoadjuvant MVAC ×3 established chemotherapy before cystectomy; gemcitabine–cisplatin ×4 is the common modern substitute. NEJM 2003',q:'SWOG 8710 neoadjuvant chemotherapy cystectomy Grossman NEJM 2003'},{t:'FDA labeling: nivolumab (Opdivo) 480 mg every 4 weeks adjuvant dosing option',q:'FDA nivolumab Opdivo 480 mg every 4 weeks adjuvant urothelial label'}],
   disease:'gu', name:'Chemo, cystectomy, adjuvant nivolumab (CheckMate 274)',
   trial:'SWOG 8710 / CheckMate 274', summary:'Muscle-invasive bladder cancer. Cisplatin-based chemo ×4, cystectomy, nivolumab for up to 1 year if high-risk pathology.',
@@ -603,7 +603,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'trimodality', plan:'Bladder-preserving chemoradiation', group:'Bladder', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'trimodality', plan:'Bladder-preserving chemoradiation', group:'Bladder', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'James ND et al. BC2001: chemoradiotherapy for bladder cancer. NEJM 2012 (radiotherapy 64 Gy in 32 fractions over 6.5 weeks, or 55 Gy in 20 fractions over 4 weeks)',q:'BC2001 radiotherapy chemoradiotherapy bladder cancer James NEJM 2012'},{t:'Choudhury A et al. BC2001/BCON meta-analysis: 55 Gy in 20 fractions noninferior and superior for invasive locoregional control. Lancet Oncol 2021',q:'hypofractionated radiotherapy bladder cancer BC2001 BCON meta-analysis Choudhury Lancet Oncology 2021'}],
   disease:'gu', name:'Trimodality bladder preservation: TURBT, chemoradiation, surveillance',
   trial:'BC2001 / NCCN', summary:'Muscle-invasive bladder cancer, bladder preservation. Maximal TURBT, chemoradiation over 4 weeks (55 Gy/20) or 6.5 weeks (64 Gy/32), cystoscopic surveillance.',
@@ -668,7 +668,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'prostate-short', plan:'Radiation with short-course hormone therapy', group:'Prostate', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'prostate-short', plan:'Radiation with short-course hormone therapy', group:'Prostate', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Jones CU et al. RTOG 94-08: 4 months of ADT with radiation, started 2 months before. NEJM 2011',q:'RTOG 9408 short-term androgen deprivation radiotherapy Jones NEJM 2011'}],
   disease:'gu', name:'Radiation + 4 months of ADT',
   trial:'RTOG 94-08', summary:'Intermediate-risk localized prostate cancer. Hormone therapy for 4 months total: 2 months before radiation, then 2 months during it. None after radiation.',
@@ -764,7 +764,7 @@ const LIBRARY = [
 
 /* ---------- HEAD AND NECK ---------- */
 {
-  id:'hn-crt', plan:'Chemoradiation to cure without surgery', group:'Oral cavity, throat, and larynx', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'hn-crt', plan:'Chemoradiation to cure without surgery', group:'Oral cavity, throat, and larynx', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Adelstein DJ et al. Intergroup phase III: radiation (70 Gy in 35 fractions) with concurrent cisplatin days 1, 22, 43. JCO 2003',q:'Adelstein intergroup phase III cisplatin radiotherapy unresectable head neck JCO 2003'},{t:'Pignon JP et al. MACH-NC meta-analysis: chemotherapy in head and neck cancer. Radiotherapy and Oncology 2009',q:'MACH-NC meta-analysis chemotherapy head and neck cancer Pignon Radiotherapy Oncology 2009'},{t:'Noronha V et al. Once-a-week vs once-every-3-weeks cisplatin chemoradiation (largely adjuvant setting). JCO 2018',q:'once-a-week versus once-every-3-weeks cisplatin chemoradiation head neck Noronha JCO 2018'}],
   disease:'hn', name:'Definitive chemoradiation: cisplatin + radiation (7 weeks)',
   trial:'MACH-NC / NCCN standard', summary:'Locally advanced squamous cell cancer of the oropharynx, larynx, hypopharynx, or oral cavity treated without surgery. Cisplatin every 3 weeks ×3 (or weekly) with 7 weeks of radiation.',
@@ -881,7 +881,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'s1801', plan:'Immunotherapy before and after surgery', group:'Stage III (lymph node involvement)', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'s1801', plan:'Immunotherapy before and after surgery', group:'Stage III (lymph node involvement)', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Patel SP et al. SWOG S1801: neoadjuvant-adjuvant or adjuvant-only pembrolizumab in advanced melanoma. NEJM 2023',q:'SWOG S1801 neoadjuvant adjuvant pembrolizumab melanoma Patel NEJM 2023'}],
   disease:'skin', name:'SWOG S1801: pembrolizumab ×3, surgery, pembrolizumab ×15',
   trial:'SWOG S1801', summary:'Resectable stage IIIB–IV melanoma. Pembrolizumab ×3 before surgery, then ×15 after, for 18 doses in total.',
@@ -899,7 +899,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'mel-adj-io', plan:'Surgery, then a year of immunotherapy', group:'Stage II to III, after surgery', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'mel-adj-io', plan:'Surgery, then a year of immunotherapy', group:'Stage II to III, after surgery', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Eggermont AMM et al. KEYNOTE-054: adjuvant pembrolizumab in stage III melanoma (18 doses every 3 weeks). NEJM 2018',q:'KEYNOTE-054 adjuvant pembrolizumab stage III melanoma Eggermont NEJM 2018'},{t:'Luke JJ et al. KEYNOTE-716: adjuvant pembrolizumab in stage IIB/IIC melanoma (17 cycles every 3 weeks). Lancet 2022',q:'KEYNOTE-716 adjuvant pembrolizumab stage IIB IIC melanoma Luke Lancet 2022'},{t:'Weber J et al. CheckMate 238: adjuvant nivolumab vs ipilimumab (nivolumab 3 mg/kg every 2 weeks for up to 1 year). NEJM 2017',q:'CheckMate 238 adjuvant nivolumab ipilimumab resected melanoma Weber NEJM 2017'},{t:'FDA labeling: nivolumab (Opdivo) 480 mg every 4 weeks adjuvant dosing option',q:'FDA nivolumab Opdivo 480 mg every 4 weeks adjuvant melanoma label'}],
   disease:'skin', name:'Surgery, then adjuvant pembrolizumab (or nivolumab) for one year',
   trial:'KEYNOTE-054 / KEYNOTE-716 / CheckMate 238', summary:'Resected stage IIB–III melanoma. Wide excision with lymph node surgery, then pembrolizumab every 3 weeks ×18 (stage III, KEYNOTE-054; ×17 for stage IIB/IIC, KEYNOTE-716), or nivolumab every 4 weeks ×12 (per current FDA label).',
@@ -930,7 +930,7 @@ const LIBRARY = [
 },
 /* ---------- BREAST: genomic-assay pathway ---------- */
 {
-  id:'genomic', plan:'Surgery, then a gene test shows whether chemotherapy would be beneficial', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'genomic', plan:'Surgery, then a gene test shows whether chemotherapy would be beneficial', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Sparano JA et al. TAILORx: adjuvant chemotherapy guided by a 21-gene expression assay. NEJM 2018',q:'TAILORx 21-gene recurrence score adjuvant chemotherapy Sparano NEJM 2018'},{t:'Kalinsky K et al. RxPONDER: 21-gene assay in node-positive breast cancer. NEJM 2021',q:'RxPONDER 21-gene assay node-positive breast cancer Kalinsky NEJM 2021'},{t:'Cardoso F et al. MINDACT: 70-gene signature. NEJM 2016',q:'MINDACT 70-gene signature adjuvant chemotherapy Cardoso NEJM 2016'},{t:'Johnston SRD et al. monarchE: adjuvant abemaciclib. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: adjuvant ribociclib. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}],
   disease:'breast', name:'Surgery, genomic test (Oncotype DX / MammaPrint), then chemotherapy only if the test shows benefit',
   trial:'TAILORx / RxPONDER / MINDACT', summary:'HR-positive, HER2-negative, stage I–II (node-negative or 1–3 nodes). Surgery, gene-expression test, then chemotherapy + radiation + endocrine therapy if the test shows chemotherapy is beneficial, or radiation + endocrine therapy if not. Optional adjuvant CDK4/6 inhibitor.',
@@ -970,7 +970,7 @@ const LIBRARY = [
 
 /* ---------- KIDNEY: belzutifan + pembrolizumab ---------- */
 {
-  id:'ls022', plan:'Kidney surgery, then immunotherapy with a targeted tablet', group:'Kidney', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AI-assisted source check; physician review pending',
+  id:'ls022', plan:'Kidney surgery, then immunotherapy with a targeted tablet', group:'Kidney', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
   refs:[{t:'Choueiri TK et al. LITESPARK-022: adjuvant pembrolizumab plus belzutifan vs pembrolizumab for clear cell RCC. NEJM 2026',q:'LITESPARK-022 belzutifan pembrolizumab adjuvant clear cell renal cell carcinoma Choueiri NEJM'},{t:'FDA approval of belzutifan with pembrolizumab for adjuvant treatment of renal cell carcinoma, June 12, 2026',q:'FDA approves belzutifan pembrolizumab adjuvant renal cell carcinoma 2026'}],
   disease:'gu', name:'LITESPARK-022: nephrectomy, then pembrolizumab + belzutifan for a year',
   trial:'LITESPARK-022', summary:'Clear-cell kidney cancer at intermediate-high or high risk after nephrectomy (or after removal of metastases). Pembrolizumab for up to a year plus belzutifan tablets for up to 54 weeks.',

@@ -229,3 +229,10 @@ the corrections below; encodings follow the owner's stated verdicts and citation
   KATHERINE convention); DB11 adjuvant HP x9 (per-local-standard in the trial; consistent
   with the 17-cycle year); `kidney-surv` (NCCN-based, guideline unreachable);
   FDA approval dates quoted in refs; all surveillance frequencies (practice conventions).
+
+### Physician sign-off, September 2, 2026
+The owner (AL) reviewed the full re-verification findings, directed the corrections above,
+and reviewed the resulting diff. The 13 pathways changed in this round (adriatic, pacific,
+laura, mel-adj-io, prostate-short, trimodality, genomic, s1801, capox, cm274, cm816,
+hn-crt, ls022) now carry reviewedBy 'AL, 2026-09-02'. The 37 pathways confirmed without
+change keep 'physician review pending' until individually signed off.
