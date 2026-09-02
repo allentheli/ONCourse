@@ -1034,7 +1034,7 @@ function renderRoute(ctx, startDate, colors){
     if (it.kind === 'decision'){
       const cx = it.x + L.diamond / 2, c = cy(it.row);
       s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
-      s += T(cx, y0 + nameY, n.short || 'Results', { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
+      s += T(cx, y0 + durY + 2, n.short || 'Results', { size:11.5, weight:700, fill:'#172033', anchor:'middle', halo:3.5 });
     } else if (it.kind === 'event'){
       s += `<rect x="${it.x + 5}" y="${y0 + barY - 5}" width="12" height="${L.barH + 10}" rx="3" fill="#172033"/>`;
       s += T(it.x + 11, y0 + nameY - 5, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
