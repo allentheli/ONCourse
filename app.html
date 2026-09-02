@@ -610,6 +610,7 @@ function loadRegimen(id){
   state.origin = clone(state.regimen);
   state.originId = id;
   state.custom = CUSTOM.some(r => r.id === id);
+  state.tab = state.custom ? 'mine' : (src.disease || state.tab);
   state.open = new Set();
   return true;
 }
@@ -1200,6 +1201,7 @@ function mConfirm(){
   document.body.classList.add('msheet');
   $('#mpeek').hidden = true;
   $('#mexpand').hidden = false;
+  renderList();
   collapsePicker(true);
   window.scrollTo(0, 0);
 }
@@ -1664,6 +1666,11 @@ function printFit(width, target, portrait){
 // content box at .35in margins: landscape height binds on A4 (727px), width on
 // Letter (985px); portrait width binds on A4 (727px), height on Letter (985px)
 async function saveImage(){
+  const wasCollapsed = document.body.classList.contains('msheet');
+  if (wasCollapsed) document.body.classList.remove('msheet');
+  try { return await saveImageInner(); } finally { if (wasCollapsed) document.body.classList.add('msheet'); }
+}
+async function saveImageInner(){
   const sheet = $('#sheet');
   const W = Math.max(900, Math.round(sheet.getBoundingClientRect().width) || 1000);
   let css = '';
@@ -1711,6 +1718,13 @@ async function saveImage(){
   });
 }
 function applyPrintZoom(){
+  // The phone's collapsed dock hides sheet sections on screen; lift it so the
+  // fit measurement sees the full handout that will actually print.
+  const wasCollapsed = document.body.classList.contains('msheet');
+  if (wasCollapsed) document.body.classList.remove('msheet');
+  try { applyPrintZoomInner(); } finally { if (wasCollapsed) document.body.classList.add('msheet'); }
+}
+function applyPrintZoomInner(){
   // Some print pipelines drop custom properties, so inject the computed values
   // concretely, overriding the var(--k,1) / var(--maph,230px) defaults.
   let st = $('#fitcss');
