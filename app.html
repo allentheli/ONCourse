@@ -1010,7 +1010,7 @@ function renderRoute(ctx, startDate, colors){
         let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
         if (lines.length > 1 && hasUp) lines = [trunc(label, maxC)];
         lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 11.5, ln, { size:11.5, weight:700, fill:'#172033' }); });
-        s += T(it.x + 2, y0 + durY, openWatch(n) ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w) + (n.openEnded ? ' ongoing' : ''), { size:10 });
+        s += T(it.x + 2, y0 + durY, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w), { size:10 });
         if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + startY, startText(it.week), { size:9.5 });
       } else {
         s += T(it.x + 1, y0 + durY, durShort(w), { size:9.5 });
@@ -1098,9 +1098,18 @@ function usedMods(nodes, set){
   return set;
 }
 function hasEndocrineTail(nodes){
-  let found = false;
-  (function walk(ns){ for (const n of ns.filter(act)){ if (n.t === 'decision'){ visibleBranches(n).forEach(v => walk(v.b.nodes)); continue; } if (n.t === 'phase' && (n.mods || []).includes('endocrine') && !(n.mods || []).some(k => TREAT.includes(k))) found = true; } })(nodes);
-  return found;
+  let idx = 0, lastTreat = -1;
+  const endo = [];
+  (function walk(ns){ for (const n of ns.filter(act)){
+    if (n.t === 'decision'){ visibleBranches(n).forEach(v => walk(v.b.nodes)); continue; }
+    if (n.t === 'phase'){
+      const mods = n.mods || [];
+      if (mods.includes('endocrine') && !mods.some(k => TREAT.includes(k))) endo.push({ i:idx, conc:!!n.concurrent, w:+n.weeks || (+n.cycleDays * +n.cycles / 7) || 0 });
+      else if (!n.concurrent && mods.some(k => TREAT.includes(k))) lastTreat = idx;
+    }
+    idx++;
+  } })(nodes);
+  return endo.some(e => (!e.conc && e.i > lastTreat) || (e.conc && e.w >= 52));
 }
 function totalText(ctx, nodes){
   const t = ctx.total;
@@ -1194,7 +1203,7 @@ function renderMiniRoute(ctx, colors, width){
     else if (it.kind === 'up'){ const ly = y0 + 1 - it.lane * 3; s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="4" rx="1.5" fill="${fillFor(n)}"/>`; }
     else {
       s += `<rect x="${it.x}" y="${y0 + MINI.barY}" width="${it.w.toFixed(1)}" height="${MINI.barH}" rx="2.5" fill="${fillFor(n)}"/>`;
-      if (it.kind === 'phase' && it.w > 18){ const w = nodeWeeks(n); s += T(it.x + 1, y0 + MINI.rowH - 4, openWatch(n) ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'TBD' : durShort(w), { size:8.5 }); }
+      if (it.kind === 'phase' && it.w > 18){ const w = nodeWeeks(n); s += T(it.x + 1, y0 + MINI.rowH - 4, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'TBD' : durShort(w), { size:8.5 }); }
     }
     g += it.dim ? `<g opacity=".38">${s}</g>` : s;
   }

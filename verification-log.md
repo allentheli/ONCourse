@@ -166,3 +166,73 @@ references as known, and were not individually re-fetched.
 - **KEYNOTE-522** `kn522` — the capecitabine step's patient text now states that giving
   it after radiation is common practice rather than an order fixed by the trial,
   making the practice-based sequencing (recorded above) visible on the handout itself.
+
+### Full-library re-verification, September 2, 2026 (v0.9.7)
+All 50 pathways were checked against fetched primary publications and ClinicalTrials.gov
+protocol records (six parallel checks by disease group; PubMed and ClinicalTrials.gov were
+reachable; hemonc.org, eviQ, NCCN, and FDA/DailyMed were network-blocked, so label- and
+guideline-only claims are marked as such). The owner reviewed every finding and directed
+the corrections below; encodings follow the owner's stated verdicts and citations.
+34 pathways confirmed with no change; the corrected items:
+
+- **ADRIATIC** `adriatic` — durvalumab consolidation corrected from 24 to 26 four-week
+  cycles. The trial's stopping rule is a time cap, up to 24 months (Cheng, NEJM 2024,
+  PMID 39268857; NCT03703297 doses through cycle 26/week 100); the patient text now says
+  treatment stops at 24 months at the latest. The 24-cycle figure had conflated
+  24 months with 24 cycles.
+- **PACIFIC** `pacific` — durvalumab corrected to the cited trial's schedule, 10 mg/kg
+  every 2 weeks for up to 12 months (Antonia, NEJM 2017, PMID 28885881); previously
+  encoded as every 4 weeks x13, which is the later FDA-label 1500 mg q4w option
+  (approved November 2020), not what the citation describes. The label alternative is
+  noted in the patient text and cited as a second reference.
+- **Adjuvant melanoma immunotherapy** `mel-adj-io` — pembrolizumab corrected from 17 to
+  18 doses, matching KEYNOTE-054 (stage III, PMID 29658430); the patient text notes 17
+  doses applies to stage IIB/IIC per KEYNOTE-716 (PMID 35367007). Nivolumab's every-4-week
+  x12 schedule is now attributed to the current FDA label (CheckMate 238 itself used
+  3 mg/kg every 2 weeks, PMID 28891423), with the label added as a reference.
+- **Short-course prostate ADT** `prostate-short` — corrected to RTOG 94-08 as cited
+  (Jones, NEJM 2011, PMID 21751904): 4 months of ADT total, started 2 months before
+  radiation and continuing through it, with no ADT after radiation. Previously encoded
+  as 24 weeks in two 12-week blocks, one after radiation. Name and summary now say
+  4 months rather than 4-6.
+- **Trimodality bladder preservation** `trimodality` — chemoradiation length un-fixed
+  (was 7 weeks, which matches neither BC2001 arm); the radiation team sets it, with the
+  two trial schedules (64 Gy/32 fractions over 6.5 weeks; 55 Gy/20 fractions over
+  4 weeks) named in the text and references (James, NEJM 2012, PMID 22512481; BC2001/BCON
+  hypofractionation meta-analysis, Choudhury, Lancet Oncol 2021 — citation supplied by
+  the owner's review).
+- **Genomic-assay pathway** `genomic` — the single CDK4/6-inhibitor step (104 weeks for
+  either drug) is now two separate optional steps: abemaciclib for 2 years (monarchE,
+  PMID 32954927) and ribociclib for 3 years (NATALEE, PMID 39442617). One shared duration
+  understated ribociclib by a year.
+- **SWOG S1801** `s1801` — patient-facing subtitle corrected from "stage III to IV" to
+  "stage IIIB to IV"; the trial enrolled resectable IIIB-IIID or oligometastatic IV
+  (PMID 36856617). Stage IIIA was not eligible.
+- **LAURA** `laura` (builder change) — open-ended treatment phases now render "ongoing"
+  on the map instead of a duration; osimertinib after chemoradiation has no fixed stop
+  date (Lu, NEJM 2024, PMID 38828946), and the bar previously read "3y ongoing", which
+  could be mistaken for ADAURA's 3-year cap.
+- **CAPOX** `capox` — patient text now says the team chooses 3 vs 6 months by risk
+  features (IDEA, PMID 29590544: 6 months favored for T4/N2).
+- **Citation fit, no schedule change** — `cm274`: SWOG 8710 reference now states it used
+  MVAC x3 with gem-cis x4 as the modern substitute, and the nivolumab q4w schedule is
+  attributed to the FDA label (trial used 240 mg q2w); `cm816`: the residual-disease
+  branch text now leads with the trial's own post-surgery options (up to 4 cycles of
+  chemotherapy and/or radiation) before mentioning the 77T-style year of immunotherapy;
+  `hn-crt`: Adelstein 2003 (definitive setting, 70 Gy/35 fractions, cisplatin days
+  1/22/43, PMID 12506176) added as the primary schedule reference, and the Noronha
+  reference now notes its largely adjuvant population; `ls022`: reference upgraded from
+  the ASCO GU abstract to the NEJM publication (PMID 42384869).
+- **Could not verify (unchanged, for the record)** — CREATE-X capecitabine x8 (UMIN
+  registry, no fetchable protocol; drug/setting/branch confirmed); T-DXd x14 in residual-
+  disease branches (DB05 sources state drug and setting but not count; 14 is the
+  KATHERINE convention); DB11 adjuvant HP x9 (per-local-standard in the trial; consistent
+  with the 17-cycle year); `kidney-surv` (NCCN-based, guideline unreachable);
+  FDA approval dates quoted in refs; all surveillance frequencies (practice conventions).
+
+### Physician sign-off, September 2, 2026
+The owner (AL) reviewed the full re-verification findings, directed the corrections above,
+and reviewed the resulting diff. The 13 pathways changed in this round (adriatic, pacific,
+laura, mel-adj-io, prostate-short, trimodality, genomic, s1801, capox, cm274, cm816,
+hn-crt, ls022) now carry reviewedBy 'AL, 2026-09-02'. The 37 pathways confirmed without
+change keep 'physician review pending' until individually signed off.
