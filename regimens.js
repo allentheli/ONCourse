@@ -1046,8 +1046,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.13.1';
+const APP_VERSION = '0.14.0';
 const CHANGELOG = [
+  { date:'2026-09-02', text:'Builder: the title block (page title, sequence sentence, cancer type and stage line, trial or source) is now edited at the top of step 3 instead of the Regimen details panel. The Overall line now states how long hormone tablets continue, so it changes when that step is edited. A second image export saves just the timeline, large and sharp, for a chart note. The prepared date can be switched off or typed in by hand. When several treatments run alongside one step, the longest now sits nearest the main bar with shorter ones stacked above it.' },
   { date:'2026-09-02', text:'Breast pathways signed off by the founder after review. KEYNOTE-522 now names CREATE-X as the source of the capecitabine step. APT: trastuzumab after the paclitaxel weeks may be weekly or every 3 weeks. The monarchE and NATALEE pathways now offer both common chemotherapy options (TC, or dose-dense AC then paclitaxel) as switchable steps before radiation, and the option names for these and the genomic-test pathway say so.' },
   { date:'2026-09-02', text:'0.13.0: Funding statement finalized in the disclaimer. Pathway review labels reworded and a dosing-and-schedule caution added for physicians. "How we chose this plan for you" rebuilt around plan adjustments. Privacy guardrail added to the test suite.' },
   { date:'2026-09-02', text:'The handout can now carry a "Prepared for ____" line for the patient\'s name, on by default and printed blank on purpose: write the name in by hand, or type it into the saved PDF, so it never touches the browser. On the map, labels for treatment given alongside another step now use the same type as every other step label, and the Surgery label no longer touches its marker.' },

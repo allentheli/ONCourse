@@ -14,6 +14,7 @@
   --surgery:#172033; --rest:#CBD3DD; --watch:#4C9A5B;
   --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans:'Atkinson Hyperlegible', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --doc:'Source Sans 3', 'Atkinson Hyperlegible', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -146,24 +147,24 @@ body.patient .main{padding:24px 20px 60px}
 
 /* ---------- the patient sheet ---------- */
 .main{overflow:auto;padding:28px 32px 60px}
-.sheet{background:var(--paper);max-width:1056px;margin:0 auto;padding:40px 48px 32px;box-shadow:0 1px 2px rgba(23,32,51,.06),0 14px 44px rgba(23,32,51,.10);border-radius:2px}
-.sh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.sheet{font-family:var(--doc);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;text-rendering:optimizeLegibility;background:var(--paper);max-width:1056px;margin:0 auto;padding:40px 48px 32px;box-shadow:0 1px 2px rgba(23,32,51,.06),0 14px 44px rgba(23,32,51,.10);border-radius:2px}
+.sh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
 .sh-prep{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-.sh-prep .prepfor b{color:var(--ink);font-size:12.5px;font-weight:700}
+.sh-prep .prepfor b{color:var(--ink);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
 .sh-prep .fillline{display:inline-block;width:180px;border-bottom:1px solid var(--ink);height:1.05em;margin-left:7px;vertical-align:baseline}
 .sh-head b{color:var(--ink);font-weight:700;font-size:13px}
-.doclabel{font:600 12px/1 var(--serif);color:var(--ink);letter-spacing:.01em;margin-right:12px;padding-right:12px;border-right:1px solid var(--line)}
-.sh-for{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.doclabel{font:600 10.5px/1 var(--doc);color:var(--ink);letter-spacing:.11em;text-transform:uppercase;margin-right:12px;padding-right:12px;border-right:1px solid var(--line)}
+.sh-for{margin:5px 0 0;font-size:13px;color:var(--muted)}
 .sh-frame{margin:6px 0 0;font-size:13px;color:var(--ink-2);max-width:80ch}
 .sh-head .ph{margin-left:8px}
 .sh-top{display:grid;grid-template-columns:1fr 288px;gap:8px 32px;align-items:start}
 .sh-top.solo{grid-template-columns:1fr}
-.sh-title{font:600 28px/1.15 var(--serif);margin:20px 0 6px;letter-spacing:-.01em;max-width:36ch}
-.sh-sub{margin:0;font-size:13.5px;color:var(--ink-2);max-width:82ch}
+.sh-title{font:600 30px/1.1 var(--serif);margin:20px 0 8px;letter-spacing:-.018em;max-width:36ch;color:var(--ink)}
+.sh-sub{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink-2);max-width:82ch}
 .sh-basis{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--muted);max-width:82ch}
 .sh-total{margin:5px 0 0;font-size:13px;color:var(--muted)}
 .chosen{border:1px solid var(--line);border-radius:10px;padding:13px 16px 11px;margin-top:23px}
-.chosen h2{font:600 13.5px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
+.chosen h2{font:600 14px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
 .chosen ul{list-style:none;margin:0;padding:0}
 .chosen li{display:flex;gap:8px;font-size:11.5px;line-height:1.4;padding:2.5px 0;color:var(--ink-2)}
 .chosen .ck{color:var(--ink);font-weight:700;flex:none}
@@ -172,11 +173,11 @@ body.patient .main{padding:24px 20px 60px}
 .steps{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px}
 .step{display:grid;grid-template-columns:22px 1fr;gap:6px;break-inside:avoid}
 .step-n{font:600 15px/1 var(--serif);color:var(--ink);padding-top:2px}
-.step h3{margin:0;font-size:14px;line-height:1.25;display:flex;align-items:flex-start;gap:7px}
+.step h3{margin:0;font:600 14.5px/1.3 var(--serif);letter-spacing:-.005em;display:flex;align-items:flex-start;gap:7px}
 .chip{width:10px;height:10px;border-radius:2px;flex:none;margin-top:3px;background:var(--c1)}
 .chip.two{background:linear-gradient(180deg,var(--c1) 50%,var(--c2) 50%)}
 .chip.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
-.step p{margin:4px 0 0;font-size:13px;line-height:1.48;color:var(--ink-2)}
+.step p{margin:4px 0 0;font-size:13.25px;line-height:1.5;color:var(--ink-2)}
 .step p.meta{color:var(--muted);font-size:12px}
 .step.rest .step-n{color:var(--muted)}
 .step.rest h3{font-weight:600;color:var(--ink-2)}
@@ -190,8 +191,8 @@ body.patient .main{padding:24px 20px 60px}
 .branch{padding:0 0 0 12px;border-left:3px solid var(--line)}
 .branch.expected{border-left-color:var(--ink)}
 .branch.dim{opacity:.55}
-.branch h4{margin:0 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600}
+.branch h4{margin:0 0 8px;font:600 13.5px/1.3 var(--serif);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font:600 10px/1.4 var(--doc);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--ink);color:#fff}
 .branch .steps{grid-template-columns:1fr;gap:8px;margin:0}
 .visits{margin:6px 0 0;padding:0;list-style:none;font-size:12px;color:var(--ink-2)}
 .visits li{display:flex;gap:8px;padding:2px 0;border-top:1px dotted var(--line)}
@@ -435,6 +436,13 @@ body.patient .main{padding:24px 20px 60px}
 
   <section class="sec">
     <h2>3. Handout details</h2>
+    <div class="f roadonly" style="margin:0 0 4px"><label style="font-weight:700;color:var(--ink)">Title block (what the patient reads at the top)</label></div>
+    <div class="f"><label for="r-plan">Short plan name (the page title)</label><input type="text" id="r-plan" data-r="plan" placeholder="e.g. Chemo-immunotherapy around surgery"></div>
+    <div class="f"><label for="r-title">One-sentence sequence (shown under the title)</label><input type="text" id="r-title" data-r="title"></div>
+    <div class="f"><label for="r-subtitle">Cancer type and stage line (prints as "For ...")</label><input type="text" id="r-subtitle" data-r="subtitle"></div>
+    <div class="row roadonly">
+      <div class="f"><label for="r-trial">Trial or source (prints as "Based on the ...")</label><input type="text" id="r-trial" data-r="trial"></div>
+    </div>
     <div class="row">
       <div class="f"><label for="o-clinic">Clinic or practice</label><input type="text" id="o-clinic" data-o="clinic" placeholder="e.g. Northwest Cancer Care"></div>
       <div class="f"><label for="o-physician">Physician</label><input type="text" id="o-physician" data-o="physician" placeholder="e.g. Dr. A. Lee"></div>
@@ -461,6 +469,10 @@ body.patient .main{padding:24px 20px 60px}
       <input type="text" data-tl="2" placeholder="We left out one medicine that would be too hard on your heart." style="margin-top:6px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:13px;width:100%">
       <p class="hint" style="margin:4px 0 0">Prints as a "Tailored for you" card at the top right of the handout, only when at least one line is filled in.</p>
     </div>
+    <div class="row">
+      <div class="f"><label class="chk" style="margin:0 0 4px"><input type="checkbox" data-o="dateOn" checked> Show the prepared date</label></div>
+      <div class="f"><label for="o-date">Prepared date <span style="color:var(--muted)">(blank = today)</span></label><input type="text" id="o-date" data-o="dateText" placeholder="e.g. September 2, 2026"></div>
+    </div>
     <label class="chk"><input type="checkbox" data-o="preparedFor" checked> Add a "Prepared for ____" line for the patient's name. It prints blank: write it in by hand, or type it into the saved PDF or image, so the name never touches the browser</label>
     <label class="chk roadonly"><input type="checkbox" data-o="showTrial" checked> Name the clinical trial the plan is based on</label>
     <label class="chk"><input type="checkbox" data-o="qr" checked> Print a QR code linking to this page</label>
@@ -471,7 +483,8 @@ body.patient .main{padding:24px 20px 60px}
     <div class="btns">
       <button class="btn" id="print">Print or save as PDF</button>
       <button class="btn sec" id="preview">Preview as the patient</button>
-      <button class="btn sec" id="saveimg">Save as image (PNG)</button>
+      <button class="btn sec" id="saveimg">Save handout as image (PNG)</button>
+      <button class="btn sec" id="savemap">Save just the map as image (PNG)</button>
     </div>
     <div class="linkbox"><input type="text" id="linkout" readonly placeholder="Link appears here"><button class="btn sec" id="copylink">Copy link</button></div>
     <div class="qr-side" id="qrside"></div>
@@ -481,13 +494,7 @@ body.patient .main{padding:24px 20px 60px}
   <section class="sec roadonly">
     <h2>Regimen details</h2>
     <div class="f"><label for="r-name">Regimen name (for your list)</label><input type="text" id="r-name" data-r="name"></div>
-    <div class="f"><label for="r-plan">Short plan name (the page title)</label><input type="text" id="r-plan" data-r="plan" placeholder="e.g. Chemo-immunotherapy around surgery"></div>
-    <div class="f"><label for="r-title">One-sentence sequence (shown under the title)</label><input type="text" id="r-title" data-r="title"></div>
-    <div class="f"><label for="r-subtitle">Cancer type and stage line</label><input type="text" id="r-subtitle" data-r="subtitle"></div>
-    <div class="row">
-      <div class="f"><label for="r-trial">Trial or source</label><input type="text" id="r-trial" data-r="trial"></div>
-      <div class="f"><label for="r-disease">Category</label><select id="r-disease" data-r="disease"><option value="breast">Breast</option><option value="gi">GI</option><option value="lung">Lung</option><option value="gu">GU</option><option value="hn">Head &amp; neck</option><option value="skin">Melanoma</option><option value="other">Other</option></select></div>
-    </div>
+    <div class="f"><label for="r-disease">Category</label><select id="r-disease" data-r="disease"><option value="breast">Breast</option><option value="gi">GI</option><option value="lung">Lung</option><option value="gu">GU</option><option value="hn">Head &amp; neck</option><option value="skin">Melanoma</option><option value="other">Other</option></select></div>
     <div class="f"><label for="r-summary">One-line summary (for your list)</label><input type="text" id="r-summary" data-r="summary"></div>
     <div class="f"><label>References (not printed)</label><ul class="refs" id="refs"></ul>
       <p class="hint" style="margin-top:8px">Dosing and schedules can differ between a trial protocol, the FDA label, and institutional practice. ONCourse follows the published protocol and does not show doses. Confirm cycles, intervals, and doses against your institution's protocol before treating.</p></div>
@@ -512,7 +519,7 @@ body.patient .main{padding:24px 20px 60px}
 <script>
 var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
 </script>
-<script src="regimens.js?v=0.13.1"></script>
+<script src="regimens.js?v=0.14.0"></script>
 <script>
 /* ===================== utilities ===================== */
 const $ = (s, el=document) => el.querySelector(s);
@@ -611,7 +618,7 @@ const state = {
   tab:'breast', view:'roadmap', regimen:null, origin:null, originId:null, custom:false, shortTouched:new Set(),
   opts:{ clinic:'', physician:'', contact:'', startDate:'', detail:'overview', notes:'', showTrial:true, qr:true,
          basisOn:true, basisText:BASIS_DEFAULT, tailored:['', '', ''],
-         progressBoxes:false, progressDim:true, preparedFor:true },
+         progressBoxes:false, progressDim:true, preparedFor:true, dateOn:true, dateText:'' },
   compare:{ title:'Your treatment options', diagnosis:'', stage:'', recWhy:'', rec:null,
             options:[ { name:'Option 1', regimenId:'', pros:'', cons:'' }, { name:'Option 2', regimenId:'', pros:'', cons:'' } ] },
   open:new Set(), patient:false, shared:false, demo:false, link:'', q:'',
@@ -944,7 +951,7 @@ function layout(nodes, cfg){
         const follow = n.afterPrev && prevConc;
         const cx = follow ? prevConc.x + prevConc.w + C.gap : lastStart;
         const cw = follow ? prevConc.week + prevConc.weeks : lastWeek;
-        const lane = follow ? prevConc.lane : Math.min(conc, 1);
+        const lane = follow ? prevConc.lane : conc;
         // if it follows a step of unknown length, its own start is not knowable either
         if (follow && prevConc.unknown) ctx.noDate.add(n.id);
         ctx.week.set(n.id, cw);
@@ -973,6 +980,21 @@ function layout(nodes, cfg){
   }
   const res = place(nodes, 0, 1, 0, false, false);
   ctx.endWeek = res.week;
+  // alongside bars that share an anchor: the longest chain sits closest to the main bar,
+  // shorter ones stack above it, so stacked lanes read as a neat staircase
+  {
+    const heads = ctx.items.filter(it => it.kind === 'up' && !it.node.afterPrev);
+    const chainOf = (h) => { const out = [h]; let cur = h; for (const it of ctx.items){ if (it.kind === 'up' && it.node.afterPrev && it.row === h.row && it.lane === h.lane && it !== h && ctx.items.indexOf(it) > ctx.items.indexOf(cur) && it.x >= cur.x + cur.w - 0.5){ out.push(it); cur = it; } } return out; };
+    const groups = new Map();
+    for (const h of heads){ const k = h.row + ':' + Math.round(h.x); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(h); }
+    for (const g of groups.values()){
+      if (g.length < 2) continue;
+      const chains = g.map(h => { const c = chainOf(h); const last = c[c.length - 1]; return { c, extent: last.x + last.w - h.x }; });
+      chains.sort((a, b) => b.extent - a.extent);
+      chains.forEach((ch, i) => ch.c.forEach(it => { it.lane = i; }));
+    }
+    ctx.maxLane = Math.max(-1, ...ctx.items.filter(it => it.kind === 'up').map(it => it.lane));
+  }
   // totals in weeks of treatment (excluding monitoring, hormone-only, open-ended tablets)
   const bt = ctx.branchTotals;
   if (bt.length){
@@ -1025,7 +1047,7 @@ function renderRoute(ctx, startDate, colors){
     g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow), f.dim);
     const lines = wrapText(f.cond, 21);
     if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 12, ln, { size:10.5, fill:'#3B4557', weight:600, halo:3.5 }); }); }
-    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 12; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 12, ln, { size:10.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400, halo:3.5 }); }); }
+    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 12; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 12, ln, { size:10.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 600 : 400, halo:3.5 }); }); }
   }
   for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
   const prevUp = (i) => { const it = ctx.items[i]; for (let j = i - 1; j >= 0; j--){ const q = ctx.items[j]; if (q.kind === 'up' && q.row === it.row && q.lane === it.lane) return j; } return -1; };
@@ -1042,10 +1064,10 @@ function renderRoute(ctx, startDate, colors){
     if (it.kind === 'decision'){
       const cx = it.x + L.diamond / 2, c = cy(it.row);
       s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
-      s += T(cx, y0 + durY + 2, n.short || 'Results', { size:11.5, weight:700, fill:'#172033', anchor:'middle', halo:3.5 });
+      s += T(cx, y0 + durY + 2, n.short || 'Results', { size:11.5, weight:600, fill:'#172033', anchor:'middle', halo:3.5 });
     } else if (it.kind === 'event'){
       s += `<rect x="${it.x + 5}" y="${y0 + barY - 5}" width="12" height="${L.barH + 10}" rx="3" fill="#172033"/>`;
-      s += T(it.x + 11, y0 + nameY - 5, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
+      s += T(it.x + 11, y0 + nameY - 5, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:600, fill:'#172033', anchor:'middle' });
       if (!ctx.noDate.has(n.id)) s += T(it.x + 11, y0 + startY, startText(it.week), { size:10.5, anchor:'middle' });
     } else if (it.kind === 'up'){
       const ly = y0 + extra + 12 - it.lane * 20;
@@ -1061,7 +1083,7 @@ function renderRoute(ctx, startDate, colors){
         }
         if (laneEnd == null){ const e = ctx.rowExt[it.row]; laneEnd = (e && isFinite(e.max) ? e.max : it.x + it.w) + 12; }
         const budget = Math.max(8, Math.floor((Math.min(laneEnd, width - 4) - ci.x) / 7.2));
-        s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:12.5, fill:'#172033', weight:700 });
+        s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:12.5, fill:'#172033', weight:600 });
       }
     } else {
       const w = nodeWeeks(n);
@@ -1096,7 +1118,7 @@ function renderRoute(ctx, startDate, colors){
           lines = [truncL(segs.join(' + '), maxC), truncL(last, maxC)];
         } else lines = wrapText(label, maxC).map(l => truncL(l, maxC));
         if (lines.length > 1 && hasUp) lines = [truncL(label, maxC)];
-        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 12.5, ln, { size:12.5, weight:700, fill:'#172033' }); });
+        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 12.5, ln, { size:12.5, weight:600, fill:'#172033' }); });
         s += T(it.x + 2, y0 + durY, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w), { size:11 });
         if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + startY, startText(it.week), { size:10.5 });
       } else {
@@ -1106,7 +1128,7 @@ function renderRoute(ctx, startDate, colors){
     const doneDim = state.opts.progressDim && it.node && it.node.done && it.kind !== 'decision';
     g += (it.dim || doneDim) ? `<g opacity="${it.dim ? '.38' : '.45'}">${s}</g>` : s;
   }
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif" role="img" aria-label="Treatment timeline"><defs>${defs}</defs>${g}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Source Sans 3, Atkinson Hyperlegible, Segoe UI, Arial, sans-serif" role="img" aria-label="Treatment timeline"><defs>${defs}</defs>${g}</svg>`;
 }
 
 /* ===================== patient sheet ===================== */
@@ -1184,26 +1206,34 @@ function usedMods(nodes, set){
   for (const n of nodes.filter(act)){ if (n.t === 'decision'){ for (const v of visibleBranches(n)) usedMods(v.b.nodes, set); continue; } if (n.t === 'rest') set.add('rest'); else (n.mods || []).forEach(k => set.add(k)); }
   return set;
 }
-function hasEndocrineTail(nodes){
+// hormone-only therapy that runs past the treatment: returns its total weeks (0 = none)
+function endocrineTailWeeks(nodes){
   let idx = 0, lastTreat = -1;
   const endo = [];
   (function walk(ns){ for (const n of ns.filter(act)){
     if (n.t === 'decision'){ visibleBranches(n).forEach(v => walk(v.b.nodes)); continue; }
     if (n.t === 'phase'){
       const mods = n.mods || [];
-      if (mods.includes('endocrine') && !mods.some(k => TREAT.includes(k))) endo.push({ i:idx, conc:!!n.concurrent, w:+n.weeks || (+n.cycleDays * +n.cycles / 7) || 0 });
+      if (mods.includes('endocrine') && !mods.some(k => TREAT.includes(k))) endo.push({ i:idx, conc:!!n.concurrent, w:+n.weeks || (+n.cycleDays * +n.cycles / 7) || 0, open:!!n.openEnded });
       else if (!n.concurrent && mods.some(k => TREAT.includes(k))) lastTreat = idx;
     }
     idx++;
   } })(nodes);
-  return endo.some(e => (!e.conc && e.i > lastTreat) || (e.conc && e.w >= 52));
+  const tail = endo.filter(e => (!e.conc && e.i > lastTreat) || (e.conc && e.w >= 52));
+  if (!tail.length) return 0;
+  if (tail.some(e => e.open)) return -1;
+  // sequential tablets add up; a tablet running alongside counts by its own length
+  const seq = tail.filter(e => !e.conc).reduce((a, e) => a + e.w, 0);
+  const conc = Math.max(0, ...tail.filter(e => e.conc).map(e => e.w));
+  return Math.max(seq, conc);
 }
 function totalText(ctx, nodes){
   const t = ctx.total;
   if (!t || t.max <= 0) return '';
   const parts = [`${(t.max - t.min >= 4) ? rangeText(t.min, t.max) : durLong(t.max)} of treatment`];
   if (ctx.unknownTreat) parts.push('plus radiation');
-  if (nodes && hasEndocrineTail(nodes)) parts.push('then hormone tablets');
+  const hw = nodes ? endocrineTailWeeks(nodes) : 0;
+  if (hw) parts.push(hw > 0 ? `then hormone tablets for ${durLong(hw)}` : 'then hormone tablets, ongoing');
   return `Overall: ${parts.join(', ')}.`;
 }
 function renderSheet(){
@@ -1218,7 +1248,7 @@ function renderSheet(){
   const chosen = tailored.length ? `<aside class="chosen"><h2>Tailored for you</h2><ul>${tailored.map(t => `<li><span class="ck">✓</span><span>${esc(t)}</span></li>`).join('')}</ul></aside>` : '';
   const basis = (o.basisOn && (o.basisText || '').trim()) ? `<p class="sh-basis">${esc(o.basisText.trim())}</p>` : '';
   $('#sheet').innerHTML = `
-    <header class="sh-head"><div><span class="doclabel">Your treatment plan</span>${who.length ? `<b>${esc(o.clinic || o.physician)}</b>${o.clinic && o.physician ? `<span class="ph">${esc(o.physician)}</span>` : ''}` : ''}</div><div class="sh-prep">${o.preparedFor ? `<span class="prepfor"><b>Prepared for</b><span class="fillline"></span></span>` : ''}<span>Prepared ${fmtLong(new Date())}</span></div></header>
+    <header class="sh-head"><div><span class="doclabel">Your treatment plan</span>${who.length ? `<b>${esc(o.clinic || o.physician)}</b>${o.clinic && o.physician ? `<span class="ph">${esc(o.physician)}</span>` : ''}` : ''}</div><div class="sh-prep">${o.preparedFor ? `<span class="prepfor"><b>Prepared for</b><span class="fillline"></span></span>` : ''}${o.dateOn ? `<span>Prepared ${esc((o.dateText || '').trim() || fmtLong(new Date()))}</span>` : ''}</div></header>
     <div class="sh-top${chosen ? '' : ' solo'}"><div>
     <h1 class="sh-title">${esc(r.plan || r.title || r.name)}</h1>
     ${r.plan && r.title ? `<p class="sh-sub">${esc(r.title.replace(/\.?$/, '.'))}</p>` : ''}
@@ -1319,7 +1349,7 @@ function renderMiniRoute(ctx, colors, width){
     }
     g += it.dim ? `<g opacity=".38">${s}</g>` : s;
   }
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Segoe UI, Arial, sans-serif"><defs>${defs}</defs>${g}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="Source Sans 3, Atkinson Hyperlegible, Segoe UI, Arial, sans-serif"><defs>${defs}</defs>${g}</svg>`;
 }
 function renderCompareSheet(){
   const c = state.compare, o = state.opts;
@@ -1611,6 +1641,7 @@ function bind(){
 
   $('#reset').onclick = () => { if (state.originId && loadRegimen(state.originId)) renderAll(); else { state.regimen = clone(state.origin); renderAll(); } toast('Reset'); };
   $('#saveimg').onclick = () => saveImage().catch(() => toast('Could not create the image in this browser'));
+  $('#savemap').onclick = () => saveMapImage().catch(() => toast('Could not create the image in this browser'));
   $('#mexpand').onclick = () => {
     const collapsed = document.body.classList.toggle('msheet');
     $('#mexpand').textContent = collapsed ? 'Show the full handout' : 'Show just the map';
@@ -1719,6 +1750,52 @@ async function saveImage(){
   const wasCollapsed = document.body.classList.contains('msheet');
   if (wasCollapsed) document.body.classList.remove('msheet');
   try { return await saveImageInner(); } finally { if (wasCollapsed) document.body.classList.add('msheet'); }
+}
+// self-hosted fonts as data URIs, so an exported image renders with the site's own type
+async function fontCss(css){
+  const fontFiles = ['atkinson-hyperlegible-latin-400-normal','atkinson-hyperlegible-latin-400-italic','atkinson-hyperlegible-latin-700-normal','source-serif-4-latin-500-normal','source-serif-4-latin-600-normal','source-sans-3-latin-400-normal','source-sans-3-latin-400-italic','source-sans-3-latin-600-normal','source-sans-3-latin-700-normal'];
+  let out = css;
+  for (const f of fontFiles){
+    try {
+      const bytes = new Uint8Array(await (await fetch('fonts/' + f + '.woff2')).arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+      out = out.replace(new RegExp('url\\((["\\\']?)[^)]*' + f + '\\.woff2\\1\\)', 'g'), 'url(data:font/woff2;base64,' + btoa(bin) + ')');
+    } catch (e) {}
+  }
+  return out;
+}
+function downloadPng(canvas, base){
+  const a = document.createElement('a');
+  a.download = String(base || 'treatment-map').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() + '.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+// the timeline alone, large, for pasting into a chart or a slide
+async function saveMapImage(){
+  const src = $('#sheet .route svg');
+  if (!src) throw new Error('no map');
+  const vb = (src.getAttribute('viewBox') || '').split(/\s+/).map(Number);
+  const vw = vb[2] || src.getBoundingClientRect().width, vh = vb[3] || src.getBoundingClientRect().height;
+  let faces = '';
+  for (const ss of document.styleSheets){ try { for (const r of ss.cssRules) if (r.type === CSSRule.FONT_FACE_RULE) faces += r.cssText + '\n'; } catch (e) {} }
+  faces = await fontCss(faces);
+  const pad = 24, W = 2400, scale = W / (vw + pad * 2), H = Math.ceil((vh + pad * 2) * scale);
+  const inner = src.outerHTML.replace(/<svg\b[^>]*>/, m => m.replace(/\s(width|height)="[^"]*"/g, '')).replace(/^<svg\b/, `<svg x="${pad}" y="${pad}" width="${vw}" height="${vh}"`);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${vw + pad * 2} ${vh + pad * 2}"><style>${faces.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</style><rect width="100%" height="100%" fill="#fff"/>${inner}</svg>`;
+  await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const c = document.createElement('canvas'); c.width = W; c.height = H;
+        const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H); g.drawImage(img, 0, 0, W, H);
+        downloadPng(c, ((state.regimen && state.regimen.name) || 'treatment-map') + '-map');
+        toast('Map image saved to your downloads'); resolve();
+      } catch (e) { reject(e); }
+    };
+    img.onerror = reject;
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
 }
 async function saveImageInner(){
   const sheet = $('#sheet');
