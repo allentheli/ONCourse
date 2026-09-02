@@ -136,8 +136,8 @@ const LIBRARY = [
   ]
 },
 {
-  id:'hrplus', plan:'Hormone therapy plus a targeted tablet', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-08-31', reviewedBy:'AI-assisted source check; physician review pending', refs:[{t:'Johnston SRD et al. monarchE: abemaciclib plus endocrine therapy. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: ribociclib plus NSAI. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}], disease:'breast', name:'HR-positive high risk: surgery, endocrine therapy + CDK4/6 inhibitor',
-  trial:'monarchE / NATALEE', summary:'HR-positive, HER2-negative, high risk. Surgery, optional chemo, radiation, endocrine therapy plus abemaciclib (2 y) or ribociclib (3 y).',
+  id:'hrplus', plan:'Hormone therapy plus a targeted tablet', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Johnston SRD et al. monarchE: abemaciclib plus endocrine therapy. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: ribociclib plus NSAI. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}], disease:'breast', name:'HR-positive high risk: surgery, endocrine therapy + CDK4/6 inhibitor',
+  trial:'monarchE', summary:'HR-positive, HER2-negative, high risk. Surgery, optional chemo, radiation, endocrine therapy plus abemaciclib for 2 years.',
   title:'Surgery, then daily tablets that block hormones and slow cancer-cell growth',
   subtitle:'Hormone-receptor positive, HER2-negative breast cancer, higher-risk stage II to III',
   nodes:[
@@ -147,7 +147,7 @@ const LIBRARY = [
         plain:'Chemotherapy is recommended for some people based on stage and tumor test results (such as Oncotype DX). A common option is docetaxel + cyclophosphamide every 3 weeks, 4 times.' }),
     RADIATION_AFTER(true),
     P({ name:'Hormone therapy + abemaciclib (Verzenio)', short:'Hormone + abemaciclib', mods:['endocrine','targeted'], mode:'daily', weeks:104,
-        plain:'A daily hormone-blocking tablet plus abemaciclib twice a day for 2 years. Abemaciclib is a targeted drug that slows the growth of cancer cells. Ribociclib (Kisqali) for 3 years is an alternative.' }),
+        plain:'A daily hormone-blocking tablet plus abemaciclib twice a day for 2 years. Abemaciclib is a targeted drug that slows the growth of cancer cells.' }),
     P({ name:'Hormone therapy continues', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:156,
         plain:'The hormone-blocking tablet continues on its own to complete 5 to 10 years in total.' }),
   ]
@@ -1042,8 +1042,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.9.7';
+const APP_VERSION = '0.10.0';
 const CHANGELOG = [
+  { date:'2026-09-02', text:'The builder can now save the handout as an image (PNG), ready to paste into a chart or an after-visit summary; everything still happens in your browser. Renaming a step now updates its label on the timeline too, unless you have typed your own short label. On a phone, the preview sits at the top with the timeline scaled to fit the screen (pinch to zoom), and the editing sections open with a tap. Handout type is larger on the map and in the step list, the web address no longer prints at the bottom of the page in most browsers, and the site\'s own fonts now load as intended. The abemaciclib pathway no longer mentions ribociclib; that option lives in its own NATALEE pathway.' },
   { date:'2026-09-02', text:'Every pathway was re-verified against its primary publication and trial registry record, with physician review of the findings. Corrections: ADRIATIC durvalumab now runs up to 2 full years (26 four-week cycles, not 24); PACIFIC durvalumab now follows the trial\'s every-2-week schedule, with the every-4-week label option noted; adjuvant melanoma pembrolizumab is 18 doses for stage III (17 for stage IIB/IIC); short-course prostate hormone therapy is 4 months, starting 2 months before radiation and ending with it, with none after (RTOG 94-08); bladder-preserving chemoradiation length is now set by the radiation team (4 or 6.5 weeks in BC2001); the gene-test pathway lists abemaciclib (2 years) and ribociclib (3 years) as separate options instead of one shared duration; S1801\'s population reads stage IIIB to IV. Open-ended treatment such as osimertinib after chemoradiation (LAURA) now shows "ongoing" on the map instead of a fixed number of years.' },
   { date:'2026-09-01', text:'KEYNOTE-522: the patient text now says that giving capecitabine after radiation is common practice rather than an order fixed by the trial. Radiation shown alongside another step now appears as a single line on the sheet instead of repeating its schedule in a paragraph, in every pathway that draws it that way.' },
   { date:'2026-09-01', text:'Printing fixed. The two buttons from the phone toolbar no longer appear on the printed page, and printing portrait rather than landscape now gets its own layout, with the steps in two columns at full size, still on one page. When a sheet is too tall for one page, the map now gives up height before any text is made smaller, so dense pathways print with noticeably larger type than before. The one-page fit also applies when steps show their individual visits; a few visit-heavy pathways that cannot fit one page at readable size now break onto a second page at a whole step, never mid-text.' },

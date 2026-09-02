@@ -153,8 +153,8 @@ body.patient .main{padding:24px 20px 60px}
 .sh-title{font:600 28px/1.15 var(--serif);margin:20px 0 6px;letter-spacing:-.01em;max-width:36ch}
 .sh-sub{margin:0;font-size:13.5px;color:var(--ink-2);max-width:82ch}
 .sh-total{margin:5px 0 0;font-size:13px;color:var(--muted)}
-.chosen{border:1px solid var(--line);border-radius:10px;padding:13px 16px 11px;margin-top:23px}
-.chosen h2{font:600 13.5px/1.3 var(--serif);margin:0 0 7px;color:var(--ink)}
+.chosen{border:1px solid var(--ink);border-left:4px solid var(--ink);border-radius:10px;padding:14px 16px 12px;margin-top:23px;background:#faf9f6}
+.chosen h2{font:600 14.5px/1.3 var(--serif);margin:0 0 8px;color:var(--ink)}
 .chosen ul{list-style:none;margin:0;padding:0}
 .chosen li{display:flex;gap:8px;font-size:11.5px;line-height:1.4;padding:2.5px 0;color:var(--ink-2)}
 .chosen .ck{color:var(--ink);font-weight:700;flex:none}
@@ -163,15 +163,15 @@ body.patient .main{padding:24px 20px 60px}
 .steps{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px}
 .step{display:grid;grid-template-columns:22px 1fr;gap:6px;break-inside:avoid}
 .step-n{font:600 15px/1 var(--serif);color:var(--ink);padding-top:2px}
-.step h3{margin:0;font-size:13.5px;line-height:1.25;display:flex;align-items:flex-start;gap:7px}
+.step h3{margin:0;font-size:14px;line-height:1.25;display:flex;align-items:flex-start;gap:7px}
 .chip{width:10px;height:10px;border-radius:2px;flex:none;margin-top:3px;background:var(--c1)}
 .chip.two{background:linear-gradient(180deg,var(--c1) 50%,var(--c2) 50%)}
 .chip.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
-.step p{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
-.step p.meta{color:var(--muted);font-size:11.5px}
+.step p{margin:4px 0 0;font-size:13px;line-height:1.48;color:var(--ink-2)}
+.step p.meta{color:var(--muted);font-size:12px}
 .step.rest .step-n{color:var(--muted)}
 .step.rest h3{font-weight:600;color:var(--ink-2)}
-.also{margin-top:6px;padding:6px 8px;background:var(--line-2);border-radius:6px;font-size:12px;line-height:1.4}
+.also{margin-top:6px;padding:6px 8px;background:var(--line-2);border-radius:6px;font-size:12.5px;line-height:1.42}
 .also b{font-weight:700}
 .also .chip{display:inline-block;vertical-align:-1px;margin:0 4px 0 0}
 .fork{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;margin-top:2px}
@@ -184,7 +184,7 @@ body.patient .main{padding:24px 20px 60px}
 .branch h4{margin:0 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600}
 .branch .steps{grid-template-columns:1fr;gap:8px;margin:0}
-.visits{margin:6px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}
+.visits{margin:6px 0 0;padding:0;list-style:none;font-size:12px;color:var(--ink-2)}
 .visits li{display:flex;gap:8px;padding:2px 0;border-top:1px dotted var(--line)}
 .visits li span:first-child{color:var(--muted);flex:none;width:112px}
 .sh-bottom{margin-top:16px;display:grid;gap:12px}
@@ -225,7 +225,7 @@ body.patient .main{padding:24px 20px 60px}
 .opt-card .oh{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;margin-bottom:2px}
 .sh-foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;font-size:11px;color:var(--muted);line-height:1.45}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
-.legend span{display:inline-flex;align-items:center;gap:5px;color:var(--ink-2);font-size:11px}
+.legend span{display:inline-flex;align-items:center;gap:5px;color:var(--ink-2);font-size:11.5px}
 .legend i{width:9px;height:9px;border-radius:2px;background:var(--c)}
 .legend i.rest{background:repeating-linear-gradient(45deg,#E9EDF2 0 2px,#C9D1DC 2px 4px)}
 .qrwrap{text-align:center;font-size:10px;color:var(--muted)}
@@ -237,17 +237,24 @@ body.patient .main{padding:24px 20px 60px}
   .mbar button{flex:1;padding:11px 10px;font-size:14px}
   body.patient .mbar{display:none}
   .sidebar{padding-bottom:84px}
-  .route{display:block!important;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-left:-20px;margin-right:-20px;padding:0 20px 6px}
-  .route svg{width:900px;max-width:none}
-  .route::after{content:"Swipe to see the whole timeline";display:block;font-size:11px;color:var(--muted);margin-top:4px}
+  .route{display:block!important;margin:0 0 2px}
+  .route svg{width:100%;height:auto;max-width:100%}
+  .route::after{content:"Pinch to zoom in on the timeline";display:block;font-size:11px;color:var(--muted);margin-top:4px}
   .topbar{padding:8px 12px;gap:8px}
   .topbar>div:first-child{display:none}
   .topbar .tb-r{width:100%}
   .topbar .tb-r .btn{flex:1}
   .topbar .btn{padding:7px 10px;font-size:12.5px;white-space:nowrap}
-  .app{grid-template-columns:1fr;height:auto}
-  .sidebar{border-right:0;border-bottom:1px solid var(--line);overflow:visible}
+  .app{display:flex;flex-direction:column;height:auto}
+  .main{order:-1}
+  .sidebar{border-right:0;border-top:1px solid var(--line);overflow:visible}
   .main{padding:16px}
+  section.sec>h2{cursor:pointer}
+  section.sec:not(#sec-regimen)>h2{display:flex;align-items:center}
+  section.sec:not(#sec-regimen)>h2::after{content:"\25BE";margin-left:auto;color:var(--muted);font-size:11px}
+  section.sec.mclosed>h2::after{content:"\25B8"}
+  section.sec.mclosed>h2{margin-bottom:0}
+  section.sec.mclosed>:not(h2){display:none}
   .sheet{padding:24px 20px 24px}
   .sh-title{font-size:23px}
   .sh-top{grid-template-columns:1fr;gap:4px}
@@ -263,7 +270,6 @@ body.patient .main{padding:24px 20px 60px}
   .cmp-c.rec{background:none}
   .cmp-c.h.rec{border-top-color:var(--ink)}
   .mlab{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-  .route{display:none}
   .sh-foot{grid-template-columns:1fr}
   .qrwrap{text-align:left}
   .qrwrap svg{margin:0 0 3px}
@@ -278,7 +284,7 @@ body.patient .main{padding:24px 20px 60px}
   .cmpg{grid-template-columns:calc(var(--k,1)*80px) repeat(var(--nc,2),1fr)}
 }
 @media print{
-  @page{size:landscape;margin:.35in}
+  @page{size:landscape;margin:.15in .35in}
   .step,.also,.branch,.fork,.chosen,.sh-foot,.cmp-c{break-inside:avoid;page-break-inside:avoid}
   body{background:#fff}
   .app{display:block;height:auto}
@@ -301,11 +307,11 @@ body.patient .main{padding:24px 20px 60px}
   .chosen li{font-size:calc(var(--k,1)*9.5px);padding:calc(var(--k,1)*2px) 0;gap:calc(var(--k,1)*6px)}
   .step{grid-template-columns:calc(var(--k,1)*18px) 1fr;gap:calc(var(--k,1)*5px)}
   .step-n{font-size:calc(var(--k,1)*12px)}
-  .step h3{font-size:calc(var(--k,1)*11.5px)}
-  .step p{font-size:calc(var(--k,1)*10.5px);line-height:1.35;margin-top:calc(var(--k,1)*3px)}
-  .step p.meta{font-size:calc(var(--k,1)*9.5px)}
+  .step h3{font-size:calc(var(--k,1)*12px)}
+  .step p{font-size:calc(var(--k,1)*11px);line-height:1.36;margin-top:calc(var(--k,1)*3px)}
+  .step p.meta{font-size:calc(var(--k,1)*10px)}
   .chip{width:calc(var(--k,1)*9px);height:calc(var(--k,1)*9px);margin-top:calc(var(--k,1)*2px)}
-  .also{font-size:calc(var(--k,1)*10px);padding:calc(var(--k,1)*4px) calc(var(--k,1)*6px);margin-top:calc(var(--k,1)*4px)}
+  .also{font-size:calc(var(--k,1)*10.5px);padding:calc(var(--k,1)*4px) calc(var(--k,1)*6px);margin-top:calc(var(--k,1)*4px)}
   .fork{padding-top:calc(var(--k,1)*8px)}
   .fork>h3{font-size:calc(var(--k,1)*12.5px);margin-bottom:calc(var(--k,1)*2px)}
   .fork>p{font-size:calc(var(--k,1)*10.5px);margin-bottom:calc(var(--k,1)*6px)}
@@ -313,7 +319,7 @@ body.patient .main{padding:24px 20px 60px}
   .branch h4{font-size:calc(var(--k,1)*11px);margin-bottom:calc(var(--k,1)*4px)}
   .branch .steps{gap:calc(var(--k,1)*6px)}
   .tag{font-size:calc(var(--k,1)*9px);padding:calc(var(--k,1)*1.5px) calc(var(--k,1)*5px)}
-  .visits{font-size:calc(var(--k,1)*9.5px)}
+  .visits{font-size:calc(var(--k,1)*10px)}
   .visits li span:first-child{width:calc(var(--k,1)*88px)}
   .sh-notes{font-size:calc(var(--k,1)*10.5px);padding:calc(var(--k,1)*8px) calc(var(--k,1)*10px);margin-top:calc(var(--k,1)*10px)}
   .sh-foot{grid-template-columns:1fr auto;font-size:calc(var(--k,1)*9px);margin-top:calc(var(--k,1)*10px);padding-top:calc(var(--k,1)*8px)}
@@ -428,6 +434,7 @@ body.patient .main{padding:24px 20px 60px}
     <div class="btns">
       <button class="btn" id="print">Print or save as PDF</button>
       <button class="btn sec" id="preview">Preview as the patient</button>
+      <button class="btn sec" id="saveimg">Save as image (PNG)</button>
     </div>
     <div class="linkbox"><input type="text" id="linkout" readonly placeholder="Link appears here"><button class="btn sec" id="copylink">Copy link</button></div>
     <div class="qr-side" id="qrside"></div>
@@ -560,7 +567,7 @@ const REASONS = [
 ];
 const REASON_DEFAULTS = [true, true, true, true, false, false];
 const state = {
-  tab:'breast', view:'roadmap', regimen:null, origin:null, originId:null, custom:false,
+  tab:'breast', view:'roadmap', regimen:null, origin:null, originId:null, custom:false, shortTouched:new Set(),
   opts:{ clinic:'', physician:'', contact:'', startDate:'', detail:'overview', notes:'', showTrial:true, qr:true,
          reasonsOn:true, reasons:REASON_DEFAULTS.slice(), customReasons:['',''],
          progressBoxes:false, progressDim:true },
@@ -818,7 +825,7 @@ function renderCompareEditor(){
   </div>`).join('') + `<div class="add">${c.options.length < 4 ? `<button type="button" data-cact="add">+ Another option</button>` : ''}<button type="button" data-cact="norec">Clear recommendation</button></div>`;
 }
 /* ===================== timeline layout ===================== */
-const L = { W:960, rowH:100, barY:38, barH:24, nameY:33, durY:74, startY:86, gap:4, fork:118, forkSingle:70, merge:16, evW:22, diamond:20, minPhase:58, minRest:20, maxScale:34 };
+const L = { W:960, rowH:104, barY:40, barH:24, nameY:34, durY:77, startY:90, gap:4, fork:118, forkSingle:70, merge:16, evW:22, diamond:20, minPhase:58, minRest:20, maxScale:34 };
 const units = (w) => w <= 0 ? 0 : w <= 16 ? w : w <= 52 ? 16 + (w - 16) * 0.45 : 32.2 + (w - 52) * 0.08;
 const TREAT = ['chemo', 'io', 'targeted', 'radiation'];
 const lenUnknown = (n) => n.t === 'phase' && n.mode === 'weekdays' && !(+n.weeks > 0);
@@ -970,8 +977,8 @@ function renderRoute(ctx, startDate, colors){
   for (const f of ctx.forks){
     g += curve(f.fx, cy(f.frow), f.tx, cy(f.trow), f.dim);
     const lines = wrapText(f.cond, 21);
-    if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 11, ln, { size:9.5, fill:'#3B4557', weight:600, halo:3.5 }); }); }
-    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 11; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 11, ln, { size:9.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400, halo:3.5 }); }); }
+    if (f.single){ lines.forEach((ln, i) => { g += T(f.fx + 8, cy(f.frow) + 24 + i * 12, ln, { size:10.5, fill:'#3B4557', weight:600, halo:3.5 }); }); }
+    else { const base = cy(f.trow) - 10 - (lines.length - 1) * 12; lines.forEach((ln, i) => { g += T(f.tx - 6, base + i * 12, ln, { size:10.5, anchor:'end', fill: f.dim ? '#9AA3B2' : '#172033', weight: f.expected ? 700 : 400, halo:3.5 }); }); }
   }
   for (const m of ctx.merges){ for (const e of m.ends) g += curve(e.x, cy(e.row), m.tx, cy(m.trow)); }
   const prevUp = (i) => { const it = ctx.items[i]; for (let j = i - 1; j >= 0; j--){ const q = ctx.items[j]; if (q.kind === 'up' && q.row === it.row && q.lane === it.lane) return j; } return -1; };
@@ -988,16 +995,16 @@ function renderRoute(ctx, startDate, colors){
     if (it.kind === 'decision'){
       const cx = it.x + L.diamond / 2, c = cy(it.row);
       s += `<path d="M${cx} ${c - 10} L${cx + 10} ${c} L${cx} ${c + 10} L${cx - 10} ${c} Z" fill="#fff" stroke="#172033" stroke-width="1.6"/>`;
-      s += T(cx, y0 + nameY, n.short || 'Results', { size:10.5, weight:700, fill:'#172033', anchor:'middle' });
+      s += T(cx, y0 + nameY, n.short || 'Results', { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
     } else if (it.kind === 'event'){
       s += `<rect x="${it.x + 5}" y="${y0 + barY - 5}" width="12" height="${L.barH + 10}" rx="3" fill="#172033"/>`;
-      s += T(it.x + 11, y0 + nameY, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:10.5, weight:700, fill:'#172033', anchor:'middle' });
-      if (!ctx.noDate.has(n.id)) s += T(it.x + 11, y0 + startY, startText(it.week), { size:9.5, anchor:'middle' });
+      s += T(it.x + 11, y0 + nameY, trunc(n.name.replace(/\s*\(.*\)\s*$/, ''), 12), { size:11.5, weight:700, fill:'#172033', anchor:'middle' });
+      if (!ctx.noDate.has(n.id)) s += T(it.x + 11, y0 + startY, startText(it.week), { size:10.5, anchor:'middle' });
     } else if (it.kind === 'up'){
       const ly = y0 + extra + 12 - it.lane * 20;
       s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="url(#fade)"/>`;
-      if (!continued.has(idx)){ const ci = chainInfo(idx); s += T(ci.x, ly - 3.5, ci.text, { size:9.5, fill:'#3B4557', weight:600 }); }
+      if (!continued.has(idx)){ const ci = chainInfo(idx); s += T(ci.x, ly - 3.5, ci.text, { size:10.5, fill:'#3B4557', weight:600 }); }
     } else {
       const w = nodeWeeks(n);
       s += `<rect x="${it.x}" y="${y0 + barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="${fillFor(n)}"/>`;
@@ -1009,11 +1016,11 @@ function renderRoute(ctx, startDate, colors){
         const hasUp = ctx.items.some(u => u.kind === 'up' && u.row === it.row && Math.abs(u.x - it.x) < 1);
         let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
         if (lines.length > 1 && hasUp) lines = [trunc(label, maxC)];
-        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 11.5, ln, { size:11.5, weight:700, fill:'#172033' }); });
-        s += T(it.x + 2, y0 + durY, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w), { size:10 });
-        if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + startY, startText(it.week), { size:9.5 });
+        lines.forEach((ln, i) => { s += T(it.x + 2, y0 + nameY - (lines.length - 1 - i) * 12.5, ln, { size:12.5, weight:700, fill:'#172033' }); });
+        s += T(it.x + 2, y0 + durY, n.openEnded ? 'ongoing' : (n.mode === 'weekdays' && !(w > 0)) ? 'to be set' : durShort(w), { size:11 });
+        if (!ctx.noDate.has(n.id)) s += T(it.x + 2, y0 + startY, startText(it.week), { size:10.5 });
       } else {
-        s += T(it.x + 1, y0 + durY, durShort(w), { size:9.5 });
+        s += T(it.x + 1, y0 + durY, durShort(w), { size:10.5 });
       }
     }
     const doneDim = state.opts.progressDim && it.node && it.node.done && it.kind !== 'decision';
@@ -1471,8 +1478,13 @@ function bind(){
     }
     if (!el.dataset.p || !el.dataset.k) return;
     const n = nodeAt(el.dataset.p); const k = el.dataset.k;
+    if (k === 'short') state.shortTouched.add(n.id);
     setField(n, k, el);
     const card = el.closest('.node');
+    if (k === 'name' && n.t !== 'decision' && !state.shortTouched.has(n.id)){
+      n.short = n.name;
+      const si = card.querySelector('input[data-k=short]'); if (si) si.value = n.short;
+    }
     if (k === 'mode' || k === 'emph' || k === 'only' || k === 'shade'){ if (e.type === 'change'){ renderEditor(); scheduleSheet(); } return; }
     if (k === 'on') card.classList.toggle('off', n.on === false);
     if (k === 'concurrent'){ card.classList.toggle('conc', !!n.concurrent); if (!n.concurrent) n.afterPrev = false; renderEditor(); }
@@ -1485,6 +1497,15 @@ function bind(){
   side.addEventListener('change', onEdit);
 
   $('#reset').onclick = () => { if (state.originId && loadRegimen(state.originId)) renderAll(); else { state.regimen = clone(state.origin); renderAll(); } toast('Reset'); };
+  $('#saveimg').onclick = () => saveImage().catch(() => toast('Could not create the image in this browser'));
+  const phoneMq = matchMedia('(max-width:900px)');
+  if (phoneMq.matches) $$('section.sec').forEach(s => { if (s.id !== 'sec-regimen') s.classList.add('mclosed'); });
+  $('#sidebar').addEventListener('click', (e) => {
+    if (!phoneMq.matches) return;
+    const h2 = e.target.closest('section.sec>h2');
+    if (!h2 || h2.parentElement.id === 'sec-regimen' || e.target.closest('button,input,select,a')) return;
+    h2.parentElement.classList.toggle('mclosed');
+  });
   $('#print').onclick = () => { applyPrintZoom(); window.print(); };
   $('#tb-print').onclick = () => { applyPrintZoom(); window.print(); };
   const preview = () => { document.body.classList.add('patient'); const b = $('#tb-back'); b.hidden = false; b.textContent = 'Back to builder'; window.scrollTo(0, 0); };
@@ -1577,14 +1598,61 @@ function printFit(width, target, portrait){
 }
 // content box at .35in margins: landscape height binds on A4 (727px), width on
 // Letter (985px); portrait width binds on A4 (727px), height on Letter (985px)
+async function saveImage(){
+  const sheet = $('#sheet');
+  const W = Math.max(900, Math.round(sheet.getBoundingClientRect().width) || 1000);
+  let css = '';
+  for (const ss of document.styleSheets){
+    try { for (const r of ss.cssRules) css += r.cssText + '\n'; } catch (e) {}
+  }
+  const fontFiles = ['atkinson-hyperlegible-latin-400-normal','atkinson-hyperlegible-latin-400-italic','atkinson-hyperlegible-latin-700-normal','source-serif-4-latin-500-normal','source-serif-4-latin-600-normal'];
+  for (const f of fontFiles){
+    try {
+      const bytes = new Uint8Array(await (await fetch('fonts/' + f + '.woff2')).arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+      css = css.replace(new RegExp('url\\((["\\\']?)[^)]*' + f + '\\.woff2\\1\\)', 'g'), 'url(data:font/woff2;base64,' + btoa(bin) + ')');
+    } catch (e) {}
+  }
+  const cl = sheet.cloneNode(true);
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `position:absolute;left:-99999px;top:0;width:${W}px;background:#fff;`;
+  wrap.appendChild(cl); document.body.appendChild(wrap);
+  const H = Math.ceil(cl.getBoundingClientRect().height) + 2;
+  const body = new XMLSerializer().serializeToString(cl);
+  wrap.remove();
+  const safeCss = css.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;background:#fff"><style>${safeCss}</style>${body}</div></foreignObject></svg>`;
+  await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = 2;
+        const c = document.createElement('canvas');
+        c.width = W * scale; c.height = H * scale;
+        const g = c.getContext('2d');
+        g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+        g.scale(scale, scale); g.drawImage(img, 0, 0);
+        const a = document.createElement('a');
+        a.download = ((state.regimen && state.regimen.name) || 'treatment-map').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() + '.png';
+        a.href = c.toDataURL('image/png');
+        a.click();
+        toast('Image saved to your downloads');
+        resolve();
+      } catch (e) { reject(e); }
+    };
+    img.onerror = reject;
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+}
 function applyPrintZoom(){
   // Some print pipelines drop custom properties, so inject the computed values
   // concretely, overriding the var(--k,1) / var(--maph,230px) defaults.
   let st = $('#fitcss');
   if (!st){ st = document.createElement('style'); st.id = 'fitcss'; document.head.appendChild(st); }
   const fill = (tpl, f) => tpl.replace(/var\(--k[^)]*\)/g, String(f.k)).replace(/var\(--maph[^)]*\)/g, f.maph + 'px');
-  const L = printFit(985, 722, false);
-  const P = printFit(727, 980, true);
+  const L = printFit(985, 760, false);
+  const P = printFit(727, 1018, true);
   let css = '';
   const lFits = L.k >= 0.995 && L.maph >= 230;
   const pFits = P.k >= 0.995 && P.maph >= 230;
