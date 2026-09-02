@@ -1036,14 +1036,37 @@ function renderRoute(ctx, startDate, colors){
       const ly = y0 + extra + 12 - it.lane * 20;
       s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="url(#fade)"/>`;
-      if (!continued.has(idx)){ const ci = chainInfo(idx); const budget = Math.max(8, Math.floor((it.x + it.w - ci.x + 24) / 6.1)); s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:10.5, fill:'#3B4557', weight:600 }); }
+      if (!continued.has(idx)){
+        const ci = chainInfo(idx);
+        // run until the next label on the same lane, else the row's extent
+        let laneEnd = null;
+        for (let j = idx + 1; j < ctx.items.length && laneEnd == null; j++){
+          const q = ctx.items[j];
+          if (q.kind === 'up' && q.row === it.row && q.lane === it.lane && !q.node.afterPrev) laneEnd = q.x - 8;
+        }
+        if (laneEnd == null){ const e = ctx.rowExt[it.row]; laneEnd = (e && isFinite(e.max) ? e.max : it.x + it.w) + 12; }
+        const budget = Math.max(8, Math.floor((Math.min(laneEnd, width - 4) - ci.x) / 6.1));
+        s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:10.5, fill:'#3B4557', weight:600 });
+      }
     } else {
       const w = nodeWeeks(n);
       s += `<rect x="${it.x}" y="${y0 + barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${y0 + barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="url(#fade)"/>`;
       if (w > 52 && it.w > 70){ const bx = it.x + it.w * 0.72; s += `<path d="M${bx - 3} ${y0 + barY + L.barH + 3} L${bx + 3} ${y0 + barY - 3} M${bx + 3} ${y0 + barY + L.barH + 3} L${bx + 9} ${y0 + barY - 3}" stroke="#fff" stroke-width="2.5"/>`; }
       if (it.kind === 'phase'){
-        const maxC = Math.max(4, Math.floor((it.w + 4) / 7.2));
+        // a label may run past its own bar into empty space, up to the next
+        // item on the row that draws its own name (rests draw none)
+        let labelEnd = null;
+        for (let j = idx + 1; j < ctx.items.length && labelEnd == null; j++){
+          const q = ctx.items[j];
+          if (q.row !== it.row || q.kind === 'up') continue;
+          if (q.kind === 'phase') labelEnd = q.x - 8;
+          else if (q.kind === 'event') labelEnd = q.x - 30;
+          else if (q.kind === 'decision') labelEnd = q.x - 28;
+        }
+        if (labelEnd == null){ const e = ctx.rowExt[it.row]; labelEnd = (e && isFinite(e.max) ? e.max : it.x + it.w) + 12; }
+        labelEnd = Math.min(labelEnd, width - 4);
+        const maxC = Math.max(4, Math.floor((Math.max(it.w, labelEnd - it.x) + 4) / 7.2));
         const label = n.short || n.name;
         const hasUp = ctx.items.some(u => u.kind === 'up' && u.row === it.row && Math.abs(u.x - it.x) < 1);
         let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
