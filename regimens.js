@@ -1042,8 +1042,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.11.0';
+const APP_VERSION = '0.12.0';
 const CHANGELOG = [
+  { date:'2026-09-02', text:'The handout can now carry a "Prepared for ____" line for the patient\'s name, on by default and printed blank on purpose: write the name in by hand, or type it into the saved PDF, so it never touches the browser. On the map, labels for treatment given alongside another step now use the same type as every other step label, and the Surgery label no longer touches its marker.' },
   { date:'2026-09-02', text:'On a phone, the builder now starts with the pathway list, and tapping a pathway shows a compact preview (title and timeline) right below it. "Use this pathway" pins the handout to the top, collapsed to the map with a button to show the full handout, and the editing steps continue underneath. Links that open a specific map are unchanged.' },
   { date:'2026-09-02', text:'Adding a treatment type to a step now updates its timeline label as well: a chemotherapy step gains "+ immunotherapy" the moment that type is ticked, and removing the type takes it back off. Labels that already name the added type are left alone.' },
   { date:'2026-09-02', text:'The builder can now save the handout as an image (PNG), ready to paste into a chart or an after-visit summary; everything still happens in your browser. Renaming a step now updates its label on the timeline too, unless you have typed your own short label. On a phone, the preview sits at the top with the timeline scaled to fit the screen (pinch to zoom), and the editing sections open with a tap. Handout type is larger on the map and in the step list, the web address no longer prints at the bottom of the page in most browsers, and the site\'s own fonts now load as intended. The abemaciclib pathway no longer mentions ribociclib; that option lives in its own NATALEE pathway.' },
