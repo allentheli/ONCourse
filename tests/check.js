@@ -60,6 +60,43 @@ if (!/^\d+\.\d+(\.\d+)?$/.test(APP_VERSION)) errors.push('APP_VERSION must look 
 }
 for (const c of CHANGELOG){ if (!c.date || !c.text) errors.push('CHANGELOG entry missing date or text'); }
 if (CHANGELOG[0] && LIBRARY.some(r => r.added === CHANGELOG[0].date) === false) warnings.push('Newest changelog date matches no regimen "added" date — fine if the change was not a new regimen');
+// privacy guardrail: the site promises that nothing leaves the browser, so no page,
+// script, or stylesheet may load or call an external resource. Plain <a href> links are fine.
+{
+  const fs = require('fs'), path = require('path');
+  const root = path.join(__dirname, '..');
+  const ALLOW = ['allentheli.github.io', 'www.w3.org'];
+  const PATTERNS = [
+    [/<(?:script|img|iframe|video|audio|source)\b[^>]*\ssrc\s*=\s*["']?(https?:\/\/[^"'\s>]+)/gi, 'src attribute'],
+    [/<link\b[^>]*\shref\s*=\s*["']?(https?:\/\/[^"'\s>]+)/gi, '<link> href'],
+    [/url\(\s*["']?(https?:\/\/[^"')\s]+)/gi, 'CSS url()'],
+    [/\bfetch\(\s*["'`](https?:\/\/[^"'`]+)/gi, 'fetch()'],
+    [/\.open\(\s*["'][A-Z]+["']\s*,\s*["'`](https?:\/\/[^"'`]+)/gi, 'XMLHttpRequest'],
+    [/\bimport\b[^;\n]*?\bfrom\s*["'](https?:\/\/[^"']+)/gi, 'ES import'],
+    [/\bimport\(\s*["'`](https?:\/\/[^"'`]+)/gi, 'dynamic import'],
+  ];
+  const files = [];
+  (function walk(dir){
+    for (const name of fs.readdirSync(dir)){
+      if (name === 'node_modules' || name.startsWith('.')) continue;
+      const p = path.join(dir, name);
+      if (fs.statSync(p).isDirectory()) walk(p);
+      else if (/\.(html|js|css)$/.test(name)) files.push(p);
+    }
+  })(root);
+  for (const f of files){
+    const lines = fs.readFileSync(f, 'utf8').split('\n');
+    lines.forEach((line, i) => {
+      for (const [re, what] of PATTERNS){
+        re.lastIndex = 0; let m;
+        while ((m = re.exec(line))){
+          let host = ''; try { host = new URL(m[1]).hostname; } catch (e) {}
+          if (!ALLOW.includes(host)) errors.push(`${path.relative(root, f)}:${i + 1} external ${what} ${m[1]} (nothing may leave the browser)`);
+        }
+      }
+    });
+  }
+}
 console.log(`ONCourse library check: ${LIBRARY.length} pathways, version ${APP_VERSION}, ${CHANGELOG.length} changelog entries`);
 warnings.forEach(w => console.log('  warning:', w));
 errors.forEach(e => console.log('  ERROR:', e));
