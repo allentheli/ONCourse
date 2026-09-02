@@ -687,6 +687,8 @@ const MOD_TEXT = {
   radiation: { re:/radiation|radiotherap/i,                                       add:'This step includes radiation treatment.' },
   watch:     { re:/monitor|surveillance|watch|scan|follow-up/i,                   add:'This step is monitoring rather than treatment.' },
 };
+// words appended to the timeline label when a type is added to a step
+const MOD_WORD = { chemo:'chemo', io:'immunotherapy', targeted:'targeted therapy', endocrine:'hormone therapy', radiation:'radiation' };
 // types that are on the step but not mentioned in the patient text
 function missingModText(n){
   if (n.t !== 'phase') return [];
@@ -1438,10 +1440,17 @@ function bind(){
     }
     if (t.dataset.mod){
       const n = nodeAt(t.closest('.node').dataset.path); const k = t.dataset.mod; n.mods = n.mods || [];
+      const before = n.mods.includes(k);
       if (k === 'watch'){ n.mods = ['watch']; }
       else {
         n.mods = n.mods.filter(x => x !== 'watch');
-        if (n.mods.includes(k)){ if (n.mods.length > 1) n.mods = n.mods.filter(x => x !== k); } else n.mods.push(k);
+        if (before){ if (n.mods.length > 1) n.mods = n.mods.filter(x => x !== k); } else n.mods.push(k);
+      }
+      const after = n.mods.includes(k), w = MOD_WORD[k];
+      if (n.t === 'phase' && w && after !== before){
+        const cur = n.short || n.name || '';
+        if (after && !MOD_TEXT[k].re.test(cur)) n.short = cur + ' + ' + w;
+        else if (!after && cur.includes(' + ' + w)) n.short = cur.replace(' + ' + w, '');
       }
       renderEditor(); scheduleSheet(); return;
     }
