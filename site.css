@@ -173,6 +173,9 @@ ul.cal li.q{justify-content:center;color:var(--muted);font-style:italic}
 .portal td:last-child{color:var(--ink);font-weight:700}
 .imgcard{border:1px solid var(--line);border-radius:10px;padding:16px 14px 10px;background:#fff;box-shadow:0 10px 30px rgba(23,32,51,.08)}
 .imgcard img{width:100%;height:auto;display:block}
+.demo{margin:36px 0 0;padding-bottom:12px}
+.demo video{width:100%;height:auto;display:block;border-radius:6px;background:#fff}
+.demo figcaption{margin:12px 2px 0;font-size:14px;color:var(--ink-2)}
 .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 /* icon, number and title share one header row; the paragraph runs below */
 .steps3>div{display:grid;grid-template-columns:38px 1fr;gap:1px 12px;align-content:start}
