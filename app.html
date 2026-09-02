@@ -262,7 +262,11 @@ body.patient .main{padding:24px 20px 60px}
   #mpeek .hint{margin-top:6px;text-align:center}
   body.msheet .sheet>.sh-head,body.msheet .sheet>.steps,body.msheet .sheet>.sh-bottom,body.msheet .sheet>.sh-foot{display:none}
   body.msheet .sheet .sh-top .chosen{display:none}
-  body.msheet .sheet{padding-bottom:10px}
+  body.msheet .sheet .sh-sub,body.msheet .sheet .sh-for{display:none}
+  body.msheet .sheet .sh-title{font-size:18px;margin:0 0 2px}
+  body.msheet .sheet .sh-total{margin-top:0}
+  body.msheet .sheet{padding:12px 16px 8px}
+  body.msheet .main{position:sticky;top:0;z-index:9;background:var(--paper);padding:8px 12px;box-shadow:0 8px 16px rgba(23,32,51,.09)}
   #mexpand{width:100%;margin-top:8px}
   section.sec>h2{cursor:pointer}
   section.sec:not(#sec-regimen)>h2{display:flex;align-items:center}
@@ -1561,11 +1565,11 @@ function bind(){
   });
   $('#print').onclick = () => { applyPrintZoom(); window.print(); };
   $('#tb-print').onclick = () => { applyPrintZoom(); window.print(); };
-  const preview = () => { document.body.classList.add('patient'); const b = $('#tb-back'); b.hidden = false; b.textContent = 'Back to builder'; window.scrollTo(0, 0); };
+  const preview = () => { state.msheetWas = document.body.classList.contains('msheet'); document.body.classList.remove('msheet'); document.body.classList.add('patient'); const b = $('#tb-back'); b.hidden = false; b.textContent = 'Back to builder'; window.scrollTo(0, 0); };
   $('#preview').onclick = preview;
   $('#m-preview').onclick = preview;
   $('#m-print').onclick = () => { applyPrintZoom(); window.print(); };
-  $('#tb-back').onclick = () => { document.body.classList.remove('patient'); if (state.demo){ state.demo = false; $('#tb-back').textContent = 'Back to builder'; } };
+  $('#tb-back').onclick = () => { document.body.classList.remove('patient'); if (state.msheetWas){ document.body.classList.add('msheet'); state.msheetWas = false; } if (state.demo){ state.demo = false; $('#tb-back').textContent = 'Back to builder'; } };
   $('#copylink').onclick = async () => {
     if (!state.link){ toast('Host this file online first to get a link'); return; }
     try { await navigator.clipboard.writeText(state.link); toast('Link copied'); } catch (e) { $('#linkout').select(); toast('Select the link and copy it'); }
