@@ -260,6 +260,7 @@ body.patient .main{padding:24px 20px 60px}
   #mpeek .route svg{width:100%;height:auto;max-width:100%}
   #mpeek .btn{width:100%;margin-top:8px}
   #mpeek .hint{margin-top:6px;text-align:center}
+  #reglist #mpeek{margin:6px 0 12px}
   body.msheet .sheet>.sh-head,body.msheet .sheet>.steps,body.msheet .sheet>.sh-bottom,body.msheet .sheet>.sh-foot{display:none}
   body.msheet .sheet .sh-top .chosen{display:none}
   body.msheet .sheet .sh-sub,body.msheet .sheet .sh-for{display:none}
@@ -665,6 +666,8 @@ function regText(r){
   return parts.filter(Boolean).join(' ').toLowerCase();
 }
 function renderList(){
+  const peek = $('#mpeek');
+  if (peek && peek.closest('#reglist')) $('#sec-regimen').after(peek);
   const btn = (r) => `<button class="reg${state.originId === r.id ? ' on' : ''}" data-reg="${esc(r.id)}"><b>${esc(r.name)}</b><span>${esc(r.summary || '')}</span></button>`;
   const q = (state.q || '').trim().toLowerCase();
   $('#tabs').hidden = !!q;
@@ -686,6 +689,7 @@ function renderList(){
     items = groups.map(g => `<div class="reggrp">${esc(g)}</div>` + list.filter(r => (r.group || 'Other') === g).map(btn).join('')).join('');
   }
   $('#reglist').innerHTML = items + `<button class="reg blank" data-newreg="1"><b>＋ Build your own</b><span>Start a blank regimen and add steps freehand.</span></button>`;
+  renderPeek();
 }
 
 /* ===================== step editor ===================== */
@@ -1178,14 +1182,16 @@ function renderSheet(){
 }
 function renderPeek(){
   const peek = $('#mpeek');
-  if (!document.body.classList.contains('mpick')){ peek.hidden = true; return; }
+  if (!peek || !document.body.classList.contains('mpick') || !state.regimen){ if (peek) peek.hidden = true; return; }
   const r = state.regimen, route = $('#sheet .route');
   peek.hidden = false;
   peek.innerHTML = `<b>${esc(r.plan || r.title || r.name)}</b>` +
     `<p class="sub">${r.subtitle ? `For ${esc(r.subtitle)}.` : ''}</p>` +
     (route ? `<section class="route">${route.innerHTML}</section>` : '') +
     `<button type="button" class="btn primary" data-mconfirm>Use this pathway</button>` +
-    `<p class="hint">or tap another pathway in the list above to preview it here</p>`;
+    `<p class="hint">or tap another pathway to preview it here</p>`;
+  const row = state.originId && $('#reglist') && $('#reglist').querySelector(`.reg[data-reg="${CSS.escape(state.originId)}"]`);
+  if (row) row.insertAdjacentElement('afterend', peek);
 }
 function mConfirm(){
   document.body.classList.remove('mpick');
@@ -1470,7 +1476,7 @@ function bind(){
     }
     if (t.dataset.tab){ state.tab = t.dataset.tab; renderTabs(); renderList(); return; }
     if (t.dataset.reg){ if (loadRegimen(t.dataset.reg)) renderAll(); return; }
-    if (t.dataset.newreg){ blankRegimen(); renderAll(); collapsePicker(true); return; }
+    if (t.dataset.newreg){ blankRegimen(); renderAll(); if (document.body.classList.contains('mpick')) mConfirm(); else collapsePicker(true); return; }
     if (t.id === 'picker-toggle'){ collapsePicker(false); return; }
     if (t.id === 'picker-confirm'){ if (document.body.classList.contains('mpick')) mConfirm(); else collapsePicker(true); return; }
     if (t.dataset.mconfirm !== undefined){ mConfirm(); return; }
