@@ -10,6 +10,7 @@ body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);f
 a{color:var(--accent)}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 header.top{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+section,[id]{scroll-margin-top:76px}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:600 21px/1 var(--serif);letter-spacing:-.01em}
 .logo svg{width:30px;height:30px}

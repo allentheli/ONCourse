@@ -33,7 +33,7 @@
   <h3>2. Adjust the steps</h3>
   <p>This is where most of the work happens. Every step is a row; click one to open it. You can change all of it:</p>
   <ul class="checks">
-    <li><b>Name and description.</b> The description is what the patient reads, so keep it plain. Drug doses do not belong on the patient page.</li>
+    <li><b>Name and description.</b> The description is what the patient reads, so keep it plain. Drug doses do not belong on the patient page. Renaming a step also renames its label on the timeline; if you want the timeline to show something shorter, type it in <b>Short label on the timeline</b> and it will stick.</li>
     <li><b>Schedule.</b> Cycle length and number of cycles for infusions; weeks for daily tablets, radiation, or monitoring. The duration updates as you type.</li>
     <li><b>Treatment type.</b> Sets the color of the bar and what appears in the legend. A step can carry more than one type. If you add a type the description does not mention, the builder offers a sentence you can drop in.</li>
     <li><b>Include this step.</b> Switch optional steps on or off. Anything switched off disappears from the map, the step list, and the totals.</li>
@@ -48,7 +48,8 @@
   <p class="pull small">Never type a patient's name. A share link carries the whole plan inside the link itself, so a name would travel with it.</p>
 
   <h3>4. Share or print</h3>
-  <p>Print gives one page, Letter or A4. The share link encodes the plan in the URL, so it needs no server and no account. <b>Save to my library</b> keeps an edited pathway in your own browser for next time, and you can export your library to a file to move it to another machine.</p>
+  <p>Print gives one page, Letter or A4. <b>Save as image (PNG)</b> downloads the handout as a picture, ready to paste into a patient chart or an after-visit summary. The share link encodes the plan in the URL, so it needs no server and no account. <b>Save to my library</b> keeps an edited pathway in your own browser for next time, and you can export your library to a file to move it to another machine.</p>
+  <p>On a phone, the handout preview sits at the top with the timeline scaled to fit the screen; pinch to zoom in. The editing sections below start closed; tap a heading to open one.</p>
 
   <h2>Comparing options side by side</h2>
   <p>Switch from <b>Roadmap</b> to <b>Compare options</b> for the decision visit. Fill in the diagnosis and stage, then give each column a name and, if you want the timing and visit counts filled in automatically, base it on a pathway. Add what is good about each option and its trade-offs, and mark one as your recommendation if you have one.</p>
@@ -62,7 +63,7 @@
     <li><b>Add a step for the blood test</b> itself, set to monitoring, with a description saying what ctDNA is: a blood test looking for fragments of tumor DNA, which can show cancer left behind before a scan can.</li>
     <li><b>Add a decision point</b> with two branches, "ctDNA detected" and "ctDNA not detected".</li>
     <li><b>In the detected branch,</b> add the treatment being tested, with its real cycle length and number of cycles.</li>
-    <li><b>In the not-detected branch,</b> add a monitoring step with the repeat testing interval. Leave it open-ended; surveillance has a frequency, not an end date.</li>
+    <li><b>In the not-detected branch,</b> add a monitoring step with the repeat testing interval. Set the frequency; how long surveillance continues depends on the cancer, and your team sets that. For many cancers it can be left open-ended.</li>
     <li><b>Set the schedule</b> on each step so the months come out right, then read the total at the top of the map.</li>
   </ol>
   <p>The map now shows the fork as a fork, with both arms drawn on the same time scale, which is the thing a paragraph cannot do. The same method works for any response-guided design: pathology after neoadjuvant therapy, an interim PET, a genomic assay.</p>
