@@ -47,6 +47,17 @@ if (ctx.COMPARE_EXAMPLE){
   if ((c.options || []).length < 2) errors.push('COMPARE_EXAMPLE needs at least 2 options');
 }
 if (!/^\d+\.\d+(\.\d+)?$/.test(APP_VERSION)) errors.push('APP_VERSION must look like 0.5.1');
+// every page must load the library with a cache-busting stamp matching APP_VERSION,
+// so a release always bypasses the CDN/browser cache of the old data
+{
+  const fs = require('fs'), path = require('path');
+  const root = path.join(__dirname, '..');
+  for (const f of fs.readdirSync(root).filter(x => x.endsWith('.html'))){
+    const html = fs.readFileSync(path.join(root, f), 'utf8');
+    const m = html.match(/src="regimens\.js(\?v=([^"]*))?"/);
+    if (m && m[2] !== APP_VERSION) errors.push(`${f} loads regimens.js?v=${m[2] || '(none)'} but APP_VERSION is ${APP_VERSION} — update the stamp`);
+  }
+}
 for (const c of CHANGELOG){ if (!c.date || !c.text) errors.push('CHANGELOG entry missing date or text'); }
 if (CHANGELOG[0] && LIBRARY.some(r => r.added === CHANGELOG[0].date) === false) warnings.push('Newest changelog date matches no regimen "added" date — fine if the change was not a new regimen');
 console.log(`ONCourse library check: ${LIBRARY.length} pathways, version ${APP_VERSION}, ${CHANGELOG.length} changelog entries`);
