@@ -7,7 +7,8 @@ ONCourse is a static site (GitHub Pages) that turns cancer treatment regimens in
 - `app.html` — the builder and patient page (timeline engine, editor, print fit, share links). Change only for feature work.
 - `index.html`, `about.html`, `updates.html`, `references.html`, `disclaimer.html`, `site.css` — public pages. Updates and References render from `regimens.js` automatically.
 - `fonts/` — self-hosted fonts. Never add external scripts, fonts, or analytics: the site promises that nothing leaves the browser and makes no third-party requests.
-- `tests/check.js` — dependency-free library check. Run `node tests/check.js` before every commit; do not commit if it reports errors.
+- `tests/check.js` — dependency-free library check. Run `node tests/check.js` before every commit; do not commit if it reports errors. It also verifies that every page loads `regimens.js?v=<APP_VERSION>`, so when you bump `APP_VERSION`, update the `?v=` stamp in all HTML pages (this busts the GitHub Pages cache for the data).
+- `tests/browser.js` — optional headless smoke test of the builder (desktop and phone) using Playwright; run it after builder changes when Playwright is available (`npm i playwright`, then `node tests/browser.js`).
 - `UPDATING.md` — the human playbook and the prompts the owner uses. Keep it in sync with this file.
 - `verification-log.md` — what was checked against which source, per pathway. Append an entry for every clinical change.
 

@@ -2,7 +2,7 @@
 
 ## Recommended setup: Claude Code on the repository
 
-The lowest-friction way to maintain ONCourse is Claude Code connected to the GitHub repository. `CLAUDE.md` in the repository root tells it how the files fit together and the rules for clinical changes, and `tests/check.js` lets it verify the library before committing. A change then becomes one sentence from you ("add the new approval below as a pathway") and one click to merge the pull request it opens.
+The lowest-friction way to maintain ONCourse is Claude Code connected to the GitHub repository. `CLAUDE.md` in the repository root tells it how the files fit together and the rules for clinical changes, and `tests/check.js` lets it verify the library before committing (it also checks that every page's `regimens.js?v=` stamp matches `APP_VERSION`, so releases bypass the old cached data; `tests/browser.js` is an optional headless test of the builder itself). A change then becomes one sentence from you ("add the new approval below as a pathway") and one click to merge the pull request it opens.
 
 1. Install Claude Code (desktop app, or the command line) and sign in.
 2. Ask it to clone your repository (`https://github.com/YOUR-USERNAME/ONCourse`) and open the folder; it reads `CLAUDE.md` automatically.
