@@ -67,6 +67,8 @@ body:not(.compare) .componly{display:none}
 .reg{text-align:left;padding:8px 10px;border:1px solid transparent;border-radius:6px;background:transparent;display:block;width:100%}
 .reg:hover{background:#fff;border-color:var(--line)}
 .reg.on{background:#fff;border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.pickconfirm{padding:6px 10px 10px;margin:-2px 0 4px;border-left:3px solid var(--accent)}
+.pickconfirm .btn{width:100%;padding:8px 10px;font-size:13px}
 .reg b{display:block;font-size:13.5px}
 .reg span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
 .reg.blank{border:1px dashed var(--line);margin-top:6px}
@@ -408,8 +410,7 @@ body.patient .main{padding:24px 20px 60px}
       <div class="tabs" id="tabs"></div>
       <div class="reglist" id="reglist"></div>
       <div class="picker-foot">
-        <span class="hint" id="picker-hint">Click any pathway to see its map. The list stays open so you can compare.</span>
-        <button type="button" class="btn primary" id="picker-confirm">Use this pathway</button>
+        <span class="hint" id="picker-hint">Click any pathway to see its map, then confirm it right below its name. The list stays open so you can compare.</span>
       </div>
     </div>
   </section>
@@ -668,7 +669,8 @@ function regText(r){
 function renderList(){
   const peek = $('#mpeek');
   if (peek && peek.closest('#reglist')) $('#sec-regimen').after(peek);
-  const btn = (r) => `<button class="reg${state.originId === r.id ? ' on' : ''}" data-reg="${esc(r.id)}"><b>${esc(r.name)}</b><span>${esc(r.summary || '')}</span></button>`;
+  const inlineConfirm = document.body.classList.contains('mpick') ? '' : `<div class="pickconfirm"><button type="button" class="btn primary" id="picker-confirm">Use this pathway</button></div>`;
+  const btn = (r) => `<button class="reg${state.originId === r.id ? ' on' : ''}" data-reg="${esc(r.id)}"><b>${esc(r.name)}</b><span>${esc(r.summary || '')}</span></button>` + (state.originId === r.id ? inlineConfirm : '');
   const q = (state.q || '').trim().toLowerCase();
   $('#tabs').hidden = !!q;
   if (q){
@@ -972,7 +974,7 @@ function wrapText(s, max){
   const words = String(s || '').split(/\s+/); const lines = []; let cur = '';
   for (const w of words){ if ((cur + ' ' + w).trim().length > max && cur){ lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }
   if (cur) lines.push(cur);
-  if (lines.length > 2){ lines.length = 2; lines[1] = trunc(lines[1], max); }
+  if (lines.length > 2){ const rest = lines.slice(1).join(' '); lines.length = 1; lines.push(trunc(rest, max)); }
   return lines;
 }
 function renderRoute(ctx, startDate, colors){
@@ -1032,14 +1034,14 @@ function renderRoute(ctx, startDate, colors){
       const ly = y0 + extra + 12 - it.lane * 20;
       s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${ly}" width="${it.w.toFixed(1)}" height="8" rx="3" fill="url(#fade)"/>`;
-      if (!continued.has(idx)){ const ci = chainInfo(idx); s += T(ci.x, ly - 3.5, ci.text, { size:10.5, fill:'#3B4557', weight:600 }); }
+      if (!continued.has(idx)){ const ci = chainInfo(idx); const budget = Math.max(8, Math.floor((it.x + it.w - ci.x + 24) / 6.1)); s += T(ci.x, ly - 3.5, trunc(ci.text, budget), { size:10.5, fill:'#3B4557', weight:600 }); }
     } else {
       const w = nodeWeeks(n);
       s += `<rect x="${it.x}" y="${y0 + barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="${fillFor(n)}"/>`;
       if (n.openEnded) s += `<rect x="${it.x}" y="${y0 + barY}" width="${it.w.toFixed(1)}" height="${L.barH}" rx="4" fill="url(#fade)"/>`;
       if (w > 52 && it.w > 70){ const bx = it.x + it.w * 0.72; s += `<path d="M${bx - 3} ${y0 + barY + L.barH + 3} L${bx + 3} ${y0 + barY - 3} M${bx + 3} ${y0 + barY + L.barH + 3} L${bx + 9} ${y0 + barY - 3}" stroke="#fff" stroke-width="2.5"/>`; }
       if (it.kind === 'phase'){
-        const maxC = Math.max(4, Math.floor((it.w + 2) / 6.4));
+        const maxC = Math.max(4, Math.floor((it.w + 4) / 7.2));
         const label = n.short || n.name;
         const hasUp = ctx.items.some(u => u.kind === 'up' && u.row === it.row && Math.abs(u.x - it.x) < 1);
         let lines = label.length <= maxC ? [label] : wrapText(label, maxC).map(l => trunc(l, maxC));
