@@ -247,3 +247,16 @@ the every-3-week cadence); `hrplus` and `natalee` gain the same two switchable c
 as the genomic-test pathway (docetaxel + cyclophosphamide q21 x4; dose-dense AC q14 x4 then
 paclitaxel, CALGB 9741 / E1199), both off by default, with the option name and summary saying so;
 `genomic` option name and summary now say the chemotherapy regimen is a choice between the two.
+
+### Adjuvant chemotherapy-only breast pathways split by receptor status, September 3, 2026 (v0.15.0)
+At the owner's direction after a compare-view question. `ddac-t` and `tc4` (both under the
+Triple-negative heading) now default to triple-negative: the "Hormone (endocrine) therapy, if
+hormone-receptor positive" step stays in the step list but is switched off, and the summary,
+title and subtitle say triple-negative. Schedules unchanged (AC q14 x4 then paclitaxel q7 x12,
+CALGB 9741 / E1199; TC q21 x4, US Oncology 9735). Two new pathways under HR-positive,
+HER2-negative carry the same chemotherapy with endocrine therapy on: `ddac-t-hr` and `tc4-hr`,
+same primary sources plus the EBCTCG 2015 aromatase-inhibitor meta-analysis for the endocrine step.
+Not re-verified against a protocol reference in this pass because no schedule changed; the
+endocrine duration (5 to 10 years, tablet chosen by the team) matches the existing breast text.
+All four carry 'Source-checked; physician sign-off pending'. Plain links of the form #r=ddac-t and
+#r=tc4 now open with the hormone step off; #p= share links are unaffected because they carry the plan.

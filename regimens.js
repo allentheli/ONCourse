@@ -120,10 +120,10 @@ const LIBRARY = [
   ]
 },
 {
-  id:'ddac-t', plan:'Chemotherapy after surgery', group:'Triple-negative', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Citron ML et al. CALGB 9741 dose-dense chemotherapy. JCO 2003',q:'CALGB 9741 dose-dense doxorubicin cyclophosphamide paclitaxel Citron'},{t:'Sparano JA et al. ECOG 1199 weekly paclitaxel. NEJM 2008',q:'ECOG 1199 weekly paclitaxel Sparano NEJM 2008'}], disease:'breast', name:'Surgery, dose-dense AC then weekly paclitaxel',
-  trial:'CALGB 9741 / ECOG 1199', summary:'HR-positive or triple-negative, node-positive or high risk. Adjuvant AC ×4 (every 2 weeks), paclitaxel ×12, radiation, endocrine therapy.',
-  title:'Surgery first, then chemotherapy, radiation, and hormone therapy',
-  subtitle:'Breast cancer, stage II to III',
+  id:'ddac-t', plan:'Chemotherapy after surgery', group:'Triple-negative', added:'2026-08-31', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending', refs:[{t:'Citron ML et al. CALGB 9741 dose-dense chemotherapy. JCO 2003',q:'CALGB 9741 dose-dense doxorubicin cyclophosphamide paclitaxel Citron'},{t:'Sparano JA et al. ECOG 1199 weekly paclitaxel. NEJM 2008',q:'ECOG 1199 weekly paclitaxel Sparano NEJM 2008'}], disease:'breast', name:'Surgery, dose-dense AC then weekly paclitaxel',
+  trial:'CALGB 9741 / ECOG 1199', summary:'Triple-negative, node-positive or high risk. Adjuvant AC ×4 (every 2 weeks), paclitaxel ×12, radiation. A hormone-therapy step can be switched on if the cancer is hormone-receptor positive.',
+  title:'Surgery first, then chemotherapy and radiation',
+  subtitle:'Triple-negative breast cancer, stage II to III',
   nodes:[
     SURGERY_BREAST(),
     HEAL(4),
@@ -131,7 +131,7 @@ const LIBRARY = [
         plain:'Two chemotherapy drugs every 2 weeks, with a growth-factor injection after each dose to support your blood counts.' }),
     P({ name:'Paclitaxel', short:'Paclitaxel', mods:['chemo'], cycleDays:7, cycles:12, plain:'One chemotherapy drug given weekly for 12 weeks. Visits are shorter than the AC visits.' }),
     RADIATION_AFTER(true),
-    P({ name:'Hormone (endocrine) therapy, if hormone-receptor positive', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260, optional:true, on:true,
+    P({ name:'Hormone (endocrine) therapy, if hormone-receptor positive', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260, optional:true, on:false,
         plain:'If the cancer is hormone-receptor positive: one tablet a day (such as tamoxifen, letrozole, or anastrozole) for 5 to 10 years, starting once chemotherapy is finished.' }),
   ]
 },
@@ -481,20 +481,55 @@ const LIBRARY = [
   ]
 },
 {
-  id:'tc4', plan:'Short chemotherapy after surgery', group:'Triple-negative', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
+  id:'tc4', plan:'Short chemotherapy after surgery', group:'Triple-negative', added:'2026-08-31', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
   refs:[{t:'Jones S et al. US Oncology 9735: docetaxel + cyclophosphamide vs AC. JCO 2009',q:'US Oncology 9735 docetaxel cyclophosphamide adjuvant Jones JCO 2009'}],
   disease:'breast', name:'Surgery, then docetaxel + cyclophosphamide ×4 (TC)',
-  trial:'US Oncology 9735', summary:'HR-positive or triple-negative, lower risk. Surgery, TC every 3 weeks ×4, radiation, endocrine therapy if HR-positive.',
+  trial:'US Oncology 9735', summary:'Triple-negative, lower risk. Surgery, TC every 3 weeks ×4, radiation. A hormone-therapy step can be switched on if the cancer is hormone-receptor positive.',
   title:'Surgery first, then four cycles of chemotherapy',
-  subtitle:'Breast cancer, stage I to II',
+  subtitle:'Triple-negative breast cancer, stage I to II',
   nodes:[
     SURGERY_BREAST(),
     HEAL(4),
     P({ name:'Docetaxel + cyclophosphamide (TC)', short:'Docetaxel + cyclophosphamide', mods:['chemo'], cycleDays:21, cycles:4,
         plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months). A growth-factor injection after each dose supports your blood counts.' }),
     RADIATION_AFTER(true),
-    P({ name:'Hormone (endocrine) therapy, if hormone-receptor positive', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260, optional:true, on:true,
+    P({ name:'Hormone (endocrine) therapy, if hormone-receptor positive', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260, optional:true, on:false,
         plain:'If the cancer is hormone-receptor positive: one tablet a day for 5 to 10 years, starting after chemotherapy.' }),
+  ]
+},
+{
+  id:'ddac-t-hr', plan:'Chemotherapy, then hormone therapy', group:'HR-positive, HER2-negative', added:'2026-09-03', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
+  refs:[{t:'Citron ML et al. CALGB 9741 dose-dense chemotherapy. JCO 2003',q:'CALGB 9741 dose-dense doxorubicin cyclophosphamide paclitaxel Citron'},{t:'Sparano JA et al. ECOG 1199 weekly paclitaxel. NEJM 2008',q:'ECOG 1199 weekly paclitaxel Sparano NEJM 2008'},{t:'Early Breast Cancer Trialists\' Collaborative Group. Aromatase inhibitors versus tamoxifen in early breast cancer: patient-level meta-analysis. Lancet 2015',q:'EBCTCG aromatase inhibitors versus tamoxifen meta-analysis Lancet 2015'}],
+  disease:'breast', name:'Surgery, dose-dense AC then weekly paclitaxel, then endocrine therapy',
+  trial:'CALGB 9741 / ECOG 1199', summary:'HR-positive, HER2-negative, node-positive or high risk, when chemotherapy is planned. Adjuvant AC ×4 (every 2 weeks), paclitaxel ×12, radiation, then endocrine therapy for 5 to 10 years.',
+  title:'Surgery first, then chemotherapy, radiation, and hormone therapy',
+  subtitle:'Hormone-receptor positive, HER2-negative breast cancer, stage II to III',
+  nodes:[
+    SURGERY_BREAST(),
+    HEAL(4),
+    P({ name:'Doxorubicin + cyclophosphamide (dose-dense AC)', short:'Doxorubicin + cyclophosphamide', mods:['chemo'], cycleDays:14, cycles:4,
+        plain:'Two chemotherapy drugs every 2 weeks, with a growth-factor injection after each dose to support your blood counts.' }),
+    P({ name:'Paclitaxel', short:'Paclitaxel', mods:['chemo'], cycleDays:7, cycles:12, plain:'One chemotherapy drug given weekly for 12 weeks. Visits are shorter than the AC visits.' }),
+    RADIATION_AFTER(true),
+    P({ name:'Hormone (endocrine) therapy', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260,
+        plain:'One tablet a day (such as tamoxifen, letrozole, or anastrozole) for 5 to 10 years, starting once chemotherapy is finished. Your team chooses the tablet and how long to continue.' }),
+  ]
+},
+{
+  id:'tc4-hr', plan:'Short chemotherapy, then hormone therapy', group:'HR-positive, HER2-negative', added:'2026-09-03', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
+  refs:[{t:'Jones S et al. US Oncology 9735: docetaxel + cyclophosphamide vs AC. JCO 2009',q:'US Oncology 9735 docetaxel cyclophosphamide adjuvant Jones JCO 2009'},{t:'Early Breast Cancer Trialists\' Collaborative Group. Aromatase inhibitors versus tamoxifen in early breast cancer: patient-level meta-analysis. Lancet 2015',q:'EBCTCG aromatase inhibitors versus tamoxifen meta-analysis Lancet 2015'}],
+  disease:'breast', name:'Surgery, then docetaxel + cyclophosphamide ×4 (TC), then endocrine therapy',
+  trial:'US Oncology 9735', summary:'HR-positive, HER2-negative, lower risk, when chemotherapy is planned. Surgery, TC every 3 weeks ×4, radiation, then endocrine therapy for 5 to 10 years.',
+  title:'Surgery first, then four cycles of chemotherapy, then hormone therapy',
+  subtitle:'Hormone-receptor positive, HER2-negative breast cancer, stage I to II',
+  nodes:[
+    SURGERY_BREAST(),
+    HEAL(4),
+    P({ name:'Docetaxel + cyclophosphamide (TC)', short:'Docetaxel + cyclophosphamide', mods:['chemo'], cycleDays:21, cycles:4,
+        plain:'Two chemotherapy drugs by IV every 3 weeks, 4 times (about 3 months). A growth-factor injection after each dose supports your blood counts.' }),
+    RADIATION_AFTER(true),
+    P({ name:'Hormone (endocrine) therapy', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260,
+        plain:'One tablet a day (such as tamoxifen, letrozole, or anastrozole) for 5 to 10 years, starting after chemotherapy. Your team chooses the tablet and how long to continue.' }),
   ]
 },
 {
@@ -1046,8 +1081,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.14.0';
+const APP_VERSION = '0.15.0';
 const CHANGELOG = [
+  { date:'2026-09-03', text:'0.15.0: Compare options gains a "show only the steps that differ" switch, so shared steps such as surgery or hormone therapy drop out of the columns and are listed in one line instead. Breast: the two adjuvant chemotherapy-only pathways (dose-dense AC then paclitaxel; TC ×4) are now triple-negative by default with the hormone-therapy step switched off, and two new hormone-receptor-positive pathways carry the same chemotherapy followed by endocrine therapy.' },
   { date:'2026-09-02', text:'Builder: the title block (page title, sequence sentence, cancer type and stage line, trial or source) is now edited at the top of step 3 instead of the Regimen details panel. The Overall line now states how long hormone tablets continue, so it changes when that step is edited. A second image export saves just the timeline, large and sharp, for a chart note. The prepared date can be switched off or typed in by hand. When several treatments run alongside one step, the longest now sits nearest the main bar with shorter ones stacked above it.' },
   { date:'2026-09-02', text:'Breast pathways signed off by the founder after review. KEYNOTE-522 now names CREATE-X as the source of the capecitabine step. APT: trastuzumab after the paclitaxel weeks may be weekly or every 3 weeks. The monarchE and NATALEE pathways now offer both common chemotherapy options (TC, or dose-dense AC then paclitaxel) as switchable steps before radiation, and the option names for these and the genomic-test pathway say so.' },
   { date:'2026-09-02', text:'0.13.0: Funding statement finalized in the disclaimer. Pathway review labels reworded and a dosing-and-schedule caution added for physicians. "How we chose this plan for you" rebuilt around plan adjustments. Privacy guardrail added to the test suite.' },
