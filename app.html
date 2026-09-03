@@ -840,7 +840,7 @@ function renderEditor(){ $('#editor').innerHTML = renderNodes(state.regimen.node
 
 function newNode(kind){
   if (kind === 'rest') return { t:'rest', name:'Recovery', weeks:4, plain:'Time for your body to recover before the next step.' };
-  if (kind === 'event') return S('Surgery', 'Removal of the tumor. The removed tissue is examined to see how well the treatment worked.');
+  if (kind === 'event') return S('Surgery', 'Removal of the tumor. The removed tissue is examined under the microscope to guide the next steps.');
   if (kind === 'decision') return D({ name:'Results', short:'Results', question:'What did the results show?', plain:'The next step depends on these results.', branches:[ Br('Outcome A', []), Br('Outcome B', []) ] });
   return P({ name:'Treatment', short:'Treatment', plain:'' });
 }
