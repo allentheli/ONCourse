@@ -23,7 +23,10 @@ const RADIATION_AFTER = (on=true) => P({ name:'Radiation (if recommended)', shor
   plain:'Daily radiation, Monday to Friday, starting a few weeks after the previous step ends. Your radiation oncologist sets the number of sessions.' });
 const ENDOCRINE_ALONGSIDE = () => P({ name:'Hormone (endocrine) therapy, if hormone-receptor positive', short:'Hormone tablet', mods:['endocrine'], mode:'daily', weeks:260, optional:true, on:false, concurrent:true,
   plain:'If the cancer is hormone-receptor positive: one tablet a day (such as tamoxifen, letrozole, or anastrozole) for 5 to 10 years, starting around this same time.' });
-const SURGERY_BREAST = () => S('Surgery', 'Lumpectomy or mastectomy, with lymph node surgery. The removed tissue is examined under the microscope to see how well the treatment worked.');
+// afterTreatment: true when chemotherapy or other treatment came before surgery, so the pathology report measures response.
+const SURGERY_BREAST = (afterTreatment=false) => S('Surgery', afterTreatment
+  ? 'Lumpectomy or mastectomy, with lymph node surgery. The removed tissue is examined under the microscope to see how well the treatment worked.'
+  : 'Lumpectomy or mastectomy, with lymph node surgery. The removed tissue is examined under the microscope to confirm the stage and the cancer\'s features, which guide the next steps.');
 const HEAL = (weeks=4) => R('Healing after surgery', weeks, 'Time to recover from surgery before treatment restarts.');
 const RECOVER = (weeks=4) => R('Recovery before surgery', weeks, 'A break for your body to recover and for the surgical team to plan. Imaging is often repeated now.');
 
@@ -43,7 +46,7 @@ const LIBRARY = [
         visits:[{d:1,label:'Doxorubicin, cyclophosphamide, and pembrolizumab'}],
         plain:'Two different chemotherapy drugs every 3 weeks, with pembrolizumab continuing. A growth-factor injection after each dose helps your blood counts recover.' }),
     RECOVER(4),
-    SURGERY_BREAST(),
+    SURGERY_BREAST(true),
     HEAL(5),
     D({ name:'Pathology results', short:'Results', question:'What did the pathology report show?',
         plain:'The report tells us whether any cancer remained in the tissue removed at surgery. Immunotherapy continues either way; if cancer remained, an oral chemotherapy may be added.',
@@ -74,7 +77,7 @@ const LIBRARY = [
         visits:[{d:1,label:'Paclitaxel, trastuzumab, and pertuzumab'},{d:8,label:'Paclitaxel'},{d:15,label:'Paclitaxel'}],
         plain:'Weekly chemotherapy (paclitaxel) plus two HER2-targeted antibodies every 3 weeks.' }),
     RECOVER(4),
-    SURGERY_BREAST(),
+    SURGERY_BREAST(true),
     HEAL(4),
     D({ name:'Pathology results', short:'Results', question:'What did the pathology report show?',
         plain:'The report tells us whether any cancer remained. HER2-targeted treatment continues either way, to complete about one year in total.',
@@ -101,7 +104,7 @@ const LIBRARY = [
     P({ name:'Docetaxel + carboplatin + trastuzumab + pertuzumab (TCHP)', short:'Docetaxel + carbo + HER2 antibodies', mods:['chemo','targeted'], cycleDays:21, cycles:6,
         plain:'Two chemotherapy drugs plus two HER2-targeted antibodies, all given by IV every 3 weeks, 6 times.' }),
     RECOVER(4),
-    SURGERY_BREAST(),
+    SURGERY_BREAST(true),
     HEAL(4),
     D({ name:'Pathology results', short:'Results', question:'What did the pathology report show?',
         plain:'HER2-targeted treatment continues either way, to complete about one year in total.',
@@ -136,7 +139,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'hrplus', plan:'Hormone therapy plus a targeted tablet', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Johnston SRD et al. monarchE: abemaciclib plus endocrine therapy. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: ribociclib plus NSAI. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}], disease:'breast', name:'HR-positive high risk: surgery, optional chemo (TC or dose-dense AC-T), endocrine therapy + abemaciclib',
+  id:'hrplus', plan:'Hormone therapy plus a targeted tablet', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending', refs:[{t:'Johnston SRD et al. monarchE: abemaciclib plus endocrine therapy. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: ribociclib plus NSAI. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}], disease:'breast', name:'HR-positive high risk: surgery, optional chemo (TC or dose-dense AC-T), endocrine therapy + abemaciclib',
   trial:'monarchE', summary:'HR-positive, HER2-negative, high risk. Surgery, optional chemotherapy (switch on TC or dose-dense AC then paclitaxel), radiation, endocrine therapy plus abemaciclib for 2 years.',
   title:'Surgery, then daily tablets that block hormones and slow cancer-cell growth',
   subtitle:'Hormone-receptor positive, HER2-negative breast cancer, higher-risk stage II to III',
@@ -155,7 +158,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'natalee', plan:'Hormone therapy plus ribociclib for 3 years', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02', refs:[{t:'Hortobagyi GN et al. Adjuvant ribociclib plus endocrine therapy versus endocrine therapy alone in HR-positive/HER2-negative early breast cancer: final invasive disease-free survival results from NATALEE. Annals of Oncology 2025;36:149-157',q:'NATALEE ribociclib adjuvant final invasive disease-free survival Hortobagyi Annals of Oncology 2025'},{t:'Slamon DJ et al. Rationale and trial design of NATALEE. Therapeutic Advances in Medical Oncology 2023;15:17588359231178125',q:'NATALEE rationale trial design Slamon ribociclib adjuvant 2023'}], disease:'breast', name:'NATALEE: surgery, optional chemo (TC or dose-dense AC-T), then an aromatase inhibitor with ribociclib for 3 years',
+  id:'natalee', plan:'Hormone therapy plus ribociclib for 3 years', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending', refs:[{t:'Hortobagyi GN et al. Adjuvant ribociclib plus endocrine therapy versus endocrine therapy alone in HR-positive/HER2-negative early breast cancer: final invasive disease-free survival results from NATALEE. Annals of Oncology 2025;36:149-157',q:'NATALEE ribociclib adjuvant final invasive disease-free survival Hortobagyi Annals of Oncology 2025'},{t:'Slamon DJ et al. Rationale and trial design of NATALEE. Therapeutic Advances in Medical Oncology 2023;15:17588359231178125',q:'NATALEE rationale trial design Slamon ribociclib adjuvant 2023'}], disease:'breast', name:'NATALEE: surgery, optional chemo (TC or dose-dense AC-T), then an aromatase inhibitor with ribociclib for 3 years',
   trial:'NATALEE', summary:'HR-positive, HER2-negative, stage IIA (with risk factors) to III. Surgery, optional chemotherapy (switch on TC or dose-dense AC then paclitaxel), radiation, then an aromatase inhibitor with ribociclib for 3 years.',
   title:'Surgery, then a daily hormone tablet with ribociclib for three years',
   subtitle:'Hormone-receptor positive, HER2-negative breast cancer, stage IIA to III',
@@ -462,7 +465,7 @@ const LIBRARY = [
 
 /* ---------------- BREAST (additions) ---------------- */
 {
-  id:'apt', plan:'Paclitaxel and trastuzumab after surgery', group:'HER2-positive', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
+  id:'apt', plan:'Paclitaxel and trastuzumab after surgery', group:'HER2-positive', added:'2026-08-31', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
   refs:[{t:'Tolaney SM et al. APT trial: paclitaxel and trastuzumab for small HER2-positive cancers. NEJM 2015',q:'APT trial adjuvant paclitaxel trastuzumab node-negative HER2 Tolaney NEJM 2015'}],
   disease:'breast', name:'APT: surgery, weekly paclitaxel + trastuzumab, then trastuzumab',
   trial:'APT trial', summary:'HER2-positive, small (≤3 cm), node-negative. Surgery, weekly paclitaxel + trastuzumab ×12, then trastuzumab (weekly or every 3 weeks) to complete one year.',
@@ -533,7 +536,7 @@ const LIBRARY = [
   ]
 },
 {
-  id:'endo', plan:'Hormone therapy after surgery', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
+  id:'endo', plan:'Hormone therapy after surgery', group:'HR-positive, HER2-negative', added:'2026-08-31', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
   refs:[{t:'Davies C et al. ATLAS: 10 years of tamoxifen. Lancet 2013',q:'ATLAS tamoxifen 10 years Davies Lancet 2013'},{t:'Sparano JA et al. TAILORx. NEJM 2018',q:'TAILORx Oncotype 21-gene Sparano NEJM 2018'}],
   disease:'breast', name:'Surgery, radiation, endocrine therapy only',
   trial:'NCCN standard (TAILORx, ATLAS)', summary:'HR-positive, HER2-negative, lower risk (low genomic score). Surgery, radiation, 5–10 years of a hormone-blocking tablet. No chemotherapy.',
@@ -969,7 +972,7 @@ const LIBRARY = [
 },
 /* ---------- BREAST: genomic-assay pathway ---------- */
 {
-  id:'genomic', plan:'Surgery, then a gene test shows whether chemotherapy would be beneficial', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-02', reviewedBy:'AL, 2026-09-02',
+  id:'genomic', plan:'Surgery, then a gene test shows whether chemotherapy would be beneficial', group:'HR-positive, HER2-negative', added:'2026-09-01', reviewed:'2026-09-03', reviewedBy:'Source-checked; physician sign-off pending',
   refs:[{t:'Sparano JA et al. TAILORx: adjuvant chemotherapy guided by a 21-gene expression assay. NEJM 2018',q:'TAILORx 21-gene recurrence score adjuvant chemotherapy Sparano NEJM 2018'},{t:'Kalinsky K et al. RxPONDER: 21-gene assay in node-positive breast cancer. NEJM 2021',q:'RxPONDER 21-gene assay node-positive breast cancer Kalinsky NEJM 2021'},{t:'Cardoso F et al. MINDACT: 70-gene signature. NEJM 2016',q:'MINDACT 70-gene signature adjuvant chemotherapy Cardoso NEJM 2016'},{t:'Johnston SRD et al. monarchE: adjuvant abemaciclib. JCO 2020',q:'monarchE abemaciclib adjuvant Johnston'},{t:'Slamon D et al. NATALEE: adjuvant ribociclib. NEJM 2024',q:'NATALEE ribociclib early breast cancer Slamon NEJM 2024'}],
   disease:'breast', name:'Surgery, genomic test (Oncotype DX / MammaPrint), then chemotherapy only if the test shows benefit (choose TC or dose-dense AC-T)',
   trial:'TAILORx / RxPONDER / MINDACT', summary:'HR-positive, HER2-negative, stage I–II (node-negative or 1–3 nodes). Surgery, gene-expression test, then chemotherapy + radiation + endocrine therapy if the test shows chemotherapy is beneficial, or radiation + endocrine therapy if not. Both chemotherapy options are included; switch on the one your team uses. Optional adjuvant CDK4/6 inhibitor.',
@@ -1081,8 +1084,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.15.0';
+const APP_VERSION = '0.15.1';
 const CHANGELOG = [
+  { date:'2026-09-03', text:'Breast surgery text: "examined to see how well the treatment worked" now appears only when treatment came before surgery (KEYNOTE-522, DESTINY-Breast11, TCHP). Surgery-first pathways say the removed tissue confirms the stage and the cancer\'s features, which guide the next steps.' },
   { date:'2026-09-03', text:'0.15.0: Compare options gains a "show only the steps that differ" switch, so shared steps such as surgery or hormone therapy drop out of the columns and are listed in one line instead. Breast: the two adjuvant chemotherapy-only pathways (dose-dense AC then paclitaxel; TC ×4) are now triple-negative by default with the hormone-therapy step switched off, and two new hormone-receptor-positive pathways carry the same chemotherapy followed by endocrine therapy.' },
   { date:'2026-09-02', text:'Builder: the title block (page title, sequence sentence, cancer type and stage line, trial or source) is now edited at the top of step 3 instead of the Regimen details panel. The Overall line now states how long hormone tablets continue, so it changes when that step is edited. A second image export saves just the timeline, large and sharp, for a chart note. The prepared date can be switched off or typed in by hand. When several treatments run alongside one step, the longest now sits nearest the main bar with shorter ones stacked above it.' },
   { date:'2026-09-02', text:'Breast pathways signed off by the founder after review. KEYNOTE-522 now names CREATE-X as the source of the capecitabine step. APT: trastuzumab after the paclitaxel weeks may be weekly or every 3 weeks. The monarchE and NATALEE pathways now offer both common chemotherapy options (TC, or dose-dense AC then paclitaxel) as switchable steps before radiation, and the option names for these and the genomic-test pathway say so.' },

@@ -260,3 +260,13 @@ Not re-verified against a protocol reference in this pass because no schedule ch
 endocrine duration (5 to 10 years, tablet chosen by the team) matches the existing breast text.
 All four carry 'Source-checked; physician sign-off pending'. Plain links of the form #r=ddac-t and
 #r=tc4 now open with the hormone step off; #p= share links are unaffected because they carry the plan.
+
+### Breast surgery text by sequence, September 3, 2026 (v0.15.1)
+At the owner's direction: "The removed tissue is examined under the microscope to see how well the
+treatment worked" is correct only when treatment came before surgery. It now appears only in the
+neoadjuvant breast pathways (`kn522`, `db11`, `tchp`). Surgery-first breast pathways (`ddac-t`,
+`tc4`, `ddac-t-hr`, `tc4-hr`, `hrplus`, `natalee`, `apt`, `endo`, `genomic`) now say the tissue is
+examined "to confirm the stage and the cancer's features, which guide the next steps." The builder's
+default text for a hand-added surgery step is neutral for the same reason. Wording only; no
+schedule changed. The five previously signed-off pathways touched (`hrplus`, `natalee`, `apt`,
+`endo`, `genomic`) return to sign-off pending until the owner confirms the new sentence.
