@@ -1,0 +1,42 @@
+ONCourse License
+
+Copyright (c) 2026 the ONCourse authors. All rights reserved.
+
+ONCourse is published openly so that clinicians, patients, and reviewers can
+inspect how it works and where its content comes from. Publication is not a
+grant of rights. Except as stated below, no part of this repository or the
+website it produces may be used without prior written permission.
+
+Permitted without further permission
+
+1. Viewing this repository and the website built from it.
+2. Using the website at its official address to create, print, save, and share
+   treatment maps and comparisons for patient care and education, including
+   the links and QR codes the site generates.
+3. Quoting brief excerpts, with attribution, for review, commentary, teaching,
+   or scholarship.
+
+Not permitted without prior written permission from the authors
+
+1. Copying, modifying, translating, or redistributing the source code, the
+   pathway library (regimens.js), the page text, the design, the images, or
+   the demonstration videos, in whole or in part.
+2. Hosting a copy or derivative of the site, or incorporating any part of it
+   into another website, product, or service.
+3. Any commercial use.
+
+Third-party materials
+
+The fonts in the fonts/ directory (Atkinson Hyperlegible, Source Sans 3, and
+Source Serif 4) are licensed separately under the SIL Open Font License; see
+fonts/LICENSES.md. Trial names, drug names, and brand names belong to their
+respective owners and are used for identification only.
+
+No warranty
+
+The software and content are provided "as is", without warranty of any kind.
+ONCourse is an educational aid for conversations between patients and their
+care teams. It is not medical advice. See disclaimer.html for the full terms
+of use, which apply to every visitor.
+
+Permission requests may be made through this repository.

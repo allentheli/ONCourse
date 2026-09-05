@@ -25,11 +25,20 @@ const BASE = `http://localhost:${PORT}`;
     const errs = [];
     const hook = (p) => p.on('pageerror', e => errs.push(String(e).slice(0, 160)));
 
-    // ---- all pathways render, no label overlaps, no orphan "+" ----
+    // ---- agreement gate: shown once for the builder, never for shared plans ----
     const p = await b.newPage({ viewport: { width: 1280, height: 950 } });
     hook(p);
     await p.goto(`${BASE}/app.html`, { waitUntil: 'load' });
     await p.waitForTimeout(300);
+    ok('terms gate shows on the first builder visit', await p.evaluate(() => !document.getElementById('gate').hidden && document.body.classList.contains('gated')));
+    await p.click('#gate-agree'); await p.waitForTimeout(150);
+    ok('agreeing opens the builder', await p.evaluate(() => document.getElementById('gate').hidden && !document.body.classList.contains('gated')));
+    await p.goto('about:blank'); await p.goto(`${BASE}/app.html`, { waitUntil: 'load' }); await p.waitForTimeout(200);
+    ok('gate does not return in the same browser', await p.evaluate(() => document.getElementById('gate').hidden));
+    await p.goto('about:blank'); await p.goto(`${BASE}/app.html#r=kn522&demo=1`, { waitUntil: 'load' }); await p.waitForTimeout(200);
+    ok('examples open without the gate', await p.evaluate(() => document.getElementById('gate').hidden));
+
+    // ---- all pathways render, no label overlaps, no orphan "+" ----
     const ids = await p.evaluate(() => LIBRARY.map(r => r.id));
     let renderFails = 0, labelIssues = 0;
     for (const id of ids){
@@ -85,6 +94,7 @@ const BASE = `http://localhost:${PORT}`;
       await p2.waitForTimeout(350);
       ok('share link opens the plan in patient view', await p2.evaluate(() =>
         document.body.classList.contains('patient') && document.body.innerText.includes('Renamed QA step')));
+      ok('shared plan is never gated', await p2.evaluate(() => document.getElementById('gate').hidden));
       await p2.close();
     }
 
@@ -92,6 +102,7 @@ const BASE = `http://localhost:${PORT}`;
     const m = await b.newPage({ viewport: { width: 390, height: 844 } });
     hook(m);
     await m.goto(`${BASE}/app.html`, { waitUntil: 'load' });
+    await m.waitForTimeout(200); await m.click('#gate-agree');
     await m.waitForTimeout(400);
     ok('phone opens in pick mode (editor hidden)', await m.evaluate(() =>
       document.body.classList.contains('mpick') && getComputedStyle(document.querySelector('.main')).display === 'none'));
