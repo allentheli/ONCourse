@@ -52,7 +52,7 @@ const CURSOR = `(() => {
 
     const shots = process.env.DEMO_SHOTS; let sn = 0;
     const shot = async () => { if (shots) await p.screenshot({ path: path.join(shots, `k${++sn}.png`) }); };
-    await p.addInitScript(() => { window.print = () => setTimeout(() => window.dispatchEvent(new Event('afterprint')), 400); });
+    await p.addInitScript(() => { window.print = () => setTimeout(() => window.dispatchEvent(new Event('afterprint')), 400); try { localStorage.setItem('roadmap.terms', '2026-09-05'); } catch (e) {} });
     await p.goto(`${BASE}/app.html`, { waitUntil: 'load' });
     await p.mouse.move(cx, cy); await sleep(300);
     // the share box should show the public address, not the local server
