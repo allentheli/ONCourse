@@ -402,7 +402,7 @@ body.patient .main{padding:24px 20px 60px}
     <span class="gate-k">Before you use the builder</span>
     <h2 id="gate-h">ONCourse is an educational aid, not medical advice</h2>
     <ul>
-      <li><b>You remain responsible for the plan.</b> Schedules come from published trials and labels. Check doses, cycle counts, and timing against your own protocol before a map reaches a patient.</li>
+      <li><b>ONCourse is a personal educational project</b> of its authors, not a protocol or policy of any hospital or health system. <b>You remain responsible for the plan:</b> schedules come from published trials and labels, so check doses, cycle counts, and timing against your own protocol before a map reaches a patient.</li>
       <li><b>Never type a patient's name</b> or any other identifying detail. Links and QR codes carry everything on the page.</li>
       <li><b>Content is &copy; its authors.</b> Print and share the handouts you make for patient care and education. Any other reuse of the site, its code, or its pathway library needs written permission.</li>
     </ul>
@@ -560,7 +560,7 @@ const uid = () => 'n' + (_uid++) + Math.random().toString(36).slice(2, 6);
 const clone = (o) => JSON.parse(JSON.stringify(o));
 function ensureIds(nodes){ for (const n of nodes){ if (!n.id) n.id = uid(); if (n.t === 'decision') for (const b of n.branches) ensureIds(b.nodes); } return nodes; }
 function stripIds(reg){ const r = clone(reg); (function walk(ns){ for (const n of ns){ delete n.id; if (n.t === 'decision') for (const b of n.branches) walk(b.nodes); } })(r.nodes); return r; }
-const TERMS_VERSION = '2026-09-04'; // matches the effective date on disclaimer.html; change it to re-prompt every browser
+const TERMS_VERSION = '2026-09-05'; // matches the effective date on disclaimer.html; change it to re-prompt every browser
 const store = {
   get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } },
   set(k, v){ try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
