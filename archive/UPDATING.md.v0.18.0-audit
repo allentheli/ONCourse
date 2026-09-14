@@ -45,18 +45,8 @@ If you use Claude Code on the repository, step 5 becomes "commit and push" done 
 
 ## Prompt: add or change a regimen after a new approval
 
-> Here is a new FDA approval / practice change: [paste the approval notice, trial abstract,
-> or link, or name the trial]. Update `regimens.js` accordingly. Rules: retrieve a source for
-> every schedule-bearing claim (agents, cycle length, number of cycles, start timing) and do
-> not encode any of them from existing knowledge; verify against the primary publication and a
-> structured protocol reference (HemOnc.org or eviQ) and cite both in `refs`; write
-> patient-facing `plain` text at an eighth-grade reading level with no promises beyond the
-> evidence; keep protocol-specified intervals and mark practice-variable ones as such in the
-> text; use `weeks:''` for any radiation step whose course length varies; set `added` and
-> `reviewed` to today; add a one-line `CHANGELOG` entry at the top; bump `APP_VERSION` if a
-> regimen was added. Return the complete file, then a verification note stating, for each
-> claim, which source you opened and how far you got (full text, abstract, protocol record, or
-> label), and naming anything you could not retrieve and what blocked you.
+> Here is a new FDA approval / practice change: [paste the approval notice, trial abstract, or link].
+> Update `regimens.js` accordingly. Rules: verify the schedule against the primary publication and a structured protocol reference (HemOnc.org or eviQ) and cite both in `refs`; write patient-facing `plain` text at an eighth-grade reading level with no promises beyond the evidence; keep protocol-specified intervals and mark practice-variable ones as such in the text; use `weeks:''` for any radiation step whose course length varies; set `added` and `reviewed` to today; add a one-line `CHANGELOG` entry at the top; bump `APP_VERSION` if a regimen was added. Return the complete file, then a short verification note listing what you checked and anything you could not confirm.
 
 ## Prompt: monthly approvals sweep
 
