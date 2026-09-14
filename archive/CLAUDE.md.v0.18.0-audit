@@ -17,11 +17,7 @@ Roadbook (formerly ONCourse) is a static site (GitHub Pages) that turns cancer t
 - `verification-log.md` — what was checked against which source, per pathway. Append an entry for every clinical change.
 
 ## Adding or changing a pathway
-1. Retrieve a source for every schedule-bearing claim: the agents named, the cycle length,
-   the number of cycles or duration, and the start timing of each phase. Do not encode any
-   of these from existing knowledge. Verify against the primary publication and a structured
-   protocol reference (HemOnc.org, eviQ) and current FDA labeling. Cite both in `refs` as
-   `{t: citation text, q: PubMed search terms}`.
+1. Verify the schedule against the primary publication and a structured protocol reference (HemOnc.org, eviQ) and current FDA labeling. Cite both in `refs` as `{t: citation text, q: PubMed search terms}`.
 2. Write patient-facing `plain` text at about an eighth-grade level. Say what the treatment is and how it is given. No promises beyond the evidence; no drug doses on the patient page.
 3. Prefer "beneficial" over "needed" when a test guides chemotherapy; treatment is a choice the evidence informs.
 4. Protocol-specified intervals stay as protocol; practice-variable intervals get a typical default and text saying the team sets it. Radiation whose course varies uses `weeks:''`.
@@ -32,10 +28,7 @@ Roadbook (formerly ONCourse) is a static site (GitHub Pages) that turns cancer t
    and builder changes a user would notice (a new picker, a control that behaves differently). Keep design, copy-editing and
    internal engineering out of it; those belong in the commit message.
 8. Never change an existing `id` (share links depend on it). Never delete a pathway without the owner's explicit instruction; deprecate by prefixing `name` with "(Superseded) " and explaining in the changelog.
-9. Append to `verification-log.md`: for each pathway, which source you opened and how far you
-   got (full text, abstract only, protocol record, or label), what you checked against it,
-   and anything you could not confirm. If you could not retrieve a source for a claim, say so
-   explicitly and name what blocked you. Do not silently fall back on existing knowledge.
+9. Append to `verification-log.md`: what you checked, the source, and anything you could not confirm.
 10. Run `node tests/check.js`. Open a pull request for clinical changes so the owner reviews the diff; commit typo fixes directly.
 
 ## Style
