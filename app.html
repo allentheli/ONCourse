@@ -531,7 +531,6 @@ body.patient .main{padding:24px 20px 60px}
       <button class="btn sec" id="saveimg">Save handout as image (PNG)</button>
       <button class="btn sec" id="savemap">Save just the map as image (PNG)</button>
     </div>
-    <p class="hint fitnote" id="fitnote" hidden></p>
     <p class="hint">Plans print on one page whenever the text stays readable; a very full plan prints on two pages at full size instead. In Chrome, untick "Headers and footers" in the print dialog so the browser's own date line does not print over the sheet.</p>
     <div class="linkbox"><input type="text" id="linkout" readonly placeholder="Link appears here"><button class="btn sec" id="copylink">Copy link</button></div>
     <div class="qr-side" id="qrside"></div>
@@ -1480,13 +1479,13 @@ function renderSheetQr(){
   else { el.innerHTML = ''; el.hidden = true; }
   scheduleFitNotice();
 }
-// Tells the builder, before anyone prints, whether the current plan fits one
-// page. Runs after every render, once the share link and its QR code have
+// Tells the preview bar, before anyone prints, whether the current plan fits
+// one page. Runs after every render, once the share link and its QR code have
 // settled, because the code's size depends on the link's length.
 let _fitT = 0;
 function scheduleFitNotice(){ clearTimeout(_fitT); _fitT = setTimeout(fitNotice, 250); }
 function fitNotice(){
-  const els = [$('#fitnote'), $('#tb-fitnote')].filter(Boolean);
+  const els = [$('#tb-fitnote')].filter(Boolean);
   if (!els.length || !$('#sheet') || !_printCssTpl) return;
   const wasCollapsed = document.body.classList.contains('msheet');
   if (wasCollapsed) document.body.classList.remove('msheet');
