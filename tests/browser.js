@@ -84,12 +84,8 @@ const BASE = `http://localhost:${PORT}`;
       fs.unlinkSync(f);
     }
     fs.rmSync(tmp, { recursive: true, force: true });
-    // kn689 has run to two pages on A4 since before the rename (the fit targets Letter's printable
-    // height); listed here so the check stays green until the print fit is revisited.
-    const KNOWN_A4 = ['kn689 A4'];
-    const unexpected = multi.filter(x => !KNOWN_A4.includes(x));
-    ok('every pathway prints on one page, Letter and A4 (known: ' + KNOWN_A4.join(', ') + ')', unexpected.length === 0);
-    if (unexpected.length) console.log('multi-page:', unexpected.join(', '));
+    ok('every pathway prints on one page, Letter and A4', multi.length === 0);
+    if (multi.length) console.log('multi-page:', multi.join(', '));
 
     // ---- desktop: picker, rename sync, type-toggle label, share link ----
     await p.goto('about:blank');
@@ -116,6 +112,13 @@ const BASE = `http://localhost:${PORT}`;
       document.querySelector('#sheet .route svg').textContent.includes('immunotherapy')));
     const link = await p.evaluate(() => document.getElementById('linkout').value);
     ok('share link generated', /#p=/.test(link));
+    // the image exports live next to the print fit in app.html; make sure a
+    // click still reaches them and produces a file
+    for (const [sel, name] of [['#savemap', 'map image export downloads'], ['#saveimg', 'sheet image export downloads']]){
+      let file = '';
+      try { const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 20000 }), p.click(sel)]); file = dl.suggestedFilename(); } catch (e) {}
+      ok(name, /\.png$/.test(file));
+    }
     if (/#p=/.test(link)){
       const p2 = await b.newPage(); hook(p2);
       await p2.goto(link.replace(/^https?:\/\/[^\/]+/, BASE), { waitUntil: 'load' });

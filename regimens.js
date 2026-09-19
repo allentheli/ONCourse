@@ -1261,8 +1261,9 @@ const COMPARE_EXAMPLE = {
   ],
 };
 
-const APP_VERSION = '0.18.0';
+const APP_VERSION = '0.19.0';
 const CHANGELOG = [
+  { date:'2026-09-19', text:'0.19.0: Printing fits every plan on one page in both the builder and the patient view; the patient view could run to a second page. A tight plan now closes up whitespace and changes the number of step columns before any text shrinks, map labels never print smaller than 9 px, and body text never drops below 82% of its normal size. A surgery that starts the timeline no longer has its label clipped at the left edge of the printed map.' },
   { date:'2026-09-08', text:'0.18.0: New Gynecologic tab with eight pathways. Uterine and endometrial: PORTEC-2 (surgery, vaginal brachytherapy), PORTEC-3 (surgery, radiation with cisplatin, carboplatin + paclitaxel), GOG-258 (surgery, carboplatin + paclitaxel ×6), NRG-GY018 (chemotherapy + pembrolizumab, then pembrolizumab), RUBY (chemotherapy + dostarlimab, then dostarlimab up to 3 years), HER2-positive uterine serous (chemotherapy + trastuzumab, then trastuzumab). Ovarian: surgery-first and chemotherapy-first sequences, each ending in a maintenance choice set by the BRCA and HRD results.' },
   { date:'2026-09-08', text:'0.17.0: Renamed to Roadbook; new wordmark and mark; old ONCourse URLs redirect with the share fragment preserved.' },
   { date:'2026-09-04', text:'0.16.0: The builder now asks each new user to agree once to the terms of use before opening: educational aid, physician responsibility for doses and schedules, no patient names, and the copyright notice. Shared plans and examples open straight to the patient view as before. A LICENSE file states the all-rights-reserved terms in the source repository. The terms of use now name the authors, state that ONCourse is a personal project independent of any employer, and add governing law (Washington), user responsibility, and the agreement as a whole.' },
